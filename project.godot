@@ -15,6 +15,11 @@ run/main_scene="uid://dyptr1v4aqv3g"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[display]
+
+window/size/viewport_width=800
+window/size/viewport_height=500
+
 [input]
 
 left={
