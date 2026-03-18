@@ -439,3 +439,5 @@ position = Vector2(-0.5, -1)
 shape = SubResource("CapsuleShape2D_g2els")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=681229413]
+limit_left = 0
+limit_top = 0
