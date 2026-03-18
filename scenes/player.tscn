@@ -461,3 +461,5 @@ script = ExtResource("1_g2els")
 sprite_frames = SubResource("SpriteFrames_ha2mi")
 animation = &"idle_up"
 frame_progress = 0.97124904
+
+[node name="Camera2D" type="Camera2D" parent="AnimatedSprite2D" unique_id=1508013483]
