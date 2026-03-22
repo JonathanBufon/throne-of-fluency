@@ -453,9 +453,9 @@ animations = [{
 "speed": 1.5
 }]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_g2els"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_b0kkn"]
 radius = 5.25
-height = 18.5
+height = 16.5
 
 [node name="player" type="CharacterBody2D" unique_id=1411583611]
 scale = Vector2(4, 4)
@@ -467,3 +467,7 @@ animation = &"idle_up"
 frame_progress = 0.97124904
 
 [node name="Camera2D" type="Camera2D" parent="AnimatedSprite2D" unique_id=1508013483]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=583839979]
+position = Vector2(-0.25, -1.75)
+shape = SubResource("CapsuleShape2D_b0kkn")
