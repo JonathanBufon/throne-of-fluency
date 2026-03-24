@@ -5,7 +5,7 @@ var last_direction: Vector2 = Vector2.RIGHT
 
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	process_movement()
 	process_animation()
 	move_and_slide()
