@@ -1,7 +1,7 @@
 [gd_scene format=4 uid="uid://bb0kqcfib5gl4"]
 
-[ext_resource type="Texture2D" uid="uid://don7oi12bhf2s" path="res://assets/images/scenario/green-scenario/Tiles/Grass_Middle.png" id="1_pnm1y"]
-[ext_resource type="PackedScene" uid="uid://cvmyqqm2xgget" path="res://scenes/player.tscn" id="2_1qck2"]
+[ext_resource type="Texture2D" uid="uid://cu2jfincrse3d" path="res://assets/images/scenario/green-scenario/Tiles/Grass_Middle.png" id="1_pnm1y"]
+[ext_resource type="PackedScene" uid="uid://cvmyqqm2xgget" path="res://entities/player.tscn" id="2_1qck2"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_spgdd"]
 texture = ExtResource("1_pnm1y")
