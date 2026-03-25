@@ -2,12 +2,16 @@
 
 [ext_resource type="Texture2D" uid="uid://qvdg87v7fd2o" path="res://assets/images/test-and-examples/background-example.png" id="1_tyde5"]
 [ext_resource type="Texture2D" uid="uid://c5sa58m2se081" path="res://assets/images/test-and-examples/gumba-enemy.png" id="2_sg10m"]
+[ext_resource type="FontFile" uid="uid://3e51p7doloxy" path="res://assets/images/ui-elements/Cute_Fantasy_UI/Fonts/CuteFantasy-5x9.ttf" id="3_sg10m"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tyde5"]
 bg_color = Color(0.91795117, 0, 0.08479213, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sg10m"]
 bg_color = Color(0.13894588, 0.7239439, 5.7756904e-07, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ebxyk"]
+bg_color = Color(0, 0, 0, 0.7490196)
 
 [node name="BattleBase" type="Control" unique_id=772083584]
 layout_mode = 3
@@ -47,7 +51,36 @@ theme_override_styles/background = SubResource("StyleBoxFlat_tyde5")
 theme_override_styles/fill = SubResource("StyleBoxFlat_sg10m")
 value = 50.0
 
+[node name="Label" type="Label" parent="EnemyContainer/ProgressBar" unique_id=1155874741]
+layout_mode = 0
+offset_left = 1.0
+offset_top = -1.0
+offset_right = 667.0
+offset_bottom = 22.0
+
 [node name="Enemy" type="TextureRect" parent="EnemyContainer" unique_id=535085324]
 layout_mode = 2
 texture = ExtResource("2_sg10m")
 stretch_mode = 3
+
+[node name="PlayerPanel" type="Panel" parent="." unique_id=815782608]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -96.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_ebxyk")
+
+[node name="PlayerData" type="HBoxContainer" parent="PlayerPanel" unique_id=585413319]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="PlayerPanel/PlayerData" unique_id=1312241207]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("3_sg10m")
+text = "PLAYER"
