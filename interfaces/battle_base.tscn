@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://c5sa58m2se081" path="res://assets/images/test-and-examples/gumba-enemy.png" id="2_sg10m"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tyde5"]
-bg_color = Color(0.17283267, 0.17283267, 0.17283258, 1)
+bg_color = Color(0.91795117, 0, 0.08479213, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sg10m"]
 bg_color = Color(0.13894588, 0.7239439, 5.7756904e-07, 1)
