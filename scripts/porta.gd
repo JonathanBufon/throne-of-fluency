@@ -5,49 +5,75 @@ var aberta = false
 var esperando_input = false
 
 @onready var anim = $AnimatedSprite2D
-@export var input_ui: LineEdit
 
-func _process(delta):
+# Arraste a cena do DialogScreen aqui no Inspetor
+@export var dialog_screen_scene: PackedScene
+
+
+func _ready():
+	anim.play("abrir")
+	anim.stop()
+	anim.frame = 0
+
+
+func _process(_delta):
 	if player_near and Input.is_action_just_pressed("interact"):
 		tentar_abrir()
 
-func tentar_abrir():
-	if aberta:
-		return
-	
-	if esperando_input:
-		return
 
+func tentar_abrir():
+	if aberta or esperando_input:
+		return
 	mostrar_input()
 
-func mostrar_input():
-	esperando_input = true
-	input_ui.visible = true
-	input_ui.text = ""
-	input_ui.grab_focus()
 
-func _on_line_edit_text_submitted(text):
-	input_ui.visible = false
+func mostrar_input():
+	if not dialog_screen_scene:
+		print("ERRO: dialog_screen_scene não está atribuído no Inspetor!")
+		return
+
+	esperando_input = true
+
+	var dialog = dialog_screen_scene.instantiate()
+	get_tree().root.add_child(dialog)
+
+	# Mostra um diálogo antes de pedir a senha
+	await dialog.start_dialog([
+		{"title": "Guarda", "dialog": "Alto lá! Esta porta está trancada.", "faceset": ""},
+		{"title": "Guarda", "dialog": "Diga a senha para passar.", "faceset": ""},
+	])
+
+	# Cria nova instância para o input
+	var dialog2 = dialog_screen_scene.instantiate()
+	get_tree().root.add_child(dialog2)
+
+	var acertou = await dialog2.start_input(
+		"Guarda",
+		"Digite a senha:",
+		"",
+		"push to open"
+	)
+
 	esperando_input = false
 
-	if text.to_lower() == "push to open":
+	if acertou:
 		abrir_porta()
 	else:
 		print("Senha incorreta")
+
 
 func abrir_porta():
 	aberta = true
 	anim.play("abrir")
 
-func _on_area_2d_body_entered(body):
+
+func _on_area_port_body_entered(body):
 	if body.is_in_group("player"):
 		player_near = true
+		body.get_node("Icone_interacao/Sprite2D").visible = true
 
-func _on_area_2d_body_exited(body):
+
+func _on_area_port_body_exited(body):
 	if body.is_in_group("player"):
 		player_near = false
-		
-func _ready():
-	anim.play("abrir")
-	anim.stop()
-	anim.frame = 0		
+		body.get_node("Icone_interacao/Sprite2D").visible = false
