@@ -56,7 +56,7 @@ Throne-Of-Fluency/
 1. Instale o [Godot 4.6](https://godotengine.org/download) ou superior
 2. Clone o repositório:
    ```bash
-   git clone <url-do-repositorio>
+   git clone https://github.com/JonathanBufon/throne-of-fluency.git
    ```
 3. Abra o Godot e importe o projeto selecionando o arquivo `project.godot`
 4. Pressione **F5** para rodar (a cena principal é `fase_cripta.tscn`)
