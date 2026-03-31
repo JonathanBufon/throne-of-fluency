@@ -4,13 +4,15 @@ const SPEED = 300.0
 var last_direction: Vector2 = Vector2.RIGHT
 
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
+@onready var icone_interacao: Node2D = $Icone_interacao
+
+func _ready() -> void:
+	$Icone_interacao/Sprite2D.visible = false
 
 func _physics_process(_delta: float) -> void:
 	process_movement()
 	process_animation()
 	move_and_slide()
-
-
 
 #                        #
 # MOVIMENT AND ANIMATION #
@@ -40,3 +42,10 @@ func player_animation(prefix: String, dir: Vector2) -> void:
 		animated_sprite_2d.play(prefix + "_up")
 	elif (dir.y > 0):
 		animated_sprite_2d.play(prefix + "_down")
+
+func _on_area_porta_body_exited(_body: Node2D) -> void:
+	pass # Replace with function body.
+
+
+func _on_area_porta_body_entered(_body: Node2D) -> void:
+	pass # Replace with function body.
