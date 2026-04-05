@@ -502,8 +502,9 @@ height = 16.5
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_b0kkn"]
 load_path = "res://.godot/imported/UI_Pop_Up.png-f1077207ce5a7d2db498554d899c5b0d.ctex"
 
-[node name="player" type="CharacterBody2D" unique_id=1411583611]
+[node name="player" type="CharacterBody2D" unique_id=1411583611 groups=["player"]]
 scale = Vector2(4, 4)
+collision_layer = 2
 script = ExtResource("1_g2els")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=96383351]
@@ -512,6 +513,11 @@ animation = &"undying"
 frame_progress = 0.40233684
 
 [node name="Camera2D" type="Camera2D" parent="AnimatedSprite2D" unique_id=1508013483]
+zoom = Vector2(1.5, 1.5)
+limit_left = 0
+limit_top = 0
+limit_right = 1761
+limit_bottom = 816
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=583839979]
 position = Vector2(-0.75, 6)
