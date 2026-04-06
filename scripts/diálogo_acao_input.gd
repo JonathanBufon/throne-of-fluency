@@ -7,18 +7,18 @@ signal submitted(text: String, correct: bool)
 # ──────────────────────────────────────────────
 #  Exportáveis — configure no Inspetor
 # ──────────────────────────────────────────────
-@export var hint_text: String = "Diga a senha para passar..."
-@export var correct_answer: String = "push to open"
+@export var hint_text: String = "What is the action to open the door?"
+@export var correct_answer: String = "open"
 @export var max_chars: int = 32
 @export var cursor_blink_speed: float = 0.55   # segundos por ciclo
 
 # ──────────────────────────────────────────────
 #  Nós internos (devem existir na cena)
 # ──────────────────────────────────────────────
-@onready var hint_label: Label       = $Panel/MarginContainer/VBoxContainer/HintLabel
-@onready var input_label: Label      = $Panel/MarginContainer/VBoxContainer/InputRow/InputLabel
-@onready var cursor_label: Label     = $Panel/MarginContainer/VBoxContainer/InputRow/CursorLabel
-@onready var feedback_label: Label   = $Panel/MarginContainer/VBoxContainer/FeedBackLabel
+@onready var hint_label: Label       = $MarginContainer/VBoxContainer/HintLabel
+@onready var input_label: Label      = $MarginContainer/VBoxContainer/InputRow/InputLabel
+@onready var cursor_label: Label     = $MarginContainer/VBoxContainer/InputRow/CursorLabel
+@onready var feedback_label: Label   = $MarginContainer/VBoxContainer/FeedBackLabel
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 
 # ──────────────────────────────────────────────
@@ -115,9 +115,9 @@ func _confirm() -> void:
 	var correct: bool = _typed.strip_edges().to_lower() == correct_answer.strip_edges().to_lower()
 
 	if correct:
-		_show_feedback("✦  A porta range e se abre...  ✦", true)
+		_show_feedback("✦  The Door Creaks and opens ✦", true)
 	else:
-		_show_feedback("✗  Senha incorreta.", false)
+		_show_feedback("✗  Wrong Action", false)
 
 	# Aguarda o feedback ser lido antes de fechar
 	await get_tree().create_timer(1.8).timeout
@@ -142,7 +142,7 @@ func _show_feedback(msg: String, success: bool) -> void:
 	feedback_label.text = msg
 	feedback_label.add_theme_color_override(
 		"font_color",
-		Color(0.45, 0.85, 0.55) if success else Color(0.85, 0.3, 0.3)
+		Color(0.0, 0.21, 0.269, 1.0) if success else Color(0.85, 0.3, 0.3)
 	)
 	# Fade-in simples via tween
 	var tw: Tween = create_tween()
