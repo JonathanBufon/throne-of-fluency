@@ -398,7 +398,7 @@ sprite_frames = SubResource("SpriteFrames_pg8c6")
 animation = &"Porta_abrindo"
 
 [node name="player" parent="." unique_id=1411583611 instance=ExtResource("8_scqts")]
-position = Vector2(1565, 1609)
+position = Vector2(561, 305)
 
 [node name="Inimigo" parent="." unique_id=1789179704 instance=ExtResource("8_scqts")]
-position = Vector2(1981, 1690)
+position = Vector2(899, 268)

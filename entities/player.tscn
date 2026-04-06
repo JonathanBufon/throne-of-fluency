@@ -499,8 +499,12 @@ animations = [{
 radius = 5.25
 height = 16.5
 
-[node name="player" type="CharacterBody2D" unique_id=1411583611]
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_b0kkn"]
+load_path = "res://.godot/imported/UI_Pop_Up.png-f1077207ce5a7d2db498554d899c5b0d.ctex"
+
+[node name="player" type="CharacterBody2D" unique_id=1411583611 groups=["player"]]
 scale = Vector2(4, 4)
+collision_layer = 2
 script = ExtResource("1_g2els")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=96383351]
@@ -509,7 +513,21 @@ animation = &"undying"
 frame_progress = 0.40233684
 
 [node name="Camera2D" type="Camera2D" parent="AnimatedSprite2D" unique_id=1508013483]
+zoom = Vector2(1.5, 1.5)
+limit_left = 0
+limit_top = 0
+limit_right = 1761
+limit_bottom = 816
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=583839979]
 position = Vector2(-0.75, 6)
 shape = SubResource("CapsuleShape2D_b0kkn")
+
+[node name="Icone_interacao" type="Node2D" parent="." unique_id=50074725]
+
+[node name="Sprite2D" type="Sprite2D" parent="Icone_interacao" unique_id=1637939700]
+position = Vector2(8.25, -6.499999)
+scale = Vector2(0.5, 0.505)
+texture = SubResource("CompressedTexture2D_b0kkn")
+region_enabled = true
+region_rect = Rect2(48.00003, 0, 43.19998, 48.799995)

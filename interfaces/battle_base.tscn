@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://bbvnufsgydfmq"]
+
+[ext_resource type="Texture2D" uid="uid://qvdg87v7fd2o" path="res://assets/images/test-and-examples/background-example.png" id="1_tyde5"]
+[ext_resource type="Texture2D" uid="uid://c5sa58m2se081" path="res://assets/images/test-and-examples/gumba-enemy.png" id="2_sg10m"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tyde5"]
+bg_color = Color(0.17283267, 0.17283267, 0.17283258, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sg10m"]
+bg_color = Color(0.13894588, 0.7239439, 5.7756904e-07, 1)
+
+[node name="BattleBase" type="Control" unique_id=772083584]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="TextureRect" parent="." unique_id=2222312]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_tyde5")
+
+[node name="EnemyContainer" type="VBoxContainer" parent="." unique_id=874925260]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -333.0
+offset_top = -203.0
+offset_right = 333.0
+offset_bottom = 203.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="EnemyContainer" unique_id=943208640]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/background = SubResource("StyleBoxFlat_tyde5")
+theme_override_styles/fill = SubResource("StyleBoxFlat_sg10m")
+value = 50.0
+
+[node name="Enemy" type="TextureRect" parent="EnemyContainer" unique_id=535085324]
+layout_mode = 2
+texture = ExtResource("2_sg10m")
+stretch_mode = 3
