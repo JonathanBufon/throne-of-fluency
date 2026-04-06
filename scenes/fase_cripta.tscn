@@ -409,7 +409,11 @@ polygon = PackedVector2Array(-11.199982, 14.600006, -6.799988, 5.4000015, -7.199
 z_index = 2
 position = Vector2(1258, 440)
 
+[node name="Camera2D" parent="player/AnimatedSprite2D" parent_id_path=PackedInt32Array(1411583611, 96383351) index="0" unique_id=1508013483]
+limit_enabled = true
+
 [connection signal="body_entered" from="Scenario/Porta/Area_Porta" to="Scenario/Porta" method="_on_area_porta_body_entered"]
 [connection signal="body_exited" from="Scenario/Porta/Area_Porta" to="Scenario/Porta" method="_on_area_porta_body_exited"]
 
 [editable path="Scenario/Fim_da_Fase"]
+[editable path="player"]
