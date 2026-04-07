@@ -1,0 +1,66 @@
+[gd_scene format=3 uid="uid://b68xvpvlrxxes"]
+
+[ext_resource type="Script" uid="uid://d2ky8paj1qcsw" path="res://battleSystem/turn_order_bar.gd" id="1_mav5h"]
+[ext_resource type="PackedScene" uid="uid://c530fh5jle7jk" path="res://battleSystem/character_display_container.tscn" id="2_kln8k"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mav5h"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.101960786, 0.101960786, 0.101960786, 0.5882353)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+corner_detail = 5
+
+[node name="TurnOrderBar" type="Control" unique_id=384685520]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mav5h")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=752752504]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 50
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer" unique_id=1644479094]
+custom_minimum_size = Vector2(125, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_mav5h")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/PanelContainer" unique_id=1413041564]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/PanelContainer/ScrollContainer" unique_id=856630306]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_top = 10
+
+[node name="CharacterContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer/ScrollContainer/MarginContainer" unique_id=96374569]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 25
+
+[node name="CharacterDisplayContainer" parent="MarginContainer/PanelContainer/ScrollContainer/MarginContainer/CharacterContainer" unique_id=2032887238 instance=ExtResource("2_kln8k")]
+layout_mode = 2

@@ -1,0 +1,83 @@
+[gd_scene format=3 uid="uid://rsqcnw42arug"]
+
+[ext_resource type="StyleBox" uid="uid://dxuw14vfsl8qk" path="res://battleSystem/focus_player_stats.tres" id="1_hhc7q"]
+[ext_resource type="Script" uid="uid://bvfc7c2jsq03c" path="res://battleSystem/player_stats_container.gd" id="2_0humv"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0humv"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0, 0, 0, 0.3019608)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+corner_detail = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o57nu"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0.8156863, 0.53333336, 0, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+corner_detail = 6
+
+[node name="PlayerStatusContainer" type="PanelContainer" unique_id=764564538]
+theme_override_styles/panel = ExtResource("1_hhc7q")
+script = ExtResource("2_0humv")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=133313282]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_right = 30
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=196378131]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=2066491066]
+layout_mode = 2
+theme_override_constants/separation = 25
+
+[node name="Name" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1491749065]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 23
+text = "Name"
+
+[node name="HP1" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=939911065]
+layout_mode = 2
+theme_override_font_sizes/font_size = 23
+text = "HP"
+
+[node name="HP2" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1264178431]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 23
+text = "555"
+
+[node name="Mana1" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=658443731]
+layout_mode = 2
+theme_override_font_sizes/font_size = 23
+text = "MP"
+
+[node name="Mana2" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1997605595]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 23
+text = "555"
+
+[node name="OverDriveBar" type="ProgressBar" parent="MarginContainer/VBoxContainer" unique_id=265947049]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_0humv")
+theme_override_styles/fill = SubResource("StyleBoxFlat_o57nu")
+step = 1.0
+value = 30.0
+show_percentage = false

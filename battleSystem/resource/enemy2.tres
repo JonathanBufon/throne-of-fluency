@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="CharacterResource" format=3 uid="uid://bryjtphifa7rw"]
+
+[ext_resource type="Script" uid="uid://b43yrin0qlny4" path="res://battleSystem/resource/character_resource.gd" id="1_10npn"]
+
+[resource]
+script = ExtResource("1_10npn")
+metadata/_custom_type_script = "uid://b43yrin0qlny4"
+name = "Echo Shade"
+maxHealth = 45
+currentHealth = 45
+maxMana = 20
+currentMana = 20
+speed = 55
+overDriveValue = 0

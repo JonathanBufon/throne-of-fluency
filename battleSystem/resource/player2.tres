@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="CharacterResource" format=3 uid="uid://bigdcgiflmeju"]
+
+[ext_resource type="Script" uid="uid://b43yrin0qlny4" path="res://battleSystem/resource/character_resource.gd" id="1_flxnj"]
+
+[resource]
+script = ExtResource("1_flxnj")
+metadata/_custom_type_script = "uid://b43yrin0qlny4"
+name = "Lumen"
+maxHealth = 70
+currentHealth = 70
+maxMana = 80
+currentMana = 80
+speed = 75
+overDriveValue = 0
