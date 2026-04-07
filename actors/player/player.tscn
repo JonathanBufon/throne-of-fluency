@@ -514,10 +514,11 @@ frame_progress = 0.40233684
 
 [node name="Camera2D" type="Camera2D" parent="AnimatedSprite2D" unique_id=1508013483]
 zoom = Vector2(1.5, 1.5)
-limit_left = 0
-limit_top = 0
-limit_right = 1761
-limit_bottom = 816
+limit_enabled = false
+limit_left = 4
+limit_top = -2
+limit_right = 1765
+limit_bottom = 814
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=583839979]
 position = Vector2(-0.75, 6)
