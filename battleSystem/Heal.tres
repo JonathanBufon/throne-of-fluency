@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="SkillResource" format=3 uid="uid://c37nasegxx0yo"]
+
+[ext_resource type="Script" uid="uid://c421fsjpurk6x" path="res://scripts/battle_system/skillResource.gd" id="1_k4eyv"]
+
+[resource]
+script = ExtResource("1_k4eyv")
+name = "Heal"
+metadata/_custom_type_script = "uid://c421fsjpurk6x"
