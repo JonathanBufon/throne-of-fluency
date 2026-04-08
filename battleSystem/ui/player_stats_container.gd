@@ -5,7 +5,7 @@ extends PanelContainer
 @onready var mana_2_label: Label = %Mana2
 @onready var over_drive_bar: ProgressBar = %OverDriveBar
 
-var focusStyleBox = preload("res://battleSystem/focus_player_stats.tres")
+var focusStyleBox = preload("res://battleSystem/data/characters/focus_player_stats.tres")
 var normalStyleBox :StyleBox = StyleBoxEmpty.new()
 var characterResource: Resource
 var oldCharacterResource: Resource

@@ -93,31 +93,56 @@ Integrados ao cenário: portas que respondem a comandos escritos, NPCs que se co
 
 ```
 throne-of-fluency/
-├── actors/
-│   ├── player/         — player.tscn + player.gd
-│   └── enemy/          — enemy.tscn + enemy.gd
-├── assets/
-│   ├── fonts/          — CuteFantasy-5x9.ttf
-│   ├── sprites/        — characters/, player/, world/
-│   └── ui/             — sprites de interface
-├── battleSystem/       — sistema de combate autocontido
-│   ├── command_menu.tscn/.gd
-│   ├── turn_based_agent.tscn/.gd
-│   ├── turn_based_controller.tscn/.gd
-│   ├── turn_order_bar.tscn/.gd
-│   ├── player_status_display.gd
-│   ├── skillResource.gd
-│   ├── character.gd
-│   ├── resource/       — .tres de personagens e inimigos
-│   ├── Attack.tres / Heal.tres / Slash.tres
-│   └── test_battle_scene.tscn
-├── ui/
-│   └── dialog/         — dialog_screen.tscn, dialogo_acao_input.tscn
-├── world/              — fases, cenários e scripts de mundo
-│   ├── fase_cripta.tscn
-│   ├── cenario1.tscn
-│   └── porta.gd / fim_da_fase.gd
-└── main.tscn
+├── actors/               — Entidades jogáveis e inimigos (cena + script juntos)
+│   ├── player/
+│   │   ├── player.tscn           — Cena do herói (CharacterBody2D)
+│   │   └── player.gd             — Movimento e animação do herói
+│   └── enemy/
+│       ├── enemy.tscn            — Cena de inimigo (CharacterBody2D)
+│       └── enemy.gd              — IA básica de inimigo (segue o jogador)
+├── assets/               — Recursos visuais e de áudio
+│   ├── fonts/                    — Fontes TTF (ex: CuteFantasy-5x9.ttf)
+│   ├── sprites/
+│   │   ├── characters/           — Spritesheets de personagens (Knights, Orcs, etc.)
+│   │   ├── player/               — Spritesheet do herói jogável
+│   │   └── world/                — Tiles e sprites de cenário (dungeon, shroomLands, green)
+│   ├── test/                     — Assets usados apenas em testes
+│   └── ui/                       — Sprites de interface (UI_Icons, UI_Frames, etc.)
+├── battleSystem/         — Sistema de combate por turnos (autocontido)
+│   ├── core/                     — Lógica central da batalha
+│   │   ├── turn_based_controller.tscn/.gd  — Gerencia ordem de turnos e fim de batalha
+│   │   ├── turn_based_agent.tscn/.gd       — Lógica por personagem (targeting, input, IA)
+│   │   └── character.gd                    — Script raiz do nó de personagem (StaticBody2D)
+│   ├── ui/                       — Cenas e scripts de interface de batalha
+│   │   ├── command_menu.tscn/.gd           — Menu de ações do jogador
+│   │   ├── command_button.tscn             — Botão reutilizável do menu de comandos
+│   │   ├── player_status_display.tscn/.gd  — HUD de status dos jogadores
+│   │   ├── player_stats_container.tscn/.gd — Painel HP/MP/OverDrive por personagem
+│   │   ├── turn_order_bar.tscn/.gd         — Barra lateral de ordem de turnos
+│   │   └── character_display_container.tscn
+│   ├── data/                     — Recursos .tres prontos para uso em cenas
+│   │   ├── skills/               — Attack.tres / Heal.tres / Slash.tres
+│   │   └── characters/           — enemy1-3.tres / player1-2.tres / focus_player_stats.tres
+│   ├── resources/                — Definições de Resource (.gd)
+│   │   ├── character_resource.gd — CharacterResource: HP, MP, speed, overDrive
+│   │   └── skillResource.gd      — SkillResource: name, targetType, skillType, power
+│   └── tests/
+│       └── test_battle_scene.tscn — Cena de teste isolada do sistema de batalha
+├── ui/                   — Interfaces de jogo
+│   └── dialog/
+│       ├── dialog_screen.tscn          — Diálogo com NPC (modos DIALOG e INPUT)
+│       ├── dialogo_acao_input.tscn     — Popup de input linguístico
+│       └── dialogo_acao_input.gd       — Script do popup (sem acento no nome)
+├── world/                — Mapas, cenários e scripts de mundo
+│   ├── fase_cripta.tscn          — Fase 1: Cripta dos Ecos Perdidos (cena principal)
+│   ├── cenario1.tscn             — Cenário de transição (ShroomLands)
+│   ├── exit_cripta.tscn          — Saída da cripta
+│   ├── fim_da_fase.tscn          — Trigger de fim de fase (Area2D)
+│   ├── testes.tscn               — Cena de testes gerais
+│   ├── porta.gd                  — Lógica da porta com puzzle linguístico
+│   ├── fim_da_fase.gd            — Detecta player e troca de cena
+│   └── scenario.gd               — Script de cenário (stub)
+└── main.tscn             — Cena principal de entrada
 ```
 
 ---

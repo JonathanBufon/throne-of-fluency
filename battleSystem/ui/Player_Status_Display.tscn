@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bx3mv8ifljfrq"]
 
-[ext_resource type="Script" uid="uid://dhdgb2h3wjiek" path="res://battleSystem/player_status_display.gd" id="1_57y8v"]
+[ext_resource type="Script" uid="uid://dhdgb2h3wjiek" path="res://battleSystem/ui/player_status_display.gd" id="1_57y8v"]
 
 [node name="PlayerStatusDisplay" type="Control" unique_id=1384549268]
 layout_mode = 3

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b68xvpvlrxxes"]
 
-[ext_resource type="Script" uid="uid://d2ky8paj1qcsw" path="res://battleSystem/turn_order_bar.gd" id="1_mav5h"]
-[ext_resource type="PackedScene" uid="uid://c530fh5jle7jk" path="res://battleSystem/character_display_container.tscn" id="2_kln8k"]
+[ext_resource type="Script" uid="uid://d2ky8paj1qcsw" path="res://battleSystem/ui/turn_order_bar.gd" id="1_mav5h"]
+[ext_resource type="PackedScene" uid="uid://c530fh5jle7jk" path="res://battleSystem/ui/character_display_container.tscn" id="2_kln8k"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mav5h"]
 content_margin_left = 0.0

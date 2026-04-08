@@ -34,20 +34,25 @@ throne-of-fluency/
 │   ├── test/                     — Assets usados apenas em testes
 │   └── ui/                       — Sprites de interface (UI_Icons, UI_Frames, etc.)
 ├── battleSystem/         — Sistema de combate por turnos (autocontido)
-│   ├── resource/                 — CharacterResource e .tres de personagens
-│   ├── skillResource.gd          — Recurso base de habilidades (SkillResource)
-│   ├── Attack.tres / Heal.tres / Slash.tres
-│   ├── turn_based_controller.tscn/.gd  — Gerencia ordem de turnos e fim de batalha
-│   ├── turn_based_agent.tscn/.gd       — Lógica por personagem (targeting, input, IA)
-│   ├── command_menu.tscn/.gd           — Menu de ações do jogador
-│   ├── character.gd                    — Script raiz do nó de personagem
-│   ├── player_status_display.tscn/.gd  — HUD de status dos jogadores
-│   ├── player_stats_container.tscn/.gd — Painel HP/MP/OverDrive por personagem
-│   ├── turn_order_bar.tscn/.gd         — Barra lateral de ordem de turnos
-│   ├── character_display_container.tscn
-│   ├── command_button.tscn
-│   ├── focus_player_stats.tres
-│   └── test_battle_scene.tscn          — Cena de teste isolada do sistema de batalha
+│   ├── core/                     — Lógica central da batalha
+│   │   ├── turn_based_controller.tscn/.gd  — Gerencia ordem de turnos e fim de batalha
+│   │   ├── turn_based_agent.tscn/.gd       — Lógica por personagem (targeting, input, IA)
+│   │   └── character.gd                    — Script raiz do nó de personagem (StaticBody2D)
+│   ├── ui/                       — Cenas e scripts de interface de batalha
+│   │   ├── command_menu.tscn/.gd           — Menu de ações do jogador
+│   │   ├── command_button.tscn             — Botão reutilizável do menu de comandos
+│   │   ├── player_status_display.tscn/.gd  — HUD de status dos jogadores
+│   │   ├── player_stats_container.tscn/.gd — Painel HP/MP/OverDrive por personagem
+│   │   ├── turn_order_bar.tscn/.gd         — Barra lateral de ordem de turnos
+│   │   └── character_display_container.tscn
+│   ├── data/                     — Recursos .tres prontos para uso em cenas
+│   │   ├── skills/               — Attack.tres / Heal.tres / Slash.tres
+│   │   └── characters/           — enemy1-3.tres / player1-2.tres / focus_player_stats.tres
+│   ├── resources/                — Definições de Resource (.gd)
+│   │   ├── character_resource.gd — CharacterResource: HP, MP, speed, overDrive
+│   │   └── skillResource.gd      — SkillResource: name, targetType, skillType, power
+│   └── tests/
+│       └── test_battle_scene.tscn — Cena de teste isolada do sistema de batalha
 ├── ui/                   — Interfaces de jogo
 │   └── dialog/
 │       ├── dialog_screen.tscn          — Diálogo com NPC (modos DIALOG e INPUT)
@@ -75,15 +80,15 @@ throne-of-fluency/
 
 | Arquivo | Responsabilidade |
 |---|---|
-| `battleSystem/skillResource.gd` | `SkillResource` — dados de habilidade: `name`, `targetType`, `skillType`, `power` |
-| `battleSystem/resource/character_resource.gd` | `CharacterResource` — dados de personagem: HP, MP, speed, overDrive. Métodos `take_damage`, `heal`, `is_dead` |
-| `battleSystem/turn_based_agent.gd` | `TurnBasedAgent` — Node filho de cada personagem. Gerencia targeting, input de seleção, sinais de turno |
-| `battleSystem/turn_based_controller.gd` | `TurnBasedController` — Gerencia a ordem de turnos, detecta fim de batalha, emite `battle_won`/`battle_lost` |
-| `battleSystem/character.gd` | Script do nó raiz de cada personagem (StaticBody2D). Aplica animação + efeito da skill (dano ou cura) |
-| `battleSystem/command_menu.gd` | `CommandMenu` — UI do turno do jogador. Emite `command_selected(command: Resource)` |
-| `battleSystem/player_status_display.gd` | HUD de status dos jogadores — lista `PlayerStatsContainer` por jogador |
-| `battleSystem/player_stats_container.gd` | Painel de HP/MP/OverDrive de um personagem, com polling de mudanças |
-| `battleSystem/turn_order_bar.gd` | Barra lateral com a ordem de turnos atual |
+| `battleSystem/resources/skillResource.gd` | `SkillResource` — dados de habilidade: `name`, `targetType`, `skillType`, `power` |
+| `battleSystem/resources/character_resource.gd` | `CharacterResource` — dados de personagem: HP, MP, speed, overDrive. Métodos `take_damage`, `heal`, `is_dead` |
+| `battleSystem/core/turn_based_agent.gd` | `TurnBasedAgent` — Node filho de cada personagem. Gerencia targeting, input de seleção, sinais de turno |
+| `battleSystem/core/turn_based_controller.gd` | `TurnBasedController` — Gerencia a ordem de turnos, detecta fim de batalha, emite `battle_won`/`battle_lost` |
+| `battleSystem/core/character.gd` | Script do nó raiz de cada personagem (StaticBody2D). Aplica animação + efeito da skill (dano ou cura) |
+| `battleSystem/ui/command_menu.gd` | `CommandMenu` — UI do turno do jogador. Emite `command_selected(command: Resource)` |
+| `battleSystem/ui/player_status_display.gd` | HUD de status dos jogadores — lista `PlayerStatsContainer` por jogador |
+| `battleSystem/ui/player_stats_container.gd` | Painel de HP/MP/OverDrive de um personagem, com polling de mudanças |
+| `battleSystem/ui/turn_order_bar.gd` | Barra lateral com a ordem de turnos atual |
 
 **Grupos Godot em uso:**
 - `"turnBasedAgents"` — todos os agentes (jogadores + inimigos)
@@ -118,9 +123,9 @@ controller.battle_lost.connect(_on_battle_lost)
 **Habilidades disponíveis:**
 | Arquivo | Nome | Alvo | Efeito | Power |
 |---|---|---|---|---|
-| `Attack.tres` | Attack | Inimigos | Dano | 15 |
-| `Slash.tres` | Slash | Inimigos | Dano | 22 |
-| `Heal.tres` | Heal | Jogadores | Cura | 25 |
+| `data/skills/Attack.tres` | Attack | Inimigos | Dano | 15 |
+| `data/skills/Slash.tres` | Slash | Inimigos | Dano | 22 |
+| `data/skills/Heal.tres` | Heal | Jogadores | Cura | 25 |
 
 **Fluxo do turno do jogador:**
 1. `TurnBasedAgent` emite `player_turn_started` → `CommandMenu` aparece com opções do personagem

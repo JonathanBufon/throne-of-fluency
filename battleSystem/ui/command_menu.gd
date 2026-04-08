@@ -10,10 +10,10 @@ signal command_selected(command: Resource)
 @onready var main_commands: VBoxContainer = %MainCommands
 @onready var skill_container: GridContainer = $MarginContainer/ScrollContainer/SkillsContainer
 
-const COMMAND_BUTTON := preload("res://battleSystem/command_button.tscn")
+const COMMAND_BUTTON := preload("res://battleSystem/ui/command_button.tscn")
 
 # Stores the current character's basic attack to avoid multiple signal connections
-var _current_basic_attack: Resource = preload("res://battleSystem/Attack.tres")
+var _current_basic_attack: Resource = preload("res://battleSystem/data/skills/Attack.tres")
 
 func _ready() -> void:
 	add_to_group("commandMenu")

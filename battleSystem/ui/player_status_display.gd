@@ -2,12 +2,12 @@ extends Control
 
 @onready var player_container: VBoxContainer = %PlayerContainer
 
-const PLAYER_STATS_CONTAINER := preload("res://battleSystem/player_stats_container.tscn")
+const PLAYER_STATS_CONTAINER := preload("res://battleSystem/ui/player_stats_container.tscn")
 
 # Resources must match the CharacterResources assigned to the player TurnBasedAgents in the scene
 var playerList: Array = [
-	preload("res://battleSystem/resource/player1.tres"),
-	preload("res://battleSystem/resource/player2.tres"),
+	preload("res://battleSystem/data/characters/player1.tres"),
+	preload("res://battleSystem/data/characters/player2.tres"),
 ]
 
 func _ready() -> void:

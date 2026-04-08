@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://rsqcnw42arug"]
 
-[ext_resource type="StyleBox" uid="uid://dxuw14vfsl8qk" path="res://battleSystem/focus_player_stats.tres" id="1_hhc7q"]
-[ext_resource type="Script" uid="uid://bvfc7c2jsq03c" path="res://battleSystem/player_stats_container.gd" id="2_0humv"]
+[ext_resource type="StyleBox" uid="uid://dxuw14vfsl8qk" path="res://battleSystem/data/characters/focus_player_stats.tres" id="1_hhc7q"]
+[ext_resource type="Script" uid="uid://bvfc7c2jsq03c" path="res://battleSystem/ui/player_stats_container.gd" id="2_0humv"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0humv"]
 content_margin_left = 2.0

@@ -5,7 +5,7 @@ extends Control
 
 @onready var character_container: VBoxContainer = %CharacterContainer
 
-const CHARACTER_DISPLAY_CONTAINER = preload("res://battleSystem/character_display_container.tscn")
+const CHARACTER_DISPLAY_CONTAINER = preload("res://battleSystem/ui/character_display_container.tscn")
 
 var characterTurnOrder: Array[TurnBasedAgent] = []
 

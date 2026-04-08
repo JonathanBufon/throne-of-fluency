@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cefek1e0d8i2m"]
 
-[ext_resource type="Script" uid="uid://c44rlhf337lf0" path="res://battleSystem/turn_based_agent.gd" id="1_yoxwo"]
+[ext_resource type="Script" uid="uid://c44rlhf337lf0" path="res://battleSystem/core/turn_based_agent.gd" id="1_yoxwo"]
 [ext_resource type="Texture2D" uid="uid://bui0g0kmp8cs" path="res://assets/ui/UI_Icons.png" id="2_ck18u"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ccga6"]

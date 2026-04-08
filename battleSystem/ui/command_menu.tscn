@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b22m3i34hfut8"]
 
-[ext_resource type="PackedScene" uid="uid://cebxpibu8ob32" path="res://battleSystem/command_button.tscn" id="1_p0m5m"]
-[ext_resource type="Script" uid="uid://b0q7cfunnlcl7" path="res://battleSystem/command_menu.gd" id="1_pyf6s"]
+[ext_resource type="PackedScene" uid="uid://cebxpibu8ob32" path="res://battleSystem/ui/command_button.tscn" id="1_p0m5m"]
+[ext_resource type="Script" uid="uid://b0q7cfunnlcl7" path="res://battleSystem/ui/command_menu.gd" id="1_pyf6s"]
 
 [node name="CommandMenu" type="Control" unique_id=1572139444]
 layout_mode = 3
