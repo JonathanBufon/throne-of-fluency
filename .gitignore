@@ -36,3 +36,8 @@ Thumbs.db
 *~
 *.tmp
 *.bak
+
+# Claude code skills
+skills-lock.json
+.claude
+.agents
