@@ -1,0 +1,94 @@
+[gd_scene format=3 uid="uid://caxv8u0tludmo"]
+
+[ext_resource type="Texture2D" uid="uid://c83ortgf2jrk8" path="res://icon.svg" id="1_1ahfb"]
+[ext_resource type="PackedScene" uid="uid://djq2mu0mqkonh" path="res://battleSystem/core/turn_based_controller.tscn" id="1_jg7qw"]
+[ext_resource type="Script" uid="uid://dxsc4wn5ypvjn" path="res://battleSystem/core/character.gd" id="1_m08ds"]
+[ext_resource type="Texture2D" uid="uid://bd72l60i2gdk5" path="res://assets/sprites/characters/Knights/Swordman.png" id="2_ca7vg"]
+[ext_resource type="PackedScene" uid="uid://cefek1e0d8i2m" path="res://battleSystem/core/turn_based_agent.tscn" id="2_xj6nq"]
+[ext_resource type="PackedScene" uid="uid://b22m3i34hfut8" path="res://battleSystem/ui/command_menu.tscn" id="3_ca7vg"]
+[ext_resource type="Resource" uid="uid://dm5g3oqr6d2uh" path="res://battleSystem/data/skills/Attack.tres" id="5_4kefl"]
+[ext_resource type="Resource" uid="uid://brgiobtl5h6p0" path="res://battleSystem/data/characters/enemy1.tres" id="5_lx5g3"]
+[ext_resource type="Resource" uid="uid://c37nasegxx0yo" path="res://battleSystem/data/skills/Heal.tres" id="7_4jyio"]
+[ext_resource type="Resource" uid="uid://bryjtphifa7rw" path="res://battleSystem/data/characters/enemy2.tres" id="7_764ow"]
+[ext_resource type="Resource" uid="uid://bowsy3l51qu3s" path="res://battleSystem/data/characters/enemy3.tres" id="8_irdlm"]
+[ext_resource type="Resource" uid="uid://66jy0hm02o01" path="res://battleSystem/data/skills/Slash.tres" id="8_j3fa2"]
+[ext_resource type="PackedScene" uid="uid://b68xvpvlrxxes" path="res://battleSystem/ui/turn_order_bar.tscn" id="10_4jyio"]
+[ext_resource type="Resource" uid="uid://cj8g8f8ovsm0j" path="res://battleSystem/data/characters/player1.tres" id="10_w11w6"]
+[ext_resource type="PackedScene" uid="uid://bx3mv8ifljfrq" path="res://battleSystem/ui/Player_Status_Display.tscn" id="15_yvime"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xj6nq"]
+atlas = ExtResource("1_1ahfb")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m08ds"]
+atlas = ExtResource("2_ca7vg")
+region = Rect2(6.9660034, 390.57434, 36.634354, 40.980774)
+
+[node name="TestBattleScene" type="Node2D" unique_id=1500664384]
+
+[node name="TurnBasedController" parent="." unique_id=1361258708 instance=ExtResource("1_jg7qw")]
+
+[node name="Enemy" type="StaticBody2D" parent="." unique_id=531534427]
+position = Vector2(384, 268)
+script = ExtResource("1_m08ds")
+
+[node name="Sprite2D" type="Sprite2D" parent="Enemy" unique_id=275013435]
+position = Vector2(-4, -73)
+scale = Vector2(0.9, 0.9)
+texture = SubResource("AtlasTexture_xj6nq")
+
+[node name="TurnBasedAgent" parent="Enemy" unique_id=1021213470 instance=ExtResource("2_xj6nq")]
+character_resource = ExtResource("5_lx5g3")
+character_type = 1
+basicAttack = ExtResource("5_4kefl")
+
+[node name="Enemy2" type="StaticBody2D" parent="." unique_id=1695973519]
+position = Vector2(384, 268)
+scale = Vector2(0.9, 0.9)
+script = ExtResource("1_m08ds")
+
+[node name="Sprite2D" type="Sprite2D" parent="Enemy2" unique_id=1076916139]
+position = Vector2(-192.99997, -95)
+scale = Vector2(0.9, 0.9)
+texture = SubResource("AtlasTexture_xj6nq")
+
+[node name="TurnBasedAgent" parent="Enemy2" unique_id=1507760456 instance=ExtResource("2_xj6nq")]
+character_resource = ExtResource("7_764ow")
+character_type = 1
+basicAttack = ExtResource("5_4kefl")
+
+[node name="Enemy3" type="StaticBody2D" parent="." unique_id=1771662550]
+position = Vector2(384, 268)
+scale = Vector2(0.9, 0.9)
+script = ExtResource("1_m08ds")
+
+[node name="Sprite2D" type="Sprite2D" parent="Enemy3" unique_id=1845110223]
+position = Vector2(182.66666, -93)
+scale = Vector2(0.9, 0.9)
+texture = SubResource("AtlasTexture_xj6nq")
+
+[node name="TurnBasedAgent" parent="Enemy3" unique_id=1316095889 instance=ExtResource("2_xj6nq")]
+character_resource = ExtResource("8_irdlm")
+character_type = 1
+basicAttack = ExtResource("5_4kefl")
+
+[node name="Player" type="StaticBody2D" parent="." unique_id=1718754404]
+position = Vector2(384, 393)
+script = ExtResource("1_m08ds")
+
+[node name="Sprite2D" type="Sprite2D" parent="Player" unique_id=1414676888]
+scale = Vector2(5, 5)
+texture = SubResource("AtlasTexture_m08ds")
+
+[node name="TurnBasedAgent" parent="Player" unique_id=1674364098 instance=ExtResource("2_xj6nq")]
+character_resource = ExtResource("10_w11w6")
+basicAttack = ExtResource("5_4kefl")
+skills = Array[Resource]([ExtResource("7_4jyio"), ExtResource("8_j3fa2")])
+isActive = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1848290934]
+
+[node name="CommandMenu" parent="CanvasLayer" unique_id=1572139444 instance=ExtResource("3_ca7vg")]
+
+[node name="TurnOrderBar" parent="CanvasLayer" unique_id=384685520 instance=ExtResource("10_4jyio")]
+
+[node name="PlayerStatusDisplay" parent="CanvasLayer" unique_id=1384549268 instance=ExtResource("15_yvime")]

@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://bx3mv8ifljfrq"]
+
+[ext_resource type="Script" uid="uid://dhdgb2h3wjiek" path="res://battleSystem/ui/player_status_display.gd" id="1_57y8v"]
+
+[node name="PlayerStatusDisplay" type="Control" unique_id=1384549268]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_57y8v")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=178320165]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 50
+
+[node name="PlayerContainer" type="VBoxContainer" parent="MarginContainer" unique_id=512790150]
+unique_name_in_owner = true
+layout_mode = 2
