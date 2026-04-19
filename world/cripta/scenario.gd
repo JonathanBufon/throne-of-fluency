@@ -25,4 +25,10 @@ func _apply_spawn() -> void:
 		return
 
 	player.global_position = spawn.global_position
+
+	# Posiciona a Lumen ao lado do player no spawn
+	var lumen = get_tree().get_first_node_in_group("lumen")
+	if lumen:
+		lumen.global_position = spawn.global_position + Vector2(-40, -20)
+
 	GameData.spawn_id = ""
