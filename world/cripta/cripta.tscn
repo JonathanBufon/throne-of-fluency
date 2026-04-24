@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://drjdfok8nfni1" path="res://world/cripta/porta.gd" id="9_n1h8o"]
 [ext_resource type="Texture2D" uid="uid://cyun1yi6ar1iq" path="res://assets/sprites/world/dungeon-scenario/Dungeon_1/Dungeon_1_Door_anim.png" id="10_cclv1"]
 [ext_resource type="PackedScene" uid="uid://cvmyqqm2xgget" path="res://actors/player/player.tscn" id="11_6fsqc"]
+[ext_resource type="PackedScene" uid="uid://dwanm5msvdfpg" path="res://actors/lumen/lumen.tscn" id="12_ti6rb"]
 
 [sub_resource type="TileSet" id="TileSet_6vbny"]
 physics_layer_0/collision_layer = 1
@@ -417,6 +418,11 @@ position = Vector2(2, 3.5)
 
 [node name="Camera2D" parent="player/AnimatedSprite2D" index="0" unique_id=1508013483]
 limit_enabled = true
+
+[node name="lumen" parent="." unique_id=292211104 instance=ExtResource("12_ti6rb")]
+z_index = 6
+position = Vector2(511, 232)
+scale = Vector2(0.5, 0.5)
 
 [node name="spawn_1" type="Marker2D" parent="." unique_id=476580708]
 z_index = 8

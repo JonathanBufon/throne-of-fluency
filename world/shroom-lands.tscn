@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://bbupi2yx1vb1h" path="res://world/troca_fase.tscn" id="10_jkgqs"]
 [ext_resource type="Script" uid="uid://cxqd75s3t8f4f" path="res://world/cripta/scenario.gd" id="11_scnry"]
 [ext_resource type="PackedScene" uid="uid://bxsqpqdctqwjw" path="res://actors/enemy/enemy.tscn" id="12_jkgqs"]
+[ext_resource type="PackedScene" uid="uid://dwanm5msvdfpg" path="res://actors/lumen/lumen.tscn" id="14_canwo"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_h768n"]
 texture = ExtResource("1_jsao4")
@@ -1106,6 +1107,10 @@ position = Vector2(1629, 1665)
 position = Vector2(1673, 2067.9998)
 scale = Vector2(5, 5)
 gizmo_extents = 85.1
+
+[node name="lumen" parent="." unique_id=292211104 instance=ExtResource("14_canwo")]
+position = Vector2(1620, 1946)
+scale = Vector2(0.5, 0.5)
 
 [editable path="scenario/Fim_da_Fase 1"]
 [editable path="player/player"]
