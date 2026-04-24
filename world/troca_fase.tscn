@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bbupi2yx1vb1h"]
 
-[ext_resource type="Script" uid="uid://bbxu1cnm435ry" path="res://world/fim_da_fase.gd" id="1_xvjgc"]
+[ext_resource type="Script" uid="uid://bbxu1cnm435ry" path="res://world/troca_fase.gd" id="1_xvjgc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3yc8x"]
 size = Vector2(128.5, 155)

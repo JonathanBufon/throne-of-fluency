@@ -1,4 +1,4 @@
-# Throne of Fluency
+# Throne of Fluency 
 
 RPG educacional top-down em pixel art desenvolvido em Godot 4.6. O jogador aprende inglês de forma orgânica — não por lições, mas porque o idioma é o mecanismo central do jogo: abre portas, desbloqueia magias e dá sentido ao mundo.
 

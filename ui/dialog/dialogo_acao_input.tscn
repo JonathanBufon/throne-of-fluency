@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://ji64y4xps3oq"]
 
 [ext_resource type="Script" uid="uid://cwvrdp8vwhpua" path="res://ui/dialog/dialogo_acao_input.gd" id="1_r5kc8"]
-[ext_resource type="Texture2D" uid="uid://r8f27aipwmjn" path="res://assets/ui/UI_Frames.png" id="2_8yfko"]
+[ext_resource type="Texture2D" uid="uid://c78rm8c4urg48" path="res://assets/ui/UI_Frames.png" id="2_8yfko"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jqcs7"]
 atlas = ExtResource("2_8yfko")
