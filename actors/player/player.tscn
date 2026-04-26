@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://cvmyqqm2xgget"]
 
 [ext_resource type="Script" uid="uid://dxaeih73iyrx7" path="res://actors/player/player.gd" id="1_g2els"]
-[ext_resource type="Texture2D" uid="uid://bd72l60i2gdk5" path="res://assets/sprites/characters/Knights/Swordman.png" id="2_b0kkn"]
+[ext_resource type="Texture2D" uid="uid://b1w5bj6vkt8qq" path="res://assets/sprites/characters/Knights/Swordman.png" id="2_b0kkn"]
+[ext_resource type="Texture2D" uid="uid://ba262wje1g63d" path="res://assets/ui/UI_Pop_Up.png" id="3_ax26v"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_e4p34"]
 atlas = ExtResource("2_b0kkn")
@@ -499,8 +500,8 @@ animations = [{
 radius = 5.25
 height = 16.5
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_b0kkn"]
-load_path = "res://.godot/imported/UI_Pop_Up.png-f1077207ce5a7d2db498554d899c5b0d.ctex"
+[sub_resource type="AtlasTexture" id="AtlasTexture_lsqbn"]
+atlas = ExtResource("3_ax26v")
 
 [node name="player" type="CharacterBody2D" unique_id=1411583611 groups=["player"]]
 scale = Vector2(4, 4)
@@ -529,6 +530,6 @@ shape = SubResource("CapsuleShape2D_b0kkn")
 [node name="Sprite2D" type="Sprite2D" parent="Icone_interacao" unique_id=1637939700]
 position = Vector2(8.25, -6.499999)
 scale = Vector2(0.5, 0.505)
-texture = SubResource("CompressedTexture2D_b0kkn")
+texture = SubResource("AtlasTexture_lsqbn")
 region_enabled = true
 region_rect = Rect2(48.00003, 0, 43.19998, 48.799995)
