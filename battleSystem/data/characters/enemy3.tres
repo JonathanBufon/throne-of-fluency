@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="CharacterResource" format=3 uid="uid://bowsy3l51qu3s"]
+
+[ext_resource type="Script" uid="uid://b43yrin0qlny4" path="res://battleSystem/resources/character_resource.gd" id="1_iioin"]
+
+[resource]
+script = ExtResource("1_iioin")
+metadata/_custom_type_script = "uid://b43yrin0qlny4"
+name = "Stone Guard"
+maxHealth = 80
+currentHealth = 80
+maxMana = 0
+currentMana = 0
+speed = 30
+overDriveValue = 0

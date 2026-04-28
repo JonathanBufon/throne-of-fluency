@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="CharacterResource" format=3 uid="uid://brgiobtl5h6p0"]
+
+[ext_resource type="Script" uid="uid://b43yrin0qlny4" path="res://battleSystem/resources/character_resource.gd" id="1_5abhp"]
+
+[resource]
+script = ExtResource("1_5abhp")
+metadata/_custom_type_script = "uid://b43yrin0qlny4"
+name = "Orc Grunt"
+maxHealth = 60
+currentHealth = 60
+maxMana = 0
+currentMana = 0
+speed = 40
+overDriveValue = 0

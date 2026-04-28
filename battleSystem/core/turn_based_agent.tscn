@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://cefek1e0d8i2m"]
+
+[ext_resource type="Script" uid="uid://c44rlhf337lf0" path="res://battleSystem/core/turn_based_agent.gd" id="1_yoxwo"]
+[ext_resource type="Texture2D" uid="uid://bui0g0kmp8cs" path="res://assets/ui/UI_Icons.png" id="2_ck18u"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ccga6"]
+atlas = ExtResource("2_ck18u")
+region = Rect2(49.3204, 175.68387, 13.034897, 15.931549)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1xsmj"]
+atlas = ExtResource("2_ck18u")
+region = Rect2(97.030304, 176.27783, 13.614227, 15.641876)
+
+[node name="TurnBasedAgent" type="Node" unique_id=960260226]
+script = ExtResource("1_yoxwo")
+
+[node name="onTurnIconNode" type="TextureRect" parent="." unique_id=177770604]
+custom_minimum_size = Vector2(25, 25)
+offset_right = 40.0
+offset_bottom = 40.0
+texture = SubResource("AtlasTexture_ccga6")
+expand_mode = 1
+
+[node name="targetIconNode" type="TextureRect" parent="." unique_id=1231392760]
+custom_minimum_size = Vector2(25, 25)
+offset_right = 40.0
+offset_bottom = 40.0
+texture = SubResource("AtlasTexture_1xsmj")
+expand_mode = 1
