@@ -1,0 +1,124 @@
+
+
+TEORIA GERAL DE SISTEMAS
+Atividade 1 – Análise de Sistema de Informação
+Sistema: Aplicativo Amo Ofertas
+
+Disciplina: Teoria Geral de Sistemas
+Profª. Drª. Carla de Almeida Martins Basso
+
+
+1. Identificação do Sistema
+
+O Amo Ofertas é um aplicativo mobile de compras e ofertas que conecta consumidores a lojas parceiras, permitindo que os usuários encontrem promoções, ativem cupons de desconto e realizem pagamentos diretamente pela plataforma. O app atua como intermediador digital entre o varejo e o consumidor final, sendo amplamente utilizado em redes de supermercados, farmácias e lojas de departamento.
+
+Do ponto de vista da Teoria Geral dos Sistemas (TGS), o Amo Ofertas é classificado como um sistema de informação aberto, pois troca dados, informações e recursos continuamente com seu ambiente externo.
+
+2. Componentes do Sistema
+
+Seguindo o modelo dos cinco componentes de um Sistema de Informação, o Amo Ofertas apresenta:
+
+2.1 Hardware
+Smartphones e tablets dos usuários (iOS e Android)
+Servidores de hospedagem e processamento (infraestrutura em nuvem)
+Equipamentos de rede das lojas parceiras (caixas, terminais de pagamento)
+
+2.2 Software
+Aplicativo móvel Amo Ofertas (frontend para o usuário)
+Backend e APIs de integração com lojas parceiras
+Sistema de notificações push (alertas de ofertas e promoções)
+Motor de busca e filtragem de produtos e categorias
+
+2.3 Dados
+Cadastro de usuários (nome, e-mail, localização, histórico)
+Catálogo de produtos, preços e promoções das lojas parceiras
+Formas de pagamento (cartão de crédito, débito, PIX, cashback)
+Dados de engajamento: cliques, conversões, cupons ativados
+
+2.4 Processos
+Busca e filtragem de ofertas por categoria, preço ou loja
+Ativação de cupons e validação no ponto de venda
+Processamento de pagamentos e crédito de cashback
+Atualização periódica do catálogo pelas lojas parceiras
+
+2.5 Pessoas
+Usuários finais (consumidores que buscam e ativam ofertas)
+Lojistas parceiros (que cadastram e gerenciam suas promoções)
+Equipe de TI e negócios do Amo Ofertas (manutenção e evolução da plataforma)
+
+3. Interações e Ambiente
+
+Como sistema aberto, o Amo Ofertas interage constantemente com seu ambiente externo. O fluxo do sistema pode ser descrito conforme o modelo entrada → processamento → saída → retroalimentação, apresentado na disciplina:
+
+Elemento
+Descrição no Amo Ofertas
+Entrada (Input)
+Dados de usuários, catálogo de promoções das lojas, pagamentos realizados
+Processamento
+Classificação e filtragem de ofertas, cálculo de descontos e cashback, validação de cupons
+Saída (Output)
+Ofertas exibidas ao usuário, cupons ativados, confirmação de pagamento, cashback creditado
+Retroalimentação
+Avaliações dos usuários, taxa de conversão, relatórios de desempenho para as lojas
+Ambiente Externo
+Concorrentes (Méliuz, Cuponomia), regulamentações (LGPD), economia e hábitos de consumo
+
+
+As principais interações identificadas entre os componentes são:
+
+o usuário navega pelas ofertas, ativa cupons, realiza pagamentos e avalia experiênciasUsuário ↔ App: 
+as lojas enviam e atualizam o catálogo de promoções; o app retorna dados de engajamento e conversãoApp ↔ Lojas Parceiras: 
+integração com gateways de pagamento para processar transações (PIX, cartões)App ↔ Sistemas de Pagamento: 
+influência de concorrentes, mudanças de mercado e exigências legais como a LGPDApp ↔ Ambiente Externo: 
+
+4. Problemas Identificados
+
+Aplicando os conceitos da TGS, foram identificados os seguintes problemas no sistema:
+
+4.1 Alta Entropia no Catálogo
+O catálogo de ofertas pode ficar desatualizado quando as lojas parceiras não atualizam suas promoções em tempo real. Isso gera desordem (entropia) no sistema: o usuário visualiza ofertas já expiradas, gerando frustração e perda de confiança na plataforma.
+
+4.2 Feedback Deficiente
+Se o loop de retroalimentação entre o app e as lojas for fraco — ou seja, os lojistas não receberem informações claras sobre quais ofertas geram mais engajamento — o sistema perde a capacidade de se ajustar e melhorar. Isso compromete o equilíbrio dinâmico (homeostase) entre os subsistemas.
+
+4.3 Instabilidade em Picos de Demanda
+Em períodos de alta demanda (como Black Friday), o sistema pode sair do equilíbrio (perda de homeostase), apresentando lentidão, erros no processamento de pagamentos e falhas na exibição do catálogo.
+
+4.4 Processo de Cadastro Complexo
+Um processo de onboarding (cadastro) muito longo ou burocrático reduz a entrada de novos usuários no sistema, enfraquecendo o fluxo de entrada (input) e limitando o crescimento da plataforma.
+
+5. Oportunidades de Melhoria baseadas na TGS
+
+Com base nos princípios da Teoria Geral dos Sistemas, propõem-se as seguintes soluções:
+
+Problema / Oportunidade
+Conceito da TGS
+Solução Proposta
+Catálogo desatualizado
+Redução de Entropia
+Integração automática via API com os sistemas das lojas, atualizando ofertas em tempo real sem intervenção manual
+Feedback fraco com lojistas
+Melhoria do Feedback Loop
+Criar painel analítico para os lojistas visualizarem taxa de cliques, conversões e desempenho das suas promoções
+Instabilidade em picos
+Homeostase / Escalabilidade
+Adotar arquitetura em nuvem escalável (auto-scaling) para suportar aumento de acessos sem degradação
+Cadastro complexo
+Facilitar o Input
+Simplificar o cadastro com login social (Google/Apple) e reduzir etapas no onboarding inicial
+Ausência de rastreamento de entrega
+Feedback em tempo real / Transparência
+Implementar localização em tempo real do motoboy após o pedido, permitindo que o usuário acompanhe o status e a posição da entrega diretamente no app, assim como ocorre em plataformas concorrentes
+Lacuna em relação a concorrentes (iFood)
+Sistema Aberto / Sinergia com o Ambiente
+Ampliar o escopo do sistema integrando funcionalidades de mercados e farmácias, como pedido e entrega de produtos do dia a dia. O iFood já oferece esse serviço, e o Amo Ofertas pode se diferenciar ao combinar essa entrega com cupons e cashback, agregando mais valor ao usuário
+
+
+
+6. Conclusão
+
+A análise do aplicativo Amo Ofertas sob a ótica da Teoria Geral dos Sistemas evidencia que a plataforma constitui um sistema de informação aberto, composto por múltiplos subsistemas interdependentes (usuários, lojas parceiras, sistema de pagamentos e o próprio aplicativo). Cada um desses subsistemas interage com os demais e com o ambiente externo, influenciando o desempenho geral da plataforma.
+
+A aplicação dos conceitos da TGS — como entropia, homeostase, feedback e visão sistêmica — permite identificar pontos críticos de falha e propor melhorias estruturadas. Compreender o sistema como um todo organizado, e não apenas como partes isoladas, é fundamental para o profissional de Sistemas de Informação que deseja solucionar problemas de forma eficaz e estratégica.
+
+
