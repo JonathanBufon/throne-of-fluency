@@ -12,6 +12,7 @@ func _on_target_selected(target: TurnBasedAgent, command: SkillResource) -> void
 		target.character_resource.heal(command.power)
 	else:
 		target.character_resource.take_damage(command.power)
+	target._refresh_character_state_visual()
 
 	turn_based_agent.character_resource.overDriveValue = mini(
 		turn_based_agent.character_resource.overDriveValue + 10, 100

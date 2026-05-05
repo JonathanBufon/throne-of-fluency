@@ -13,6 +13,9 @@ signal player_turn_started()
 
 @export var onTurnIconOffSet: Vector2 = Vector2(0, -50)
 @export var targetIconOffSet: Vector2 = Vector2(50, 0)
+@export var active_modulate := Color(1.25, 1.25, 1.05, 1.0)
+@export var target_modulate := Color(1.2, 0.78, 0.78, 1.0)
+@export var dead_modulate := Color(0.35, 0.35, 0.42, 1.0)
 
 @onready var on_turn_icon_node: TextureRect = $onTurnIconNode
 @onready var target_icon_node: TextureRect = $targetIconNode
@@ -22,6 +25,8 @@ enum Character_Type { PLAYER, ENEMY }
 @export var isActive := false
 var selectedCommand: Resource
 var target: TurnBasedAgent
+var _base_modulate := Color.WHITE
+var _visual_node: CanvasItem
 
 func get_global_position() -> Vector2:
 	return get_parent().global_position
@@ -66,8 +71,10 @@ func set_active(boolean: bool) -> void:
 
 	if isActive:
 		on_turn_icon_node.show()
+		_apply_character_modulate(active_modulate)
 	else:
 		on_turn_icon_node.hide()
+		_refresh_character_state_visual()
 
 	if character_type == Character_Type.PLAYER and isActive:
 		player_turn_started.emit()
@@ -112,12 +119,22 @@ func _deselect_all_targets() -> void:
 	var all_targets := get_tree().get_nodes_in_group("enemy") + get_tree().get_nodes_in_group("player")
 	for t in all_targets:
 		t.target_icon_node.hide()
+		t._refresh_character_state_visual()
 
 func _ready() -> void:
+	_set_visual_node()
 	_set_group()
 	_set_on_turn_icon()
 	_set_target_icon()
+	_refresh_character_state_visual()
 	_set_late_signals()
+
+func _set_visual_node() -> void:
+	_visual_node = get_parent().get_node_or_null("Sprite2D") as CanvasItem
+	if _visual_node == null:
+		_visual_node = get_parent().get_node_or_null("AnimatedSprite2D") as CanvasItem
+	if _visual_node:
+		_base_modulate = _visual_node.modulate
 
 func _set_group() -> void:
 	add_to_group("turnBasedAgents")
@@ -177,3 +194,16 @@ func _on_command_selected(command: Resource) -> void:
 
 func set_target() -> void:
 	target_icon_node.show()
+	_apply_character_modulate(target_modulate)
+
+func _refresh_character_state_visual() -> void:
+	if _visual_node == null:
+		return
+	if character_resource != null and character_resource.is_dead():
+		_apply_character_modulate(dead_modulate)
+	else:
+		_apply_character_modulate(_base_modulate)
+
+func _apply_character_modulate(color: Color) -> void:
+	if _visual_node:
+		_visual_node.modulate = color

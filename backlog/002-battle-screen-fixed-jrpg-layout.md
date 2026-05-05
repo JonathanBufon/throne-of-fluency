@@ -694,3 +694,52 @@ A UI de batalha foi reorganizada para ficar mais próxima de um painel inferior 
 - `Combo` e `Item` são placeholders, sem sistemas por trás.
 - O status de múltiplos players reais depende da futura party dinâmica.
 - Sem Godot no `PATH`, a validação de foco, anchors e estados disabled continua manual.
+
+---
+
+## 20. Registro da Fase 6 — Cursor e feedback visual
+
+**Data:** 2026-05-05
+**Status:** Implementação inicial aplicada, aguardando validação visual/manual na Godot
+**Validação executada:** revisão estática e diff dos arquivos alterados.
+
+### Alteração feita
+
+O feedback visual da batalha foi reforçado reaproveitando os nós existentes:
+
+- `TurnBasedAgent` agora guarda o nó visual do personagem (`Sprite2D` ou `AnimatedSprite2D`).
+- O personagem ativo recebe modulação mais clara enquanto espera comando/alvo.
+- O alvo selecionado recebe modulação avermelhada junto com o cursor de alvo já existente.
+- Ao cancelar ou trocar alvo, os alvos anteriores voltam ao estado visual normal.
+- Personagens com 0 HP recebem modulação escurecida.
+- Depois de dano ou cura em `character.gd`, o estado visual do alvo é atualizado.
+- `PlayerStatsContainer` passa a escurecer o painel de status quando o personagem está sem HP.
+
+### Preservado
+
+- `onTurnIconNode` continua sendo o indicador do personagem ativo.
+- `targetIconNode` continua sendo o cursor de alvo.
+- O fluxo de comandos, seleção de alvo e fim de turno não foi refeito.
+- O foco visual do painel de status do personagem ativo foi preservado.
+
+### Fora desta fase
+
+- Cursor novo desenhado em `CursorLayer`.
+- Animações complexas de brilho, seta ou colchetes.
+- Feedback de comando selecionado além do foco de botão existente.
+- Estados visuais específicos para defesa, status negativo ou carregamento.
+
+### Teste manual pendente
+
+1. Rodar uma batalha.
+2. Confirmar que o player ativo fica visualmente destacado.
+3. Escolher `Attack` e confirmar que o alvo selecionado fica destacado.
+4. Trocar alvo, quando houver mais de um inimigo, e confirmar que o destaque muda.
+5. Cancelar seleção de alvo e confirmar que o destaque sai.
+6. Reduzir HP de um personagem a 0 e confirmar sprite/painel escurecidos.
+
+### Riscos restantes
+
+- Modulação simples pode não ser suficiente como linguagem visual final.
+- Como os ícones usam posição calculada no `_ready()`, movimentações maiores de personagem podem exigir reposicionamento dinâmico dos indicadores.
+- Sem Godot no `PATH`, a validação visual continua manual.
