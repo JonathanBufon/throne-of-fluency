@@ -1,501 +1,514 @@
-# HARNESS.md — Godot Vibe Coding com IA
+# HARNESS.md - Guia de trabalho com IA no Throne of Fluency
 
-## 1. Objetivo do Projeto
+Este arquivo orienta agentes de IA e colaboradores ao alterar este projeto. Ele deve ser lido antes de qualquer mudança de código, cena, asset, backlog ou documentação.
 
-Este projeto é um jogo desenvolvido em Godot com apoio de IA.
+O objetivo nao e criar uma arquitetura perfeita. O objetivo e manter o jogo jogavel, compreensivel e evoluindo em passos pequenos.
 
-A IA deve ajudar a implementar, corrigir e evoluir o jogo mantendo consistência entre:
-
-* cenas `.tscn`
-* scripts `.gd`
-* autoloads
-* inputs
-* assets
-* lógica de gameplay
-* organização do projeto
-
-O foco é evoluir o jogo em ciclos pequenos, testáveis e jogáveis.
-
----
-
-## 2. Regra Principal
-
-Nunca alterar muitas áreas do jogo ao mesmo tempo.
-
-Cada tarefa deve ter um objetivo claro, por exemplo:
-
-* criar movimentação do player
-* corrigir pulo
-* adicionar inimigo simples
-* implementar câmera
-* criar HUD
-* melhorar feedback visual
-* corrigir colisão
-* organizar cenas
-
-A IA deve evitar refatorações grandes sem necessidade.
-
----
-
-## 3. Como a IA deve trabalhar
-
-Para cada tarefa, a IA deve seguir este ciclo:
-
-1. Ler o contexto do projeto.
-2. Identificar quais cenas, scripts e recursos serão afetados.
-3. Fazer a menor alteração funcional possível.
-4. Explicar o que foi alterado.
-5. Informar como testar dentro da Godot.
-6. Não quebrar funcionalidades existentes.
-7. Não remover nós, sinais, inputs ou scripts sem justificar.
-
----
-
-## 4. Estrutura recomendada do projeto
-
-Usar esta organização como referência:
+Prioridade do projeto:
 
 ```txt
-res://
-  scenes/
-    player/
-    enemies/
-    levels/
-    ui/
-    props/
-
-  scripts/
-    player/
-    enemies/
-    systems/
-    ui/
-
-  assets/
-    sprites/
-    audio/
-    fonts/
-    tilesets/
-
-  autoload/
-    GameState.gd
-    EventBus.gd
-    SaveManager.gd
-
-  resources/
-    data/
-    configs/
+jogavel > testavel > organizado > escalavel
 ```
-
-A IA deve respeitar a estrutura existente. Se ela não existir ainda, pode propor a criação gradual.
 
 ---
 
-## 5. Convenções de Godot
+## 1. Identidade do projeto
 
-### Cenas
+**Throne of Fluency** e um RPG educacional top-down em pixel art, feito em Godot 4.6, no qual o ingles e parte central da jogabilidade. O idioma deve aparecer como mecanismo de mundo: abre portas, guia magias, estrutura puzzles, informa dialogos e da sentido ao combate.
 
-Cada entidade importante deve ter sua própria cena:
+Pilares de design:
 
-* Player
-* Enemy
-* Projectile
-* Level
-* HUD
-* Camera
-* Interactable
-* Collectible
+- RPG top-down com exploracao e combate por turnos.
+- Ensino de ingles por contexto, repeticao e descoberta, nao por licao isolada.
+- Combate intencional, com tempo para pensar, inspirado em Final Fantasy e Chrono Trigger.
+- Puzzles linguisticos integrados ao cenario, como a porta da cripta com `PUSH TO OPEN`.
+- Lumen como guia narrativo e mecanico do jogador.
+- Pixel art sem suavizacao, com filtro `Nearest`.
 
-Evitar colocar tudo em uma única cena gigante.
+Lore essencial:
 
-### Scripts
+- O mundo Lexicon entrou em colapso depois que o Rei Orc quebrou a Gema do Dialogo.
+- A Gema do Dialogo se partiu em tres fragmentos: Auris, Vox e Scriptum.
+- O heroi e uma armadura vazia guiada por Lumen, centelha criada por Verbum.
+- O jogador aprende vocabulario junto com o heroi.
 
-Cada script deve ter responsabilidade clara.
+---
 
-Exemplo:
+## 2. Fontes de verdade
+
+Antes de implementar, consulte as fontes nesta ordem:
+
+1. Estado atual do codigo e das cenas no repositorio.
+2. `backlog/*.md` quando a tarefa estiver ligada a uma feature planejada.
+3. `CLAUDE.md` para arquitetura e pendencias historicas.
+4. `README.md` para visao geral publica do projeto.
+5. `Throne_Of_Fluency_Documentacao.md` para lore e escopo de produto.
+
+Se a documentacao divergir do codigo atual, o codigo atual vence para implementacao. Registre a divergencia no resumo final se ela afetar a tarefa.
+
+Exemplo de divergencia ja conhecida: algumas docs citam nomes antigos como `fase_cripta.tscn` e `cenario1.tscn`; o repositorio atual contem `world/cripta/cripta.tscn`, `world/shroom-lands.tscn` e `world/city_center.tscn`.
+
+---
+
+## 3. Stack e configuracao real
+
+- Engine: Godot 4.6.
+- Renderer: GL Compatibility.
+- Linguagem: GDScript.
+- Main scene: `main.tscn`.
+- Viewport atual no `project.godot`: `800x760`, stretch mode `canvas_items`.
+- Fisica 2D: `CharacterBody2D` para player e inimigos de overworld.
+- Texturas: pixel art com filtro `Nearest`.
+
+Autoloads registrados:
+
+- `GameData` -> `world/cripta/game_data.gd`
+- `BattleTransition` -> `world/battle_transition.gd`
+
+InputMap atual:
+
+- `left`
+- `right`
+- `up`
+- `down`
+- `attack`
+- `interact`
+- Acoes nativas de UI do Godot usadas no combate/dialogo: `ui_accept`, `ui_cancel`, setas de UI quando aplicavel.
+
+Layers 2D atuais:
+
+- `terreno`
+- `player`
+- `inimigos`
+- `fim_da_fase`
+
+Nao invente novos inputs ou layers sem atualizar `project.godot` e documentar a necessidade.
+
+---
+
+## 4. Estrutura real do projeto
+
+Convencao atual: cenas e scripts ficam co-localizados quando pertencem a uma entidade ou sistema.
 
 ```txt
-Player.gd
-PlayerMovement.gd
-PlayerHealth.gd
-EnemyAI.gd
-HUD.gd
-GameState.gd
+actors/
+  player/             Player do overworld
+  enemy/              Inimigo de overworld e trigger de batalha
+  lumen/              Companheiro Lumen
+
+battleSystem/
+  battle_scene.tscn   Cena de batalha parametrizavel
+  battle_scene.gd
+  core/               Controller, agent, character e templates
+  data/               .tres de personagens e skills
+  resources/          Classes Resource
+  tests/              Cena isolada de teste do combate
+  ui/                 Menu de comandos, status, ordem de turno
+
+ui/
+  dialog/             Dialogo e input linguistico
+
+world/
+  battle_transition.gd
+  world_scene.gd
+  troca_fase.tscn/.gd
+  shroom-lands.tscn
+  city_center.tscn
+  cripta/
+    cripta.tscn
+    game_data.gd
+    porta.gd
+    scenario.gd
+
+backlog/
+  README.md
+  001-batalha-instanciavel-overworld.md
 ```
 
-Não misturar movimentação, vida, inventário, câmera e UI no mesmo script se o arquivo começar a ficar grande demais.
+Nao reorganize pastas para seguir templates genericos como `scenes/` e `scripts/`. A estrutura acima e a base atual.
 
 ---
 
-## 6. Regras para scripts GDScript
+## 5. Fluxo de trabalho esperado
 
-A IA deve:
+Para cada tarefa:
 
-* usar nomes claros
-* evitar código mágico sem explicação
-* usar `@export` para valores ajustáveis no editor
-* validar nós com cuidado antes de acessar
-* evitar dependência excessiva de caminhos absolutos
-* preferir sinais quando houver comunicação entre sistemas
-* não criar singletons/autoloads sem necessidade real
+1. Leia este `HARNESS.md`.
+2. Leia o backlog ou documentacao relacionada.
+3. Inspecione arquivos reais antes de assumir arquitetura.
+4. Liste mentalmente quais cenas, scripts e resources serao tocados.
+5. Faca a menor alteracao funcional possivel.
+6. Preserve nomes de nos, sinais, grupos e paths existentes.
+7. Valide com Godot quando o binario estiver disponivel.
+8. Informe o que mudou, como testar e riscos.
 
-Exemplo bom:
+Se a tarefa for grande, divida em subtarefas. Uma feature transversal pode tocar mais de um sistema, mas cada alteracao dentro dela deve ser minima e justificada.
 
-```gdscript
-@export var move_speed: float = 240.0
-@export var jump_force: float = -420.0
-```
+Evite:
 
-Exemplo ruim:
-
-```gdscript
-velocity.x = 999
-```
+- refatoracao ampla sem pedido explicito;
+- renomear cenas/nos/scripts sem necessidade;
+- apagar arquivos ou assets;
+- alterar UIDs/imports de Godot manualmente;
+- misturar mudancas de gameplay, UI e persistencia quando nao forem necessarias para o mesmo fluxo.
 
 ---
 
-## 7. Inputs
+## 6. Edicao de cenas `.tscn`
 
-Antes de usar uma ação de input, verificar se ela existe no projeto.
+Arquivos `.tscn` sao sensiveis. Edite diretamente apenas quando necessario.
 
-Inputs sugeridos:
+Ao editar cenas:
 
-```txt
-move_left
-move_right
-move_up
-move_down
-jump
-attack
-dash
-interact
-pause
-```
+- preserve `ext_resource`, `sub_resource`, sinais, grupos e nomes de nos existentes;
+- nao mude UID/path/import sem motivo claro;
+- prefira adicionar poucos nos e conectar sinais de forma explicita;
+- confira o diff antes de finalizar;
+- nao remova nodes herdados ou instanciados sem entender a cena.
 
-A IA não deve inventar nomes novos sem atualizar a documentação.
-
----
-
-## 8. Física e movimentação
-
-Para player 2D, preferir:
-
-```txt
-CharacterBody2D
-```
-
-Para objetos físicos:
-
-```txt
-RigidBody2D
-```
-
-Para colisões simples:
-
-```txt
-Area2D
-StaticBody2D
-CollisionShape2D
-```
-
-A IA deve preservar a separação entre:
-
-* input
-* cálculo de movimento
-* animação
-* colisão
-* estado do personagem
-
----
-
-## 9. Comunicação entre sistemas
-
-Prioridade de comunicação:
-
-1. chamada direta simples, quando os nós estão próximos
-2. sinais, quando há eventos entre objetos
-3. autoload/EventBus, apenas para eventos globais
-4. GameState, apenas para estado global real
-
-Não usar autoload como depósito de qualquer variável.
-
----
-
-## 10. Regras para cenas `.tscn`
-
-A IA deve tomar cuidado ao editar arquivos `.tscn`.
-
-Preferência:
-
-* criar scripts e orientar quais nós configurar manualmente
-* editar `.tscn` somente quando necessário
-* não apagar referências de scripts
-* não alterar UID/import/resource path sem necessidade
-* preservar grupos, sinais e nomes de nós existentes
-
-Quando alterar uma cena, informar:
+Ao alterar uma cena, o resumo final deve indicar:
 
 ```txt
 Cena alterada:
-Nós adicionados:
-Nós removidos:
+Nos adicionados:
+Nos removidos:
 Sinais conectados:
 Como testar:
 ```
 
+Quando Godot nao estiver no PATH, faca validacao estatica e declare que o teste manual na Godot ainda e necessario.
+
 ---
 
-## 11. Loop de implementação
+## 7. Sistema de overworld
 
-Cada tarefa deve terminar com:
+Arquivos principais:
 
-```md
-## O que foi feito
+- `actors/player/player.gd`
+- `actors/player/player.tscn`
+- `actors/enemy/enemy.gd`
+- `actors/enemy/enemy.tscn`
+- `actors/lumen/lumen.gd`
+- `world/world_scene.gd`
+- `world/troca_fase.gd`
+- `world/cripta/scenario.gd`
+- `world/cripta/porta.gd`
 
-- ...
+Regras:
 
-## Arquivos alterados
+- Player e inimigos de overworld usam `CharacterBody2D`.
+- O player entra no grupo `player`.
+- Inimigos procuram o player via `get_tree().get_first_node_in_group("player")`.
+- Cenas de mundo devem usar ou herdar a logica de `world/world_scene.gd` quando precisarem de retorno de batalha, reposicionamento e limpeza de encontros derrotados.
+- Transicao normal entre mapas usa `world/troca_fase.gd` e `GameData.spawn_id`.
 
-- ...
+Nao coloque estado temporario de batalha em cenas de mundo. Use `BattleTransition`.
 
-## Como testar na Godot
+---
 
-1. Abrir a cena ...
-2. Clicar em Play
-3. Verificar se ...
+## 8. Fluxo overworld -> batalha -> overworld
 
-## Riscos
+Feature base: `backlog/001-batalha-instanciavel-overworld.md`.
 
-- ...
+Arquivos principais:
 
-## Próximo passo sugerido
+- `world/battle_transition.gd`
+- `actors/enemy/enemy.gd`
+- `actors/enemy/enemy.tscn`
+- `battleSystem/battle_scene.tscn`
+- `battleSystem/battle_scene.gd`
+- `battleSystem/core/enemy_battle_template.tscn`
+- `world/world_scene.gd`
+- `world/cripta/game_data.gd`
 
-- ...
+Fluxo atual:
+
+1. Player entra na `DangerBox` do inimigo no overworld.
+2. `enemy.gd` monta a party de combate usando `battle_party` ou `battle_resource`.
+3. `BattleTransition.request_battle()` recebe inimigos, cena de retorno, posicao do player e `encounter_id`.
+4. `BattleTransition.change_scene_with_fade()` troca para `battleSystem/battle_scene.tscn`.
+5. `battle_scene.gd` instancia inimigos a partir de `BattleTransition.enemy_resources`.
+6. `TurnBasedController` emite `battle_won` ou `battle_lost`.
+7. Vitoria marca o encontro em `GameData.defeated_encounters` e retorna ao overworld.
+8. Fuga retorna ao overworld sem marcar o encontro como derrotado.
+9. Derrota volta para `main.tscn` como placeholder de game over.
+10. `world_scene.gd` reposiciona player/Lumen e remove inimigos derrotados.
+
+Regras importantes:
+
+- `battleSystem/tests/test_battle_scene.tscn` deve continuar existindo para debug isolado.
+- `TurnBasedController` descobre participantes por grupos, entao nao hardcode quantidade de inimigos.
+- Todo inimigo de overworld que dispara batalha deve ter `battle_resource` ou `battle_party`.
+- Use `encounter_id` unico quando possivel. O fallback baseado em path existe, mas IDs explicitos sao melhores para cenas editadas.
+- Nao limpe `BattleTransition` antes da cena de mundo ler retorno, exceto em derrota/game over.
+
+---
+
+## 9. Sistema de combate por turnos
+
+Arquivos principais:
+
+- `battleSystem/resources/skillResource.gd`
+- `battleSystem/resources/character_resource.gd`
+- `battleSystem/core/turn_based_agent.gd`
+- `battleSystem/core/turn_based_controller.gd`
+- `battleSystem/core/character.gd`
+- `battleSystem/ui/command_menu.gd`
+- `battleSystem/ui/player_status_display.gd`
+- `battleSystem/ui/player_stats_container.gd`
+- `battleSystem/ui/turn_order_bar.gd`
+
+Resources:
+
+- `CharacterResource`: dados de personagem, HP, MP, speed, OverDrive.
+- `SkillResource`: dados de skill, alvo, tipo e poder.
+
+Grupos usados pelo combate:
+
+- `turnBasedAgents`
+- `player`
+- `enemy`
+- `commandMenu`
+- `turnBasedController`
+
+Regras:
+
+- Combate nao deve ser frenetico; preserve o tempo de decisao do jogador.
+- `TurnBasedController` gerencia ordem e fim de batalha.
+- `TurnBasedAgent` gerencia turno, targeting e IA por participante.
+- `CommandMenu` so deve emitir comandos/eventos de UI; a cena/controlador decide consequencias globais.
+- Nao remova suporte a `battle_won` e `battle_lost`.
+- Ao adicionar skill, prefira `.tres` em `battleSystem/data/skills/`.
+- Ao adicionar personagem de batalha, prefira `.tres` em `battleSystem/data/characters/`.
+
+Ponto tecnico sensivel:
+
+- `TurnBasedController._set_after_all_ready()` usa um pequeno delay para esperar agentes entrarem nos grupos. Se mudar spawn dinamico, garanta que inimigos sejam instanciados antes da montagem da fila.
+
+---
+
+## 10. Dialogo, porta e conteudo linguistico
+
+Arquivos principais:
+
+- `ui/dialog/dialog_screen.tscn`
+- `ui/dialog/dialogo_acao_input.tscn`
+- `ui/dialog/dialogo_acao_input.gd`
+- `world/cripta/porta.gd`
+- `world/cripta/cripta.tscn`
+
+Regras:
+
+- O puzzle da porta da cripta usa o conceito `PUSH TO OPEN`.
+- Textos em ingles devem existir por motivo de gameplay ou narrativa.
+- Evite hardcodar grandes blocos de texto educacional em scripts; prefira `.tres`, `.json` ou recursos dedicados quando o conteudo crescer.
+- Quando hardcode temporario for inevitavel para prototipo, documente no resumo e mantenha localizado.
+- Dialogos de Lumen devem favorecer ingles com apoio em portugues, conforme docs de produto.
+
+Atencao:
+
+- `porta.gd` pode depender de paths especificos da cena. Se mexer na cena, valide essa estrutura.
+
+---
+
+## 11. Autoloads e estado global
+
+Use autoload apenas para estado ou comunicacao global real.
+
+`GameData`:
+
+- `spawn_id` para retorno entre cenas de mundo.
+- `cripta_porta_aberta`.
+- `defeated_encounters`.
+- Deve guardar estado persistente simples do jogo.
+
+`BattleTransition`:
+
+- Payload temporario entre overworld e batalha.
+- Guarda inimigos do encontro, cena de retorno, posicao do player, resultado e fade de transicao.
+- Nao deve virar deposito permanente de progresso.
+
+Regra pratica:
+
+- Se o dado precisa sobreviver entre cenas por progresso do jogo, considere `GameData`.
+- Se o dado existe apenas para atravessar uma transicao de batalha, use `BattleTransition`.
+- Se o dado pertence a um personagem, skill ou inimigo, prefira `Resource`.
+
+---
+
+## 12. Assets e estilo visual
+
+Regras:
+
+- Nunca suavizar pixel art; preserve `Nearest`.
+- Nao editar assets importados manualmente sem necessidade.
+- Nao redistribuir ou duplicar asset pack fora do projeto.
+- UI deve usar os assets em `assets/ui/` quando fizer sentido.
+- Sprites de personagens ficam em `assets/sprites/characters/` e `assets/sprites/player/`.
+- Tiles e cenario ficam em `assets/sprites/world/`.
+
+Se adicionar asset:
+
+- coloque na pasta coerente;
+- explique origem/licenca se nao for asset ja existente;
+- valide import no Godot quando possivel.
+
+---
+
+## 13. Backlog
+
+Backlog fica em `backlog/`.
+
+Convenção:
+
+```txt
+NNN-slug-curto.md
 ```
 
+Status:
+
+- `Proposto`
+- `Aprovado`
+- `Em progresso`
+- `Concluido`
+- `Descartado`
+
+Quando implementar uma tarefa do backlog:
+
+- leia o arquivo inteiro antes de alterar codigo;
+- preserve criterios de aceite ou explique mudancas;
+- nao apague o backlog entregue; atualize status apenas se solicitado ou se a tarefa pedir;
+- se descobrir divergencia entre backlog e codigo atual, mencione no resumo.
+
 ---
 
-## 12. Regras para debug
+## 14. Pronto para entrega
 
-Quando houver bug, a IA deve primeiro investigar antes de alterar.
+Uma tarefa so deve ser considerada pronta quando:
 
-Checklist:
+- a alteracao e pequena o suficiente para revisar;
+- os arquivos tocados fazem sentido para o escopo;
+- nao ha mudancas acidentais em `.tscn`, `.import`, UID ou assets;
+- o fluxo principal afetado tem uma forma clara de teste manual;
+- Godot foi executado sem erro, quando disponivel;
+- se Godot nao estiver disponivel, isso foi declarado;
+- riscos restantes foram listados.
+
+Formato recomendado para resposta final:
 
 ```md
-## Sintoma
+O que foi alterado:
+- ...
 
-O que acontece?
+Arquivos principais:
+- ...
 
-## Esperado
-
-O que deveria acontecer?
-
-## Hipóteses
-
+Como testar na Godot:
 1. ...
 2. ...
 3. ...
 
-## Arquivos prováveis
-
-- ...
-
-## Correção mínima
-
-- ...
-
-## Como validar
-
+Riscos:
 - ...
 ```
 
-Não sair reescrevendo o sistema inteiro.
+Mantenha a resposta proporcional ao tamanho da mudanca.
 
 ---
 
-## 13. Regras para gameplay
+## 15. Debug
 
-A IA deve priorizar sensação de jogo antes de complexidade.
+Ao corrigir bug, investigue antes de alterar.
 
-Antes de adicionar sistemas grandes, validar:
+Checklist:
 
-* o player se move bem?
-* a câmera acompanha bem?
-* o pulo/ataque é responsivo?
-* existe feedback visual?
-* existe feedback sonoro?
-* o objetivo da fase está claro?
-* o loop básico é divertido?
+```md
+Sintoma:
+
+Esperado:
+
+Hipoteses:
+
+Arquivos provaveis:
+
+Correcao minima:
+
+Como validar:
+```
+
+Nao reescreva sistemas inteiros para corrigir sintomas pequenos.
 
 ---
 
-## 14. Ordem ideal de desenvolvimento
+## 16. Git e commits
 
-Seguir esta ordem sempre que possível:
+Antes de commitar:
+
+- rode `git status --short`;
+- confira `git diff --stat`;
+- garanta que so arquivos do escopo estao staged;
+- use mensagem em Conventional Commits quando possivel.
+
+Exemplos:
 
 ```txt
-1. Player controlável
-2. Câmera
-3. Colisão básica
-4. Fase de teste
-5. Inimigo simples
-6. Vida/dano
-7. UI mínima
-8. Condição de vitória/derrota
-9. Feedback visual e sonoro
-10. Polimento
-11. Conteúdo extra
-12. Menus
-13. Save/load
+feat(battle): integrate overworld battle return flow
+fix(enemy): prevent battle retrigger after fleeing
+docs: update project harness
 ```
 
-Não começar por sistemas avançados antes do loop jogável.
+Nao misture docs, refactor e feature grande no mesmo commit sem necessidade.
 
 ---
 
-## 15. Definição de pronto
+## 17. O que nao fazer
 
-Uma tarefa só está pronta quando:
+Nao:
 
-* roda dentro da Godot
-* não gera erro no console
-* pode ser testada em uma cena
-* não quebra o que já existia
-* tem instrução clara de validação
-* os arquivos alterados fazem sentido para a tarefa
-
----
-
-## 16. O que a IA não deve fazer
-
-A IA não deve:
-
-* reescrever o projeto inteiro
-* inventar arquitetura complexa cedo demais
-* alterar várias cenas sem necessidade
-* apagar arquivos sem pedir
-* modificar assets importados manualmente
-* criar autoloads para tudo
-* misturar UI, gameplay e persistência no mesmo script
-* criar sistemas genéricos antes de existir necessidade real
-* prometer que algo funciona sem explicar como testar
+- reescrever o projeto inteiro;
+- trocar a estrutura de pastas por uma arquitetura generica;
+- criar autoload para qualquer variavel;
+- hardcodar textos educacionais extensos em scripts;
+- remover `test_battle_scene.tscn`;
+- remover sinais de batalha sem substituir consumidores;
+- quebrar o fluxo `GameData.spawn_id` de troca de fase;
+- mexer em player, inimigo, batalha, UI e persistencia na mesma tarefa sem declarar que a feature e transversal;
+- prometer que algo foi testado na Godot se o binario nao foi executado.
 
 ---
 
-## 17. Prompt padrão para usar com IA
-
-Use este modelo para pedir tarefas:
+## 18. Prompt recomendado para tarefas
 
 ```md
-Você está trabalhando em um projeto Godot.
-
-Leia o HARNESS.md antes de alterar qualquer coisa.
+Leia o HARNESS.md e o backlog relacionado antes de alterar.
 
 Tarefa:
-[descrever tarefa]
+[descrever]
 
-Objetivo:
-[resultado esperado no jogo]
-
-Regras:
-- faça a menor alteração funcional possível
-- preserve cenas e scripts existentes
-- não refatore fora do escopo
-- explique os arquivos alterados
-- informe como testar dentro da Godot
-
-Ao final, responda com:
-1. O que foi alterado
-2. Arquivos modificados
-3. Como testar
-4. Riscos
-5. Próximo passo sugerido
-```
-
----
-
-## 18. Prompt padrão para corrigir bugs
-
-```md
-Você está trabalhando em um projeto Godot.
-
-Leia o HARNESS.md antes de alterar qualquer coisa.
-
-Bug:
-[descrever o problema]
-
-Comportamento esperado:
-[descrever o correto]
-
-Comportamento atual:
-[descrever o erro]
-
-Regras:
-- investigue antes de alterar
-- não reescreva sistemas inteiros
-- corrija com o menor patch possível
-- preserve scripts, cenas, inputs e sinais existentes
-
-Ao final, responda com:
-1. Causa provável
-2. Correção aplicada
-3. Arquivos alterados
-4. Como testar
-5. Riscos restantes
-```
-
----
-
-## 19. Prompt padrão para criar uma feature
-
-```md
-Você está trabalhando em um projeto Godot.
-
-Leia o HARNESS.md antes de alterar qualquer coisa.
-
-Feature:
-[descrever feature]
-
-Contexto:
-[explicar onde ela entra no jogo]
+Objetivo no jogo:
+[resultado esperado]
 
 Critérios de aceite:
 - ...
-- ...
-- ...
 
 Regras:
-- implementar primeiro a versão mais simples jogável
-- usar @export para valores ajustáveis
-- evitar dependências globais desnecessárias
-- não criar arquitetura maior do que a feature exige
-- informar como testar
-
-Ao final, responda com:
-1. Implementação feita
-2. Arquivos alterados
-3. Configurações necessárias no editor
-4. Como testar
-5. Próximo refinamento possível
+- fazer a menor alteração funcional possível
+- preservar cenas, grupos, sinais e inputs existentes
+- não refatorar fora do escopo
+- informar como testar na Godot
 ```
 
 ---
 
-## 20. Filosofia do projeto
+## 19. Lacunas conhecidas
 
-Este projeto deve evoluir como um jogo jogável, não como uma arquitetura perfeita.
+Estas areas existem como produto planejado, mas ainda precisam de arquitetura consolidada:
 
-A prioridade é:
+- Sistema Lumen: energia, proximidade com gemas e traducao contextual.
+- Sistema de Grimorio: palavras aprendidas e combinacoes para magias.
+- Sistema de Glossario: dicionario interativo.
+- Persistencia completa de HP/MP do player entre overworld e batalha.
+- Game over real para derrota.
+- XP/loot/tela de vitoria completa.
 
-```txt
-jogável > testável > organizado > escalável
-```
-
-A IA deve ajudar a manter ritmo de prototipação sem destruir a base do projeto.
-
----
-
-## 21. Regra final de segurança
-
-A IA nunca deve mexer em player, inimigo, câmera, HUD, estado global e cena principal na mesma tarefa.
-
-Se uma tarefa parecer grande demais, dividir em subtarefas menores antes de implementar.
+Ao trabalhar nessas areas, prefira primeiro um prototipo pequeno, jogavel e isolado. Depois consolide dados em `.tres` ou `.json` quando o comportamento estiver claro.
