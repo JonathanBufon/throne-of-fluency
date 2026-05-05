@@ -409,3 +409,125 @@ Teste manual:
 - [ ] `godot --headless --path . --quit` foi executado sem erro, se Godot estiver no `PATH`.
 - [ ] Se Godot não estiver disponível, foi feita validação estática e o teste manual pendente foi declarado.
 
+---
+
+## 15. Registro da Fase 1 — Auditoria estática
+
+**Data:** 2026-05-05
+**Status:** Parcial, aguardando validação manual na Godot
+**Validação executada:** leitura estática dos arquivos, pois `godot`/`godot4` não foi encontrado no `PATH`.
+
+### O que funciona ou já está estruturado
+
+- `BattleTransition` está registrado em `project.godot` como autoload.
+- `BattleTransition.request_battle()` guarda inimigos, cena de retorno, posição do player e `encounter_id`.
+- `BattleTransition.change_scene_with_fade()` centraliza a troca de cena com fade.
+- `actors/enemy/enemy.gd` mantém comportamento de patrulha/perseguição e procura o player pelo grupo `player`.
+- `actors/enemy/enemy.gd` já tem `battle_resource`, `battle_party` e `encounter_id`.
+- `actors/enemy/enemy.gd` monta a party de batalha e chama `BattleTransition.request_battle()` ao detectar player na `DangerBox`.
+- `actors/enemy/enemy.tscn` possui `DangerBox` com `Area2D`, `CollisionShape2D` e sinal `body_entered` conectado.
+- `battleSystem/battle_scene.gd` instancia inimigos dinamicamente a partir de `BattleTransition.enemy_resources`.
+- `battleSystem/battle_scene.tscn` possui três pontos de spawn para inimigos em `EnemySpawnPoints`.
+- `battleSystem/battle_scene.gd` conecta `battle_won`, `battle_lost` e `run_requested`.
+- Vitória marca encontro derrotado via `GameData.mark_encounter_defeated()`.
+- Fuga retorna ao overworld sem marcar encontro como derrotado.
+- `world/world_scene.gd` reposiciona player/Lumen no retorno de vitória/fuga.
+- `world/world_scene.gd` remove encontros derrotados ao entrar na cena.
+- `battleSystem/tests/test_battle_scene.tscn` continua preservada para debug isolado.
+
+### O que está parcial
+
+- `world/shroom-lands.tscn` instancia o inimigo de teste, mas a instância não tem `battle_resource`, `battle_party` ou `encounter_id` configurados no arquivo.
+- O fallback de `encounter_id` por path existe em `enemy.gd`, mas o encontro de teste deveria receber um ID explícito para reduzir risco ao editar a cena.
+- A cena real de batalha é parametrizável para inimigos, mas ainda não para party de players, fundo, sprites, escala, offset ou tipo chefe.
+- O spawn visual existe para inimigos, mas ainda usa `EnemySpawnPoints` genérico, sem a estrutura final `EnemySlots`.
+- O player da batalha é hardcoded em `battle_scene.tscn`.
+- `PlayerStatusDisplay` exibe `player1.tres` e `player2.tres`, enquanto a cena real instancia apenas um player.
+- `CommandMenu` suporta `Attack`, `Skills` e `Run`; ainda não há modelo de UI para `Combo` e `Item`.
+- O destaque do personagem ativo existe via `onTurnIconNode` e foco no painel, mas ainda não está integrado ao layout visual desejado.
+- O template de inimigo de batalha usa `icon.svg` como placeholder visual.
+
+### O que falta
+
+- Configurar o inimigo da entrada de `shroom-lands.tscn` com `battle_resource` ou `battle_party`.
+- Definir `encounter_id` explícito para o inimigo de teste em `shroom-lands.tscn`.
+- Validar no editor se `shroom-lands.tscn` abre sem erros.
+- Validar no editor se o inimigo persegue o player e se a `DangerBox` detecta colisão.
+- Validar no editor se a troca para `battleSystem/battle_scene.tscn` ocorre depois de configurar dados de combate.
+- Validar no editor se o spawn dinâmico acontece antes do `TurnBasedController` montar a fila.
+- Validar vitória, fuga, derrota e retorno ao overworld.
+- Validar se o inimigo derrotado é removido no retorno.
+- Criar fundo fixo da batalha.
+- Criar slots formais para inimigos e players.
+- Reorganizar a UI inferior.
+- Definir como sprites de batalha serão vinculados a personagens e inimigos.
+
+### Riscos encontrados
+
+- Sem dados de batalha no inimigo de `shroom-lands.tscn`, o fluxo para antes da troca de cena e emite warning.
+- `DangerBox` usa `collision_layer = 4`, que no projeto está nomeada como `fim_da_fase`; a `collision_mask = 2` deve detectar player, mas a layer comunica intenção errada.
+- `TurnBasedController` depende de um delay curto para montar sinais e fila; qualquer mudança no spawn dinâmico precisa preservar essa ordem.
+- `PlayerStatusDisplay` pode mostrar status de personagem que não está na batalha real.
+- `CharacterResource` não tem dados visuais; resolver sprites apenas na cena/template pode criar hardcode.
+- Sem Godot no `PATH`, não há confirmação de parse, import, sinais ou colisões em runtime.
+
+### Registro de erros do console
+
+Não houve execução da Godot nesta auditoria. Erros de console ainda precisam ser coletados no editor ou com `godot --headless --path . --quit` quando o binário estiver disponível.
+
+---
+
+## 16. Registro da Fase 2 — Separação Overworld Encounter x Battle Screen
+
+**Data:** 2026-05-05
+**Status:** Implementação mínima aplicada, aguardando validação manual na Godot
+**Validação executada:** revisão estática e diff dos arquivos alterados.
+
+### Decisão aplicada
+
+A Fase 2 manteve a separação já existente:
+
+- O overworld continua responsável apenas por detectar o player e montar o payload do encontro.
+- `BattleTransition` continua sendo o canal temporário para inimigos, cena de retorno, posição de retorno e `encounter_id`.
+- `battleSystem/battle_scene.tscn` continua sendo a tela dedicada de batalha.
+- `battleSystem/battle_scene.gd` continua responsável por instanciar inimigos, controlar vitória/derrota/fuga e retornar ao overworld.
+
+### Alteração feita
+
+O inimigo de entrada de `world/shroom-lands.tscn` agora tem dados mínimos de encontro:
+
+- `battle_resource = res://battleSystem/data/characters/enemy1.tres`
+- `encounter_id = "shroom_lands_entry_enemy_001"`
+
+Com isso, a `DangerBox` não deve mais parar no warning de inimigo sem `battle_resource`/`battle_party`. Ao detectar o player, `enemy.gd` deve conseguir enviar para `BattleTransition`:
+
+- cena de retorno;
+- posição do player;
+- ID do encontro;
+- lista com o resource de batalha do inimigo.
+
+### Fora desta fase
+
+- Fundo fixo espacial/cósmico.
+- Slots visuais formais.
+- Reorganização da UI inferior.
+- Sprites de batalha por `CharacterResource`.
+- Ajuste do placeholder visual do inimigo.
+- Validação manual completa do loop vitória/fuga/derrota.
+
+### Teste manual pendente
+
+1. Abrir o projeto na Godot 4.6.
+2. Rodar `world/shroom-lands.tscn` ou chegar nela pelo fluxo principal.
+3. Aproximar o player do inimigo da entrada.
+4. Confirmar perseguição.
+5. Entrar na `DangerBox`.
+6. Confirmar troca para `battleSystem/battle_scene.tscn`.
+7. Confirmar que pelo menos um inimigo é instanciado na batalha.
+8. Vencer ou fugir e confirmar retorno para `shroom-lands.tscn`.
+
+### Riscos restantes
+
+- Godot não estava disponível no `PATH`, então sinais, imports e colisões ainda precisam ser confirmados no editor.
+- A `DangerBox` ainda usa `collision_layer = 4`, nomeada como `fim_da_fase`; a mask de player está correta para detecção, mas a semântica da layer continua confusa.
+- A batalha ainda usa template visual placeholder para o inimigo.
