@@ -14,21 +14,23 @@ script = ExtResource("1_pyf6s")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=2049252028]
 layout_mode = 1
-anchors_preset = 2
+anchors_preset = 12
 anchor_top = 1.0
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -40.0
-offset_right = 40.0
+offset_top = -180.0
 grow_vertical = 0
-theme_override_constants/margin_left = 50
-theme_override_constants/margin_top = 50
-theme_override_constants/margin_right = 50
-theme_override_constants/margin_bottom = 50
+theme_override_constants/margin_left = 48
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 570
+theme_override_constants/margin_bottom = 24
 
-[node name="MainCommands" type="VBoxContainer" parent="MarginContainer" unique_id=1632905242]
+[node name="MainCommands" type="GridContainer" parent="MarginContainer" unique_id=1632905242]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/separation = 25
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 16
+columns = 1
 
 [node name="AttackButton" parent="MarginContainer/MainCommands" unique_id=1333535008 instance=ExtResource("1_p0m5m")]
 unique_name_in_owner = true
@@ -37,7 +39,13 @@ layout_mode = 2
 [node name="SkillsButton" parent="MarginContainer/MainCommands" unique_id=304050209 instance=ExtResource("1_p0m5m")]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Skills"
+disabled = true
+text = "Combo"
+
+[node name="ItemButton" parent="MarginContainer/MainCommands" instance=ExtResource("1_p0m5m")]
+layout_mode = 2
+disabled = true
+text = "Item"
 
 [node name="RunButton" parent="MarginContainer/MainCommands" unique_id=2036110789 instance=ExtResource("1_p0m5m")]
 unique_name_in_owner = true

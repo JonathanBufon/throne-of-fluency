@@ -8,7 +8,7 @@ signal run_requested()
 @onready var skills_button: Button = %SkillsButton
 @onready var run_button: Button = %RunButton
 
-@onready var main_commands: VBoxContainer = %MainCommands
+@onready var main_commands: GridContainer = %MainCommands
 @onready var skill_container: GridContainer = $MarginContainer/ScrollContainer/SkillsContainer
 
 const COMMAND_BUTTON := preload("res://battleSystem/ui/command_button.tscn")
@@ -73,6 +73,7 @@ func _set_command_options(character: TurnBasedAgent) -> void:
 		skills_button.hide()
 	else:
 		skills_button.show()
+		skills_button.disabled = true
 		for skill in skill_container.get_children():
 			skill.queue_free()
 		for skill in character.skills:

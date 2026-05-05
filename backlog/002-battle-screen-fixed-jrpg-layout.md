@@ -641,3 +641,56 @@ O player hardcoded da cena foi reposicionado para o slot inferior central atual.
 - A formação de chefe grande ainda é apenas implícita: um único inimigo fica no centro, mas não há escala/offset especial.
 - A party de players ainda não é dinâmica.
 - Sem Godot no `PATH`, a validação de runtime continua manual.
+
+---
+
+## 19. Registro da Fase 5 — UI inferior estilo JRPG
+
+**Data:** 2026-05-05
+**Status:** Implementação inicial aplicada, aguardando validação visual/manual na Godot
+**Validação executada:** revisão estática e diff dos arquivos alterados.
+
+### Alteração feita
+
+A UI de batalha foi reorganizada para ficar mais próxima de um painel inferior de JRPG:
+
+- `CommandMenu` agora fica ancorado no painel inferior esquerdo.
+- O menu principal mostra `Attack`, `Combo`, `Item` e preserva `Run`.
+- `Combo` fica desabilitado como placeholder do sistema futuro.
+- `Item` fica desabilitado como placeholder do inventário futuro.
+- `Run` continua funcional para preservar fuga e retorno ao overworld.
+- `PlayerStatusDisplay` foi reposicionado para o painel inferior direito.
+- `PlayerStatusDisplay` agora monta status a partir dos `TurnBasedAgent` do grupo `player` presentes na batalha.
+- `TurnOrderBar` foi compactado para o canto superior direito, sem competir com o painel inferior.
+
+### Preservado
+
+- `Attack` continua emitindo o comando básico do personagem ativo.
+- `Run` continua emitindo `run_requested`.
+- O foco do personagem ativo no status continua usando `activate_focus()`.
+- A cena de teste isolada continua usando os mesmos componentes de UI.
+
+### Fora desta fase
+
+- Implementar combo real.
+- Implementar inventário real.
+- Criar layout final responsivo para múltiplos personagens.
+- Redesenhar visualmente os botões e painéis.
+- Criar ícones para comandos.
+
+### Teste manual pendente
+
+1. Rodar `battleSystem/battle_scene.tscn`.
+2. Confirmar que `Attack`, `Combo`, `Item` e `Run` aparecem no painel inferior.
+3. Confirmar que `Combo` e `Item` aparecem desabilitados.
+4. Confirmar que `Attack` ainda permite selecionar alvo e causar dano.
+5. Confirmar que `Run` ainda retorna ao overworld quando a batalha veio de `BattleTransition`.
+6. Confirmar que o status mostra apenas personagens que participam da batalha real.
+7. Confirmar que a barra de turnos fica visível e não cobre o painel inferior.
+
+### Riscos restantes
+
+- O layout ainda precisa de ajuste fino visual no editor.
+- `Combo` e `Item` são placeholders, sem sistemas por trás.
+- O status de múltiplos players reais depende da futura party dinâmica.
+- Sem Godot no `PATH`, a validação de foco, anchors e estados disabled continua manual.
