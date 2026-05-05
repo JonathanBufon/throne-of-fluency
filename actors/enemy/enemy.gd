@@ -10,6 +10,15 @@ enum State {
 @export var detection_range: float = 120.0
 @export var patrol_radius: float = 100.0
 
+# =========================
+# ⚔️ DADOS DE BATALHA
+# =========================
+# battle_party tem prioridade; se vazia, usa [battle_resource] como encontro de 1 inimigo.
+# encounter_id identifica unicamente a instância para marcar como derrotada e não respawnar.
+@export var battle_resource: CharacterResource
+@export var battle_party: Array[CharacterResource] = []
+@export var encounter_id: String = ""
+
 var state: State = State.PATROL
 var player: Node2D
 var patrol_target: Vector2
