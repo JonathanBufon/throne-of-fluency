@@ -593,3 +593,51 @@ O player hardcoded da cena foi reposicionado para o slot inferior central atual.
 - A UI foi apenas agrupada sob `BattleUI`; o layout inferior completo ainda depende da Fase 5.
 - O fundo é estrutural/protótipo, não arte final.
 - Sem Godot no `PATH`, ainda falta validar se `ColorRect`/anchors e paths renderizam exatamente como esperado no editor.
+
+---
+
+## 18. Registro da Fase 4 — Spawn em slots fixos
+
+**Data:** 2026-05-05
+**Status:** Implementação inicial aplicada, aguardando validação manual na Godot
+**Validação executada:** revisão estática e diff dos arquivos alterados.
+
+### Alteração feita
+
+`battleSystem/battle_scene.gd` agora usa os slots formais criados na Fase 3:
+
+- O player hardcoded da cena é posicionado em `PlayerSlots/PlayerSlot2` durante `_ready()`.
+- Um encontro com 1 inimigo usa `EnemySlots/EnemySlot2`, no centro superior.
+- Um encontro com 2 inimigos usa `EnemySlots/EnemySlot1` e `EnemySlots/EnemySlot3`, esquerda e direita.
+- Um encontro com 3 inimigos usa `EnemySlot1`, `EnemySlot2` e `EnemySlot3`.
+- Encontros com mais de 3 inimigos continuam aceitos no payload, mas excedentes são ignorados com warning por enquanto.
+
+### Preservado
+
+- `BattleTransition.enemy_resources` continua sendo a origem dos inimigos.
+- `enemy_battle_template.tscn` continua sendo o template de instância de inimigo.
+- O player da cena continua sendo o único player real do primeiro corte.
+- A fila do `TurnBasedController` continua dependendo dos grupos `player` e `enemy`.
+
+### Fora desta fase
+
+- Instanciar múltiplos players dinamicamente.
+- Diferenciar chefe grande por campo de resource.
+- Reposicionar UI e status para múltiplos personagens reais.
+- Trocar o placeholder visual do inimigo.
+- Adicionar animações de entrada ou movimentação elaborada.
+
+### Teste manual pendente
+
+1. Configurar temporariamente encontros de 1, 2 e 3 inimigos via `battle_party`.
+2. Confirmar que 1 inimigo aparece no centro superior.
+3. Confirmar que 2 inimigos aparecem nos slots laterais.
+4. Confirmar que 3 inimigos aparecem nos três slots.
+5. Confirmar que o player aparece no slot inferior central.
+6. Confirmar que a ordem de turnos continua incluindo todos os agentes instanciados.
+
+### Riscos restantes
+
+- A formação de chefe grande ainda é apenas implícita: um único inimigo fica no centro, mas não há escala/offset especial.
+- A party de players ainda não é dinâmica.
+- Sem Godot no `PATH`, a validação de runtime continua manual.
