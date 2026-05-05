@@ -6,9 +6,9 @@ extends Node2D
 
 const ENEMY_TEMPLATE := preload("res://battleSystem/core/enemy_battle_template.tscn")
 
-@onready var spawn_points: Node2D = $EnemySpawnPoints
+@onready var enemy_slots: Node2D = $EnemySlots
 @onready var controller: TurnBasedController = $TurnBasedController
-@onready var command_menu: CommandMenu = $CanvasLayer/CommandMenu
+@onready var command_menu: CommandMenu = $CanvasLayer/BattleUI/CommandMenu
 @onready var canvas_layer: CanvasLayer = $CanvasLayer
 
 func _ready() -> void:
@@ -23,7 +23,7 @@ func _spawn_enemies_from_transition() -> void:
 		push_warning("battle_scene carregada sem inimigos em BattleTransition.enemy_resources")
 		return
 
-	var spawns := spawn_points.get_children()
+	var spawns := enemy_slots.get_children()
 	for i in resources.size():
 		if i >= spawns.size():
 			push_warning("Mais inimigos (%d) do que spawn points (%d); excedentes ignorados" % [resources.size(), spawns.size()])

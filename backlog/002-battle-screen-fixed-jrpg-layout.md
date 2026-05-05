@@ -531,3 +531,65 @@ Com isso, a `DangerBox` não deve mais parar no warning de inimigo sem `battle_r
 - Godot não estava disponível no `PATH`, então sinais, imports e colisões ainda precisam ser confirmados no editor.
 - A `DangerBox` ainda usa `collision_layer = 4`, nomeada como `fim_da_fase`; a mask de player está correta para detecção, mas a semântica da layer continua confusa.
 - A batalha ainda usa template visual placeholder para o inimigo.
+
+---
+
+## 17. Registro da Fase 3 — Layout fixo de batalha
+
+**Data:** 2026-05-05
+**Status:** Implementação estrutural aplicada, aguardando validação visual/manual na Godot
+**Validação executada:** revisão estática e diff dos arquivos alterados.
+
+### Alteração feita
+
+`battleSystem/battle_scene.tscn` recebeu uma estrutura inicial de battle screen fixa:
+
+- `Background` com base escura, faixa cósmica simples e pontos de estrela.
+- `EnemySlots` com `EnemySlot1`, `EnemySlot2` e `EnemySlot3`.
+- `PlayerSlots` com `PlayerSlot1`, `PlayerSlot2` e `PlayerSlot3`.
+- `EffectsLayer`.
+- `CursorLayer`.
+- `CanvasLayer/BattleUI`.
+- `CanvasLayer/BattleUI/BottomPanel`.
+
+O player hardcoded da cena foi reposicionado para o slot inferior central atual.
+
+`battleSystem/battle_scene.gd` foi atualizado para:
+
+- ler slots de inimigo em `$EnemySlots`;
+- encontrar o menu em `$CanvasLayer/BattleUI/CommandMenu`.
+
+### Preservado
+
+- `TurnBasedController`.
+- `CommandMenu`.
+- `TurnOrderBar`.
+- `PlayerStatusDisplay`.
+- Spawn dinâmico de inimigos via `BattleTransition.enemy_resources`.
+- Cena de teste isolada em `battleSystem/tests/test_battle_scene.tscn`.
+- Fluxo de vitória, derrota e fuga.
+
+### Fora desta fase
+
+- Arte final do fundo espacial.
+- Sprites reais dos inimigos vindos de `CharacterResource`.
+- Spawn dinâmico de players por party.
+- Reorganização completa de `CommandMenu`, `PlayerStatusDisplay` e `TurnOrderBar`.
+- Implementação real de `Combo` e `Item`.
+- Cursor customizado em `CursorLayer`.
+
+### Teste manual pendente
+
+1. Abrir `battleSystem/battle_scene.tscn` na Godot.
+2. Confirmar que a cena abre sem warnings de node path.
+3. Rodar o fluxo por `shroom-lands.tscn`.
+4. Confirmar que o fundo fixo aparece.
+5. Confirmar que o player aparece na parte inferior/central.
+6. Confirmar que o inimigo instancia nos slots superiores.
+7. Confirmar que `CommandMenu`, `PlayerStatusDisplay` e `TurnOrderBar` ainda aparecem e respondem.
+
+### Riscos restantes
+
+- A UI foi apenas agrupada sob `BattleUI`; o layout inferior completo ainda depende da Fase 5.
+- O fundo é estrutural/protótipo, não arte final.
+- Sem Godot no `PATH`, ainda falta validar se `ColorRect`/anchors e paths renderizam exatamente como esperado no editor.
