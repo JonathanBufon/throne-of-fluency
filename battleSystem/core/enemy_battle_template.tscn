@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://b6kr8nqz4p2vw"]
+
+[ext_resource type="Script" uid="uid://dxsc4wn5ypvjn" path="res://battleSystem/core/character.gd" id="1_char"]
+[ext_resource type="Texture2D" uid="uid://c83ortgf2jrk8" path="res://icon.svg" id="2_icon"]
+[ext_resource type="PackedScene" uid="uid://cefek1e0d8i2m" path="res://battleSystem/core/turn_based_agent.tscn" id="3_agent"]
+[ext_resource type="Resource" uid="uid://dm5g3oqr6d2uh" path="res://battleSystem/data/skills/Attack.tres" id="4_attack"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_placeholder"]
+atlas = ExtResource("2_icon")
+
+[node name="EnemyBattleTemplate" type="StaticBody2D"]
+script = ExtResource("1_char")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -40)
+scale = Vector2(0.9, 0.9)
+texture = SubResource("AtlasTexture_placeholder")
+
+[node name="TurnBasedAgent" parent="." instance=ExtResource("3_agent")]
+character_type = 1
+basicAttack = ExtResource("4_attack")
