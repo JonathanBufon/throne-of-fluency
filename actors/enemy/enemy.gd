@@ -24,6 +24,7 @@ var player: Node2D
 var patrol_target: Vector2
 var viu_player: bool = false
 var last_direction: Vector2 = Vector2.RIGHT
+var _battle_triggered: bool = false
 
 @onready var icone_visao = $Icone_Visao
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
@@ -149,3 +150,30 @@ func mostrar_icone_visao():
 
 func _esconder_icone():
 	icone_visao.visible = false
+
+# =========================
+# ⚔️ DANGER BOX → BATALHA
+# =========================
+func _on_danger_box_body_entered(body: Node2D) -> void:
+	if _battle_triggered:
+		return
+	if not body.is_in_group("player"):
+		return
+
+	var party: Array[CharacterResource] = []
+	if not battle_party.is_empty():
+		party = battle_party
+	elif battle_resource != null:
+		party.append(battle_resource)
+	else:
+		push_warning("Enemy '%s' tocou o player sem battle_resource ou battle_party configurados" % name)
+		return
+
+	_battle_triggered = true
+	BattleTransition.request_battle(
+		party,
+		get_tree().current_scene.scene_file_path,
+		body.global_position,
+		encounter_id
+	)
+	get_tree().change_scene_to_file("res://battleSystem/battle_scene.tscn")
