@@ -25,6 +25,7 @@ var patrol_target: Vector2
 var viu_player: bool = false
 var last_direction: Vector2 = Vector2.RIGHT
 var _battle_triggered: bool = false
+var _wait_player_exit_before_retrigger := false
 
 @onready var icone_visao = $Icone_Visao
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
@@ -33,6 +34,8 @@ func _ready():
 	player = get_tree().get_first_node_in_group("player")
 	icone_visao.visible = false
 	_pick_patrol_target()
+	_set_flee_retrigger_guard()
+	_set_danger_box_exit_signal()
 
 func _physics_process(delta):
 	if player == null:
@@ -129,6 +132,32 @@ func _pick_patrol_target():
 	)
 	patrol_target = global_position + random_offset
 
+func get_effective_encounter_id() -> String:
+	if not encounter_id.is_empty():
+		return encounter_id
+
+	var current_scene := get_tree().current_scene
+	if current_scene == null:
+		return ""
+
+	return "%s:%s" % [current_scene.scene_file_path, current_scene.get_path_to(self)]
+
+func _set_flee_retrigger_guard() -> void:
+	if BattleTransition.last_result != BattleTransition.Result.FLED:
+		return
+	if BattleTransition.encounter_id != get_effective_encounter_id():
+		return
+
+	_battle_triggered = true
+	_wait_player_exit_before_retrigger = true
+
+func _set_danger_box_exit_signal() -> void:
+	var danger_box := get_node_or_null("DangerBox") as Area2D
+	if danger_box == null:
+		return
+	if not danger_box.body_exited.is_connected(_on_danger_box_body_exited):
+		danger_box.body_exited.connect(_on_danger_box_body_exited)
+
 # =========================
 # ❗ ICONE DE VISÃO
 # =========================
@@ -174,6 +203,13 @@ func _on_danger_box_body_entered(body: Node2D) -> void:
 		party,
 		get_tree().current_scene.scene_file_path,
 		body.global_position,
-		encounter_id
+		get_effective_encounter_id()
 	)
-	get_tree().change_scene_to_file("res://battleSystem/battle_scene.tscn")
+	await BattleTransition.change_scene_with_fade("res://battleSystem/battle_scene.tscn")
+
+func _on_danger_box_body_exited(body: Node2D) -> void:
+	if not _wait_player_exit_before_retrigger or not body.is_in_group("player"):
+		return
+
+	_battle_triggered = false
+	_wait_player_exit_before_retrigger = false
