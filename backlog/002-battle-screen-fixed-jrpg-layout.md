@@ -743,3 +743,68 @@ O feedback visual da batalha foi reforçado reaproveitando os nós existentes:
 - Modulação simples pode não ser suficiente como linguagem visual final.
 - Como os ícones usam posição calculada no `_ready()`, movimentações maiores de personagem podem exigir reposicionamento dinâmico dos indicadores.
 - Sem Godot no `PATH`, a validação visual continua manual.
+
+---
+
+## 21. Registro da Fase 7 — Validação usando `shroom-lands.tscn`
+
+**Data:** 2026-05-05
+**Status:** Validação técnica headless executada; validação jogável/manual concluída no editor.
+**Godot usado:** `/opt/godot/godot` (`4.6.1.stable.official.14d19694e`).
+
+### Validação executada
+
+Foram executados smoke tests headless para confirmar que as cenas relevantes carregam sem erros de script depois das fases anteriores:
+
+```bash
+/opt/godot/godot --headless --path . --scene res://battleSystem/tests/test_battle_scene.tscn --quit-after 30
+/opt/godot/godot --headless --path . --scene res://battleSystem/battle_scene.tscn --quit-after 30
+/opt/godot/godot --headless --path . --scene res://world/shroom-lands.tscn --quit-after 30
+/opt/godot/godot --headless --path . --quit
+git diff --check
+```
+
+### Resultado encontrado
+
+- `battleSystem/tests/test_battle_scene.tscn` carrega sem erro de script após correção de tipagem em `PlayerStatsContainer`.
+- `battleSystem/battle_scene.tscn` carrega sem erro de script quando aberta diretamente.
+- Ao abrir `battle_scene.tscn` diretamente, o aviso `battle_scene carregada sem inimigos em BattleTransition.enemy_resources` é esperado, pois a cena real depende dos dados enviados pelo `BattleTransition`.
+- `world/shroom-lands.tscn` carrega em modo headless sem erro de script.
+- O inimigo de entrada em `shroom-lands.tscn` permanece configurado com `battle_resource` e `encounter_id`.
+- A validação estática do diff não encontrou espaços finais ou problemas de whitespace.
+
+### Correção mínima feita durante a validação
+
+O smoke test identificou que Godot não conseguia inferir com segurança o tipo de `is_dead` em `battleSystem/ui/player_stats_container.gd`. A variável foi tipada explicitamente como `bool`, sem alterar comportamento funcional:
+
+```gdscript
+var is_dead: bool = characterResource != null and characterResource.is_dead()
+```
+
+### Avisos conhecidos
+
+- Ainda aparecem avisos de fallback de UID invalido em recursos de cena/importacao.
+- Esses avisos nao bloquearam o parse das cenas e nao foram introduzidos como parte da Fase 7.
+- A limpeza dos UID warnings deve ser tratada separadamente para evitar misturar manutencao de asset/import com a validacao do fluxo de batalha.
+
+### Teste manual validado
+
+Validado manualmente no editor em 2026-05-05:
+
+1. O jogo roda pela main scene.
+2. O player entra em `shroom-lands.tscn`.
+3. O inimigo de entrada persegue o player.
+4. Entrar na `DangerBox` dispara `BattleTransition`.
+5. A batalha abre com fundo fixo espacial.
+6. O inimigo aparece no slot superior correto.
+7. O player aparece no slot inferior central.
+8. A UI inferior exibe comandos e status.
+9. `Attack` causa dano no inimigo.
+10. O inimigo consegue agir.
+11. Vitoria ou fuga retorna para `shroom-lands.tscn`.
+12. A posicao de retorno do player e coerente.
+13. O inimigo derrotado nao reaparece quando a regra do encontro e aplicada.
+
+### Conclusao da fase
+
+A Fase 7 confirmou que a estrutura criada nas fases 3 a 6 nao quebrou o carregamento das cenas principais nem o parse do projeto. A validacao manual no editor tambem confirmou o fluxo jogavel completo: movimento ate o inimigo, colisao com a `DangerBox`, transicao para batalha, comandos, acao inimiga, retorno ao overworld e persistencia do inimigo derrotado.

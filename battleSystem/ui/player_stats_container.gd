@@ -82,7 +82,7 @@ func set_player_stats(newCharacterResource: Resource) -> void:
 	_refresh_life_state()
 
 func _refresh_life_state() -> void:
-	var is_dead := characterResource != null and characterResource.is_dead()
+	var is_dead: bool = characterResource != null and characterResource.is_dead()
 	modulate = Color(0.62, 0.62, 0.68, 1.0) if is_dead else Color.WHITE
 	if is_dead:
 		add_theme_stylebox_override("panel", deadStyleBox)
