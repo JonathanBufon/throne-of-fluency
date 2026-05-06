@@ -13,6 +13,9 @@ signal player_turn_started()
 
 @export var onTurnIconOffSet: Vector2 = Vector2(0, -50)
 @export var targetIconOffSet: Vector2 = Vector2(50, 0)
+@export var active_modulate := Color(1.25, 1.25, 1.05, 1.0)
+@export var target_modulate := Color(1.2, 0.78, 0.78, 1.0)
+@export var dead_modulate := Color(0.35, 0.35, 0.42, 1.0)
 
 @onready var on_turn_icon_node: TextureRect = $onTurnIconNode
 @onready var target_icon_node: TextureRect = $targetIconNode
@@ -22,6 +25,10 @@ enum Character_Type { PLAYER, ENEMY }
 @export var isActive := false
 var selectedCommand: Resource
 var target: TurnBasedAgent
+var _base_modulate := Color.WHITE
+var _visual_node: CanvasItem
+var _animated_sprite: AnimatedSprite2D
+var _last_facing_direction := Vector2.DOWN
 
 func get_global_position() -> Vector2:
 	return get_parent().global_position
@@ -66,8 +73,10 @@ func set_active(boolean: bool) -> void:
 
 	if isActive:
 		on_turn_icon_node.show()
+		_apply_character_modulate(active_modulate)
 	else:
 		on_turn_icon_node.hide()
+		_refresh_character_state_visual()
 
 	if character_type == Character_Type.PLAYER and isActive:
 		player_turn_started.emit()
@@ -112,12 +121,123 @@ func _deselect_all_targets() -> void:
 	var all_targets := get_tree().get_nodes_in_group("enemy") + get_tree().get_nodes_in_group("player")
 	for t in all_targets:
 		t.target_icon_node.hide()
+		t._refresh_character_state_visual()
 
 func _ready() -> void:
+	_set_default_facing_direction()
+	_set_visual_node()
 	_set_group()
 	_set_on_turn_icon()
 	_set_target_icon()
+	_refresh_character_state_visual()
+	play_idle_current_direction()
 	_set_late_signals()
+
+func _set_visual_node() -> void:
+	_animated_sprite = get_parent().get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
+	_visual_node = _animated_sprite as CanvasItem
+	if _visual_node == null:
+		_visual_node = get_parent().get_node_or_null("Sprite2D") as CanvasItem
+	if _visual_node:
+		_base_modulate = _visual_node.modulate
+
+func refresh_visual_node() -> void:
+	_set_visual_node()
+	_refresh_character_state_visual()
+	play_idle_current_direction()
+
+func play_idle_current_direction() -> void:
+	_play_directional_animation("idle", _last_facing_direction)
+
+func play_idle_towards(target_global_position: Vector2) -> void:
+	_play_directional_animation("idle", target_global_position - get_global_position())
+
+func play_attack_towards(target_global_position: Vector2) -> void:
+	_play_directional_animation("attack", target_global_position - get_global_position())
+
+func play_dying_and_wait() -> void:
+	on_turn_icon_node.hide()
+	target_icon_node.hide()
+
+	if _animated_sprite == null or _animated_sprite.sprite_frames == null:
+		_refresh_character_state_visual()
+		await get_tree().create_timer(0.25).timeout
+		return
+
+	if not _animated_sprite.sprite_frames.has_animation("dying"):
+		_refresh_character_state_visual()
+		await get_tree().create_timer(0.25).timeout
+		return
+
+	var frame_count := _animated_sprite.sprite_frames.get_frame_count("dying")
+	if frame_count <= 0:
+		_refresh_character_state_visual()
+		await get_tree().create_timer(0.25).timeout
+		return
+
+	_apply_character_modulate(_base_modulate)
+	_animated_sprite.flip_h = false
+	_animated_sprite.animation = "dying"
+	_animated_sprite.set_frame_and_progress(0, 0.0)
+	_animated_sprite.play()
+
+	var animation_speed := _animated_sprite.sprite_frames.get_animation_speed("dying")
+	var duration := 0.7
+	if animation_speed > 0.0:
+		duration = float(frame_count) / animation_speed
+
+	await get_tree().create_timer(duration).timeout
+	_animated_sprite.stop()
+	_animated_sprite.set_frame_and_progress(frame_count - 1, 0.0)
+	_refresh_character_state_visual()
+
+func play_run_down() -> void:
+	_play_named_animation("run_down")
+
+func _set_default_facing_direction() -> void:
+	if character_type == Character_Type.PLAYER:
+		_last_facing_direction = Vector2.UP
+	else:
+		_last_facing_direction = Vector2.DOWN
+
+func _play_directional_animation(prefix: String, direction: Vector2) -> void:
+	if _animated_sprite == null or _animated_sprite.sprite_frames == null:
+		return
+
+	if direction == Vector2.ZERO:
+		direction = _last_facing_direction
+	else:
+		_last_facing_direction = direction.normalized()
+
+	var suffix := "down"
+	var flip_h := false
+	if absf(direction.x) > absf(direction.y):
+		suffix = "right"
+		flip_h = direction.x < 0
+	elif direction.y < 0:
+		suffix = "up"
+	else:
+		suffix = "down"
+
+	var animation_name := "%s_%s" % [prefix, suffix]
+	if not _animated_sprite.sprite_frames.has_animation(animation_name):
+		animation_name = "idle_%s" % suffix
+	if not _animated_sprite.sprite_frames.has_animation(animation_name):
+		animation_name = "idle_right"
+	if not _animated_sprite.sprite_frames.has_animation(animation_name):
+		return
+
+	_animated_sprite.flip_h = flip_h
+	_animated_sprite.play(animation_name)
+
+func _play_named_animation(animation_name: String) -> void:
+	if _animated_sprite == null or _animated_sprite.sprite_frames == null:
+		return
+	if not _animated_sprite.sprite_frames.has_animation(animation_name):
+		return
+
+	_animated_sprite.flip_h = false
+	_animated_sprite.play(animation_name)
 
 func _set_group() -> void:
 	add_to_group("turnBasedAgents")
@@ -177,3 +297,16 @@ func _on_command_selected(command: Resource) -> void:
 
 func set_target() -> void:
 	target_icon_node.show()
+	_apply_character_modulate(target_modulate)
+
+func _refresh_character_state_visual() -> void:
+	if _visual_node == null:
+		return
+	if character_resource != null and character_resource.is_dead():
+		_apply_character_modulate(dead_modulate)
+	else:
+		_apply_character_modulate(_base_modulate)
+
+func _apply_character_modulate(color: Color) -> void:
+	if _visual_node:
+		_visual_node.modulate = color
