@@ -1,0 +1,160 @@
+[gd_scene format=3 uid="uid://cy8m4rpa0q3xt"]
+
+[ext_resource type="Script" path="res://battleSystem/battle_scene.gd" id="1_scene"]
+[ext_resource type="PackedScene" uid="uid://djq2mu0mqkonh" path="res://battleSystem/core/turn_based_controller.tscn" id="2_ctrl"]
+[ext_resource type="Script" uid="uid://dxsc4wn5ypvjn" path="res://battleSystem/core/character.gd" id="3_char"]
+[ext_resource type="Texture2D" uid="uid://bd72l60i2gdk5" path="res://assets/sprites/characters/Knights/Swordman.png" id="4_swordman"]
+[ext_resource type="PackedScene" uid="uid://cefek1e0d8i2m" path="res://battleSystem/core/turn_based_agent.tscn" id="5_agent"]
+[ext_resource type="PackedScene" uid="uid://b22m3i34hfut8" path="res://battleSystem/ui/command_menu.tscn" id="6_cmd"]
+[ext_resource type="Resource" uid="uid://dm5g3oqr6d2uh" path="res://battleSystem/data/skills/Attack.tres" id="7_attack"]
+[ext_resource type="Resource" uid="uid://c37nasegxx0yo" path="res://battleSystem/data/skills/Heal.tres" id="8_heal"]
+[ext_resource type="Resource" uid="uid://66jy0hm02o01" path="res://battleSystem/data/skills/Slash.tres" id="9_slash"]
+[ext_resource type="PackedScene" uid="uid://b68xvpvlrxxes" path="res://battleSystem/ui/turn_order_bar.tscn" id="10_order"]
+[ext_resource type="Resource" uid="uid://cj8g8f8ovsm0j" path="res://battleSystem/data/characters/player1.tres" id="11_p1"]
+[ext_resource type="PackedScene" uid="uid://bx3mv8ifljfrq" path="res://battleSystem/ui/Player_Status_Display.tscn" id="12_status"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_player"]
+atlas = ExtResource("4_swordman")
+region = Rect2(6.9660034, 390.57434, 36.634354, 40.980774)
+
+[node name="BattleScene" type="Node2D"]
+script = ExtResource("1_scene")
+
+[node name="Background" type="Node2D" parent="."]
+z_index = -100
+
+[node name="Base" type="ColorRect" parent="Background"]
+offset_right = 800.0
+offset_bottom = 760.0
+color = Color(0.015686275, 0.011764706, 0.050980393, 1)
+
+[node name="FarNebula" type="ColorRect" parent="Background"]
+offset_top = 150.0
+offset_right = 800.0
+offset_bottom = 420.0
+color = Color(0.12156863, 0.05490196, 0.21960784, 0.42)
+
+[node name="Star1" type="ColorRect" parent="Background"]
+offset_left = 74.0
+offset_top = 88.0
+offset_right = 77.0
+offset_bottom = 91.0
+color = Color(0.85, 0.9, 1, 1)
+
+[node name="Star2" type="ColorRect" parent="Background"]
+offset_left = 148.0
+offset_top = 224.0
+offset_right = 150.0
+offset_bottom = 226.0
+color = Color(0.65, 0.8, 1, 1)
+
+[node name="Star3" type="ColorRect" parent="Background"]
+offset_left = 248.0
+offset_top = 122.0
+offset_right = 251.0
+offset_bottom = 125.0
+color = Color(1, 1, 0.82, 1)
+
+[node name="Star4" type="ColorRect" parent="Background"]
+offset_left = 322.0
+offset_top = 64.0
+offset_right = 324.0
+offset_bottom = 66.0
+color = Color(0.9, 0.96, 1, 1)
+
+[node name="Star5" type="ColorRect" parent="Background"]
+offset_left = 462.0
+offset_top = 188.0
+offset_right = 466.0
+offset_bottom = 192.0
+color = Color(0.78, 0.9, 1, 1)
+
+[node name="Star6" type="ColorRect" parent="Background"]
+offset_left = 626.0
+offset_top = 102.0
+offset_right = 628.0
+offset_bottom = 104.0
+color = Color(1, 1, 1, 1)
+
+[node name="Star7" type="ColorRect" parent="Background"]
+offset_left = 710.0
+offset_top = 258.0
+offset_right = 713.0
+offset_bottom = 261.0
+color = Color(0.72, 0.86, 1, 1)
+
+[node name="Star8" type="ColorRect" parent="Background"]
+offset_left = 548.0
+offset_top = 338.0
+offset_right = 550.0
+offset_bottom = 340.0
+color = Color(1, 0.92, 0.8, 1)
+
+[node name="EnemySlots" type="Node2D" parent="."]
+
+[node name="EnemySlot1" type="Marker2D" parent="EnemySlots"]
+position = Vector2(192, 260)
+
+[node name="EnemySlot2" type="Marker2D" parent="EnemySlots"]
+position = Vector2(384, 246)
+
+[node name="EnemySlot3" type="Marker2D" parent="EnemySlots"]
+position = Vector2(576, 260)
+
+[node name="PlayerSlots" type="Node2D" parent="."]
+
+[node name="PlayerSlot1" type="Marker2D" parent="PlayerSlots"]
+position = Vector2(292, 474)
+
+[node name="PlayerSlot2" type="Marker2D" parent="PlayerSlots"]
+position = Vector2(384, 446)
+
+[node name="PlayerSlot3" type="Marker2D" parent="PlayerSlots"]
+position = Vector2(476, 474)
+
+[node name="EffectsLayer" type="Node2D" parent="."]
+
+[node name="CursorLayer" type="Node2D" parent="."]
+
+[node name="TurnBasedController" parent="." instance=ExtResource("2_ctrl")]
+
+[node name="Player" type="StaticBody2D" parent="."]
+position = Vector2(384, 446)
+script = ExtResource("3_char")
+
+[node name="Sprite2D" type="Sprite2D" parent="Player"]
+scale = Vector2(5, 5)
+texture = SubResource("AtlasTexture_player")
+
+[node name="TurnBasedAgent" parent="Player" instance=ExtResource("5_agent")]
+character_resource = ExtResource("11_p1")
+basicAttack = ExtResource("7_attack")
+skills = Array[Resource]([ExtResource("8_heal"), ExtResource("9_slash")])
+isActive = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="BattleUI" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BottomPanel" type="ColorRect" parent="CanvasLayer/BattleUI"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -190.0
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(0.019607844, 0.023529412, 0.039215688, 0.86)
+
+[node name="CommandMenu" parent="CanvasLayer/BattleUI" instance=ExtResource("6_cmd")]
+
+[node name="TurnOrderBar" parent="CanvasLayer/BattleUI" instance=ExtResource("10_order")]
+
+[node name="PlayerStatusDisplay" parent="CanvasLayer/BattleUI" instance=ExtResource("12_status")]

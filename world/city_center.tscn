@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://cuqckpsn2peum" path="res://assets/sprites/world/shroomLands-scenario/Houses/Shroomlinng_House_2.png" id="7_ce6ug"]
 [ext_resource type="Texture2D" uid="uid://bggm203vb0c51" path="res://assets/sprites/world/shroomLands-scenario/Houses/Shroomlinng_House_3.5.png" id="8_dv4sx"]
 [ext_resource type="Texture2D" uid="uid://d4b2fn2jcxua0" path="res://assets/sprites/world/shroomLands-scenario/Houses/Shroomlinng_House_3.png" id="9_h0f3t"]
+[ext_resource type="Script" path="res://world/world_scene.gd" id="10_world"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ce6ug"]
 texture = ExtResource("1_skb5i")
@@ -747,6 +748,7 @@ sources/0 = SubResource("TileSetAtlasSource_edgv0")
 [node name="CityCenter" type="Node2D" unique_id=671381784]
 y_sort_enabled = true
 position = Vector2(858, -1415)
+script = ExtResource("10_world")
 
 [node name="chao" type="TileMapLayer" parent="." unique_id=1367989234]
 z_index = 1

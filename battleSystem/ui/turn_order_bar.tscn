@@ -31,19 +31,21 @@ script = ExtResource("1_mav5h")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=752752504]
 layout_mode = 1
-anchors_preset = 11
+anchors_preset = 9
 anchor_left = 1.0
 anchor_right = 1.0
-anchor_bottom = 1.0
+offset_left = -146.0
+offset_top = 52.0
+offset_bottom = 260.0
 grow_horizontal = 0
-grow_vertical = 2
-theme_override_constants/margin_left = 50
-theme_override_constants/margin_top = 50
-theme_override_constants/margin_right = 50
-theme_override_constants/margin_bottom = 50
+grow_vertical = 0
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 0
 
 [node name="PanelContainer" type="PanelContainer" parent="MarginContainer" unique_id=1644479094]
-custom_minimum_size = Vector2(125, 0)
+custom_minimum_size = Vector2(126, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_mav5h")
 

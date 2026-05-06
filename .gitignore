@@ -41,3 +41,6 @@ Thumbs.db
 skills-lock.json
 .claude
 .agents
+
+# Backlog local (não versionar)
+/backlog/

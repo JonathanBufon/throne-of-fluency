@@ -1,188 +1,161 @@
-# Throne of Fluency 
+# Throne of Fluency
 
-RPG educacional top-down em pixel art desenvolvido em Godot 4.6. O jogador aprende inglês de forma orgânica — não por lições, mas porque o idioma é o mecanismo central do jogo: abre portas, desbloqueia magias e dá sentido ao mundo.
-
----
+RPG educacional top-down em pixel art desenvolvido em Godot 4.6. O jogador aprende inglês de forma orgânica: o idioma é usado como mecanismo de mundo para abrir portas, estruturar puzzles, dar contexto a diálogos e futuramente formar magias.
 
 ## Sobre o Jogo
 
-### O Mundo
+**Lexicon** entrou em colapso depois que o Rei Orc atingiu a Gema do Diálogo. A gema se partiu em três fragmentos:
 
-**Lexicon** era um mundo em harmonia até o dia em que o Rei Orc invadiu o Olimpo das Gemas. Ao tentar destruir a Gema da Paz, ele atingiu a **Gema do Diálogo** — o pilar que sustentava a comunicação entre os povos. A gema se quebrou em três fragmentos:
-
-| Fragmento | Domínio | Desafio no Jogo |
+| Fragmento | Domínio | Uso no jogo |
 |---|---|---|
-| **Auris** | Escuta e compreensão | Challenges de listening |
-| **Vox** | Fala e comunicação | Diálogos e escolha de palavras |
-| **Scriptum** | Escrita e registro | Formação de palavras e frases |
+| Auris | Escuta e compreensão | Challenges de listening |
+| Vox | Fala e comunicação | Diálogos e escolha de palavras |
+| Scriptum | Escrita e registro | Formação de palavras e frases |
 
-Sem a Gema do Diálogo, os reinos pararam de se entender. Monstros surgiram. O mundo entrou em colapso linguístico.
-
-### O Herói
-
-Uma armadura vazia, reanimada por **Lumen** — uma centelha de luz criada por Verbum, o Deus da Linguagem. O herói é uma *tabula rasa*: possui poder (a Lâmina de Ferro Comum e o Grimório de Marfim), mas não possui vocabulário. Tudo que ele aprende, o jogador aprende junto.
-
-### Lumen
-
-Assistente do jogador. Não fala com sons — projeta conceitos diretamente na mente do herói. Suas falas são sempre em inglês com tradução em português. Possui **energia limitada**: fica fraco se o jogador não se aproximar das gemas, forçando autonomia no aprendizado.
-
----
-
-## Mecânicas Principais
-
-### Combate por Turnos
-
-Inspirado em Final Fantasy e Chrono Trigger. O tempo é intencional — o combate nunca deve ser frenético. O jogador tem espaço para pensar antes de agir.
-
-- Ordem de turno baseada em speed dos personagens
-- Menu de comandos: Ataque, Habilidades, Fuga
-- Sistema de OverDrive que carrega ao receber/causar dano
-
-### Sistema de Magia do Grimório
-
-Palavras aprendidas ficam registradas no Grimório como vocabulário. Combinações de palavras formam magias:
-
-```
-throw + fire + ball  →  THROW FIRE BALL (magia de fogo)
-```
-
-Se o encantamento estiver pré-montado, pode ser usado como skill rápida no combate. Caso contrário, o jogador pode tentar montar as palavras durante a batalha. Ao acertar, **apenas uma palavra** é salva — o jogador precisa recitar várias vezes para desbloquear a magia completa. Repetição como método de aprendizado.
-
-### Sistema Lumen
-
-Lumen oferece dicas, traduz frases captadas de NPCs, inimigos, placas e objetos do mundo. Sua energia recarrega conforme a proximidade com as gemas. Quanto mais perto, mais rápido. Quando fraco, o jogador precisa usar o Glossário por conta própria.
-
-### Glossário
-
-Dicionário interativo integrado ao jogo. Fornece contexto das palavras e incentiva a interpretação autônoma — não entrega a resposta, mas dá ferramentas para o jogador chegar até ela.
-
-### Puzzles Linguísticos
-
-Integrados ao cenário: portas que respondem a comandos escritos, NPCs que se comunicam em inglês, objetos que exigem compreensão para interagir. O primeiro exemplo é a porta da cripta inicial: **"PUSH TO OPEN"**.
-
----
+O herói é uma armadura vazia reanimada por **Lumen**, uma centelha criada por Verbum, o Deus da Linguagem. O herói não possui vocabulário próprio: tudo que ele aprende, o jogador aprende junto.
 
 ## Stack Técnica
 
-| | |
+| Item | Valor |
 |---|---|
-| **Engine** | Godot 4.6 — GL Compatibility renderer |
-| **Linguagem** | GDScript |
-| **Resolução** | 700×550, stretch mode `canvas_items` |
-| **Sprites** | Pixel art 16×16 e 48×48, filtro `Nearest` (sem suavização) |
-| **Física** | `CharacterBody2D` para jogador e inimigos |
-| **Assets** | Cute Fantasy Characters, Cute Fantasy Dungeons UI, ShroomLands Tileset |
-
----
+| Engine | Godot 4.6 |
+| Renderer | GL Compatibility |
+| Linguagem | GDScript |
+| Viewport | 800x760, stretch mode `canvas_items` |
+| Pixel art | Filtro `Nearest`, sem suavização |
+| Física | `CharacterBody2D` para player e inimigos de overworld |
 
 ## Como Rodar
 
-1. Instale o [Godot 4.6](https://godotengine.org/download)
-2. Clone o repositório:
-   ```bash
-   git clone https://github.com/JonathanBufon/throne-of-fluency.git
-   ```
-3. Abra o Godot e importe o projeto selecionando `project.godot`
-4. Pressione **F5** — a cena principal carrega `world/fase_cripta.tscn`
+1. Instale Godot 4.6.
+2. Importe `project.godot`.
+3. Pressione F5 para rodar `main.tscn`.
 
-**Para testar o sistema de combate diretamente:** abra `battleSystem/test_battle_scene.tscn` e rode com **F6**.
+Comandos úteis, quando o binário estiver disponível:
 
----
-
-## Estrutura do Projeto
-
-```
-throne-of-fluency/
-├── actors/               — Entidades jogáveis e inimigos (cena + script juntos)
-│   ├── player/
-│   │   ├── player.tscn           — Cena do herói (CharacterBody2D)
-│   │   └── player.gd             — Movimento e animação do herói
-│   └── enemy/
-│       ├── enemy.tscn            — Cena de inimigo (CharacterBody2D)
-│       └── enemy.gd              — IA básica de inimigo (segue o jogador)
-├── assets/               — Recursos visuais e de áudio
-│   ├── fonts/                    — Fontes TTF (ex: CuteFantasy-5x9.ttf)
-│   ├── sprites/
-│   │   ├── characters/           — Spritesheets de personagens (Knights, Orcs, etc.)
-│   │   ├── player/               — Spritesheet do herói jogável
-│   │   └── world/                — Tiles e sprites de cenário (dungeon, shroomLands, green)
-│   ├── test/                     — Assets usados apenas em testes
-│   └── ui/                       — Sprites de interface (UI_Icons, UI_Frames, etc.)
-├── battleSystem/         — Sistema de combate por turnos (autocontido)
-│   ├── core/                     — Lógica central da batalha
-│   │   ├── turn_based_controller.tscn/.gd  — Gerencia ordem de turnos e fim de batalha
-│   │   ├── turn_based_agent.tscn/.gd       — Lógica por personagem (targeting, input, IA)
-│   │   └── character.gd                    — Script raiz do nó de personagem (StaticBody2D)
-│   ├── ui/                       — Cenas e scripts de interface de batalha
-│   │   ├── command_menu.tscn/.gd           — Menu de ações do jogador
-│   │   ├── command_button.tscn             — Botão reutilizável do menu de comandos
-│   │   ├── player_status_display.tscn/.gd  — HUD de status dos jogadores
-│   │   ├── player_stats_container.tscn/.gd — Painel HP/MP/OverDrive por personagem
-│   │   ├── turn_order_bar.tscn/.gd         — Barra lateral de ordem de turnos
-│   │   └── character_display_container.tscn
-│   ├── data/                     — Recursos .tres prontos para uso em cenas
-│   │   ├── skills/               — Attack.tres / Heal.tres / Slash.tres
-│   │   └── characters/           — enemy1-3.tres / player1-2.tres / focus_player_stats.tres
-│   ├── resources/                — Definições de Resource (.gd)
-│   │   ├── character_resource.gd — CharacterResource: HP, MP, speed, overDrive
-│   │   └── skillResource.gd      — SkillResource: name, targetType, skillType, power
-│   └── tests/
-│       └── test_battle_scene.tscn — Cena de teste isolada do sistema de batalha
-├── ui/                   — Interfaces de jogo
-│   └── dialog/
-│       ├── dialog_screen.tscn          — Diálogo com NPC (modos DIALOG e INPUT)
-│       ├── dialogo_acao_input.tscn     — Popup de input linguístico
-│       └── dialogo_acao_input.gd       — Script do popup (sem acento no nome)
-├── world/                — Mapas, cenários e scripts de mundo
-│   ├── fase_cripta.tscn          — Fase 1: Cripta dos Ecos Perdidos (cena principal)
-│   ├── cenario1.tscn             — Cenário de transição (ShroomLands)
-│   ├── exit_cripta.tscn          — Saída da cripta
-│   ├── fim_da_fase.tscn          — Trigger de fim de fase (Area2D)
-│   ├── testes.tscn               — Cena de testes gerais
-│   ├── porta.gd                  — Lógica da porta com puzzle linguístico
-│   ├── fim_da_fase.gd            — Detecta player e troca de cena
-│   └── scenario.gd               — Script de cenário (stub)
-└── main.tscn             — Cena principal de entrada
+```bash
+godot --path .
+godot --headless --path . --quit
 ```
 
----
+Neste ambiente, o binário também pode existir em:
 
-## Estado Atual
+```bash
+/opt/godot/godot --headless --path . --quit
+```
 
-### Implementado
+Teste isolado de combate:
 
-- Movimentação e animações do jogador (idle, run, 4 direções)
-- Cripta dos Ecos Perdidos com tilemaps, colisões e decorações
-- Sistema de porta com puzzle de texto
-- Inimigo básico com IA de perseguição
-- **Sistema de combate por turnos completo:**
-  - Ordem de turno dinâmica (TurnBasedController)
-  - Menu de comandos com ataque, habilidades e suporte a skills customizadas
-  - Recursos de personagem com HP, MP, speed e OverDrive
-  - Skills tipadas (DAMAGE / HEAL) com power configurável
-  - Detecção de fim de batalha (vitória / derrota)
-  - Exibição de status dos jogadores em tempo real
-  - Barra de ordem de turno visual
+```txt
+battleSystem/tests/test_battle_scene.tscn
+```
 
-### Em Desenvolvimento
+Abra a cena e rode com F6.
 
-- Sistema Lumen: energia, proximidade com gemas, tradução contextual
-- Sistema de Grimório: registro de palavras, combinações → magias
-- Sistema de Glossário: dicionário interativo
-- Lógica real de fuga no combate
-- Transição de batalha (BattleTransition autoload)
-- Fase 2: ShroomLands — exploração livre, NPCs, puzzles
+## Estrutura Atual
 
----
+```txt
+actors/
+  player/             Player do overworld
+  enemy/              Inimigo de overworld, perseguição e gatilho de batalha
+  lumen/              Companheiro Lumen
+
+battleSystem/
+  battle_scene.tscn   Tela real de batalha fixa estilo JRPG
+  battle_scene.gd
+  core/               Controller, agents, character e templates
+  data/               Recursos .tres de personagens e skills
+  resources/          Classes Resource
+  tests/              Cena isolada de teste do combate
+  ui/                 Menu de comandos, status e ordem de turno
+
+ui/
+  dialog/             Diálogo e input linguístico
+
+world/
+  battle_transition.gd
+  world_scene.gd
+  troca_fase.tscn/.gd
+  shroom-lands.tscn
+  city_center.tscn
+  cripta/
+    cripta.tscn
+    game_data.gd
+    porta.gd
+    scenario.gd
+
+main.tscn
+project.godot
+```
+
+## Sistemas Implementados
+
+### Overworld
+
+- Player com movimento e animações direcionais.
+- Lumen acompanha o player durante exploração.
+- Cripta com puzzle linguístico da porta.
+- `shroom-lands.tscn` com inimigo de entrada que persegue o player.
+- Troca de mapas via `troca_fase`.
+- Persistência simples em `GameData`.
+
+### Combate
+
+O combate é iniciado pelo overworld, mas acontece em uma tela dedicada de batalha.
+
+Fluxo atual:
+
+1. O inimigo do overworld detecta o player pela `DangerBox`.
+2. `enemy.gd` monta o encontro usando `battle_party` ou `battle_resource`.
+3. `BattleTransition` guarda inimigos, cena de retorno, posição de retorno, `encounter_id` e dados visuais dos atores.
+4. A cena muda para `battleSystem/battle_scene.tscn`.
+5. A batalha usa fundo fixo espacial, slots para inimigos e player, UI inferior e barra de turno.
+6. Vitória marca o encontro em `GameData.defeated_encounters` e retorna ao overworld.
+7. Fuga toca `run_down`, retorna ao overworld e não marca o inimigo como derrotado.
+8. Derrota toca `dying` nos players mortos e retorna para `main.tscn` como fluxo provisório de game over.
+
+Recursos atuais:
+
+- Turnos por `TurnBasedController`.
+- Participantes por grupos Godot: `turnBasedAgents`, `player`, `enemy`.
+- Menu de comandos com `Attack`, placeholder de skills/combo e `Run`.
+- Status de HP/MP do grupo.
+- Barra lateral de ordem de turno.
+- Feedback visual de personagem ativo, alvo e personagem morto.
+- Atores animados com `idle_*`, `attack_*`, `dying` e `run_down` na fuga.
+- Inimigos de batalha instanciados a partir do inimigo real que ativou o encontro.
+
+### Dados de Combate
+
+- `CharacterResource`: nome, HP, MP, speed, OverDrive.
+- `SkillResource`: nome, tipo de alvo, tipo de skill e poder.
+- Skills existentes: `Attack`, `Heal`, `Slash`.
+- Personagens de teste em `battleSystem/data/characters/`.
+
+## Sistemas Planejados
+
+- Sistema Lumen: energia, proximidade com gemas e tradução contextual.
+- Grimório: registro de palavras aprendidas e combinações para magias.
+- Glossário: dicionário interativo.
+- Game over real e retorno para save anterior.
+- Persistência completa de HP/MP entre overworld e batalha.
+- Recompensas de vitória, XP, loot e tela de resultado completa.
+
+## Documentação de Trabalho
+
+- `AGENTS.md`: regras rápidas para agentes e colaboradores.
+- `HARNESS.md`: guia operacional detalhado para IA e fluxo de desenvolvimento.
+- `CLAUDE.md`: visão técnica e arquitetura atual.
+- `Throne_Of_Fluency_Documentacao.md`: documento de produto, lore e design.
+
+`/backlog/` é local e ignorado pelo Git. Use para planejamento temporário, sem subir para o GitHub.
 
 ## Equipe
 
-- **Gabriel Rosario**
-- **Jonathan Bufon**
-- **Rafael Merisio Neto**
-
----
+- Gabriel Rosario
+- Jonathan Bufon
+- Rafael Merisio Neto
 
 ## Licença
 
-Projeto acadêmico (ABEX). Os asset packs utilizados possuem licença para uso comercial e não-comercial, com proibição de redistribuição dos assets originais.
+Projeto acadêmico (ABEX). Os asset packs usados no projeto possuem licença para uso comercial e não-comercial, com proibição de redistribuição dos assets originais.

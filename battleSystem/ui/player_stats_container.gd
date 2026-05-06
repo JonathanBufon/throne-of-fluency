@@ -7,8 +7,17 @@ extends PanelContainer
 
 var focusStyleBox = preload("res://battleSystem/data/characters/focus_player_stats.tres")
 var normalStyleBox :StyleBox = StyleBoxEmpty.new()
+var deadStyleBox := StyleBoxFlat.new()
 var characterResource: Resource
 var oldCharacterResource: Resource
+
+func _ready() -> void:
+	deadStyleBox.bg_color = Color(0.22, 0.22, 0.26, 0.78)
+	deadStyleBox.border_width_left = 2
+	deadStyleBox.border_width_top = 2
+	deadStyleBox.border_width_right = 2
+	deadStyleBox.border_width_bottom = 2
+	deadStyleBox.border_color = Color(0.55, 0.1, 0.1, 1.0)
 	
 func _process(delta: float) -> void:
 	var refreshed = _check_change_data()
@@ -16,6 +25,7 @@ func _process(delta: float) -> void:
 	if refreshed: 
 		_update_stats()
 		oldCharacterResource = characterResource.duplicate()
+		_refresh_life_state()
 
 func _check_change_data():
 	var healthChanged = characterResource["currentHealth"] != oldCharacterResource["currentHealth"]
@@ -49,9 +59,15 @@ func tween_progress_bar(value: int, progressBarNode: ProgressBar):
 	progressBarNode.value = value
 	
 func activate_focus() -> void:
+	if characterResource != null and characterResource.is_dead():
+		add_theme_stylebox_override("panel", deadStyleBox)
+		return
 	add_theme_stylebox_override("panel", focusStyleBox)
 	
 func deactivate_focus() -> void:
+	if characterResource != null and characterResource.is_dead():
+		add_theme_stylebox_override("panel", deadStyleBox)
+		return
 	add_theme_stylebox_override("panel", normalStyleBox)
 
 func set_player_stats(newCharacterResource: Resource) -> void:
@@ -63,3 +79,10 @@ func set_player_stats(newCharacterResource: Resource) -> void:
 	over_drive_bar.value = characterResource["overDriveValue"]
 
 	oldCharacterResource = characterResource.duplicate()
+	_refresh_life_state()
+
+func _refresh_life_state() -> void:
+	var is_dead: bool = characterResource != null and characterResource.is_dead()
+	modulate = Color(0.62, 0.62, 0.68, 1.0) if is_dead else Color.WHITE
+	if is_dead:
+		add_theme_stylebox_override("panel", deadStyleBox)

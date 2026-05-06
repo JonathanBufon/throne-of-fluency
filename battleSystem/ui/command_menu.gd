@@ -2,12 +2,13 @@ extends Control
 class_name CommandMenu
 
 signal command_selected(command: Resource)
+signal run_requested()
 
 @onready var attack_button: Button = %AttackButton
 @onready var skills_button: Button = %SkillsButton
 @onready var run_button: Button = %RunButton
 
-@onready var main_commands: VBoxContainer = %MainCommands
+@onready var main_commands: GridContainer = %MainCommands
 @onready var skill_container: GridContainer = $MarginContainer/ScrollContainer/SkillsContainer
 
 const COMMAND_BUTTON := preload("res://battleSystem/ui/command_button.tscn")
@@ -58,8 +59,8 @@ func _on_skill_button_pressed() -> void:
 		children[0].grab_focus()
 
 func _on_run_button_pressed() -> void:
-	# TODO: replace with actual escape/flee logic
-	get_tree().quit()
+	hide()
+	run_requested.emit()
 
 func _set_command_options(character: TurnBasedAgent) -> void:
 	if character.basicAttack:
@@ -72,6 +73,7 @@ func _set_command_options(character: TurnBasedAgent) -> void:
 		skills_button.hide()
 	else:
 		skills_button.show()
+		skills_button.disabled = true
 		for skill in skill_container.get_children():
 			skill.queue_free()
 		for skill in character.skills:
