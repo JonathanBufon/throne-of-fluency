@@ -7,8 +7,17 @@ extends Node
 enum Result { IDLE, WON, LOST, FLED }
 
 var enemy_resources: Array[CharacterResource] = []
-var enemy_textures: Array[Texture2D] = []
+var enemy_sprite_frames: Array[SpriteFrames] = []
+var enemy_animations: Array[String] = []
+var enemy_frame_indices: Array[int] = []
+var enemy_frame_progresses: Array[float] = []
+var enemy_flip_hs: Array[bool] = []
 var enemy_scales: Array[Vector2] = []
+var player_sprite_frames: SpriteFrames
+var player_animation: String = ""
+var player_frame_index: int = 0
+var player_frame_progress: float = 0.0
+var player_flip_h: bool = false
 var return_scene: String = ""
 var return_position: Vector2 = Vector2.ZERO
 var encounter_id: String = ""
@@ -21,29 +30,66 @@ func request_battle(
 	enemies: Array[CharacterResource],
 	origin_scene: String,
 	player_position: Vector2,
-	id: String = "",
-	textures: Array[Texture2D] = [],
-	scales: Array[Vector2] = []
+	id: String = ""
 ) -> void:
 	enemy_resources = enemies
-	enemy_textures = textures
-	enemy_scales = scales
+	_clear_visual_data()
 	return_scene = origin_scene
 	return_position = player_position
 	encounter_id = id
 	last_result = Result.IDLE
+
+func set_enemy_visuals(
+	sprite_frames: Array[SpriteFrames],
+	animations: Array[String],
+	frame_indices: Array[int],
+	frame_progresses: Array[float],
+	flip_hs: Array[bool],
+	scales: Array[Vector2]
+) -> void:
+	enemy_sprite_frames = sprite_frames
+	enemy_animations = animations
+	enemy_frame_indices = frame_indices
+	enemy_frame_progresses = frame_progresses
+	enemy_flip_hs = flip_hs
+	enemy_scales = scales
+
+func set_player_visual(
+	sprite_frames: SpriteFrames,
+	animation: String,
+	frame_index: int,
+	frame_progress: float,
+	flip_h: bool
+) -> void:
+	player_sprite_frames = sprite_frames
+	player_animation = animation
+	player_frame_index = frame_index
+	player_frame_progress = frame_progress
+	player_flip_h = flip_h
 
 func finish_battle(result: Result) -> void:
 	last_result = result
 
 func clear() -> void:
 	enemy_resources = []
-	enemy_textures = []
-	enemy_scales = []
+	_clear_visual_data()
 	return_scene = ""
 	return_position = Vector2.ZERO
 	encounter_id = ""
 	last_result = Result.IDLE
+
+func _clear_visual_data() -> void:
+	enemy_sprite_frames = []
+	enemy_animations = []
+	enemy_frame_indices = []
+	enemy_frame_progresses = []
+	enemy_flip_hs = []
+	enemy_scales = []
+	player_sprite_frames = null
+	player_animation = ""
+	player_frame_index = 0
+	player_frame_progress = 0.0
+	player_flip_h = false
 
 func has_pending_return() -> bool:
 	return return_scene != "" and last_result != Result.IDLE

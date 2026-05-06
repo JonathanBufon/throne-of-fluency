@@ -199,24 +199,39 @@ func _on_danger_box_body_entered(body: Node2D) -> void:
 		push_warning("Enemy '%s' tocou o player sem battle_resource ou battle_party configurados" % name)
 		return
 
-	var battle_textures: Array[Texture2D] = []
-	var battle_texture := _get_current_battle_texture()
-	if battle_texture != null:
-		battle_textures.append(battle_texture)
-
+	var enemy_sprite_frames: Array[SpriteFrames] = []
+	var enemy_animations: Array[String] = []
+	var enemy_frame_indices: Array[int] = []
+	var enemy_frame_progresses: Array[float] = []
+	var enemy_flip_hs: Array[bool] = []
 	var battle_scales: Array[Vector2] = []
-	if battle_texture != null:
-		battle_scales.append(battle_sprite_scale)
+	_append_battle_animation_data(
+		animated_sprite_2d,
+		battle_sprite_scale,
+		enemy_sprite_frames,
+		enemy_animations,
+		enemy_frame_indices,
+		enemy_frame_progresses,
+		enemy_flip_hs,
+		battle_scales
+	)
 
 	_battle_triggered = true
 	BattleTransition.request_battle(
 		party,
 		get_tree().current_scene.scene_file_path,
 		body.global_position,
-		get_effective_encounter_id(),
-		battle_textures,
+		get_effective_encounter_id()
+	)
+	BattleTransition.set_enemy_visuals(
+		enemy_sprite_frames,
+		enemy_animations,
+		enemy_frame_indices,
+		enemy_frame_progresses,
+		enemy_flip_hs,
 		battle_scales
 	)
+	_set_player_battle_visual(body)
 	await BattleTransition.change_scene_with_fade("res://battleSystem/battle_scene.tscn")
 
 func _on_danger_box_body_exited(body: Node2D) -> void:
@@ -226,17 +241,66 @@ func _on_danger_box_body_exited(body: Node2D) -> void:
 	_battle_triggered = false
 	_wait_player_exit_before_retrigger = false
 
-func _get_current_battle_texture() -> Texture2D:
-	if animated_sprite_2d == null or animated_sprite_2d.sprite_frames == null:
-		return null
+func _append_battle_animation_data(
+	animated_sprite: AnimatedSprite2D,
+	battle_scale: Vector2,
+	sprite_frames_list: Array[SpriteFrames],
+	animations: Array[String],
+	frame_indices: Array[int],
+	frame_progresses: Array[float],
+	flip_hs: Array[bool],
+	scales: Array[Vector2]
+) -> void:
+	if animated_sprite == null or animated_sprite.sprite_frames == null:
+		return
 
-	var animation_name := animated_sprite_2d.animation
-	if animation_name.is_empty() or not animated_sprite_2d.sprite_frames.has_animation(animation_name):
-		return null
+	var animation_name := _get_battle_animation_name(animated_sprite)
+	if animation_name.is_empty():
+		return
 
-	var frame_count := animated_sprite_2d.sprite_frames.get_frame_count(animation_name)
+	var frame_count := animated_sprite.sprite_frames.get_frame_count(animation_name)
 	if frame_count <= 0:
-		return null
+		return
 
-	var frame_index := clampi(animated_sprite_2d.frame, 0, frame_count - 1)
-	return animated_sprite_2d.sprite_frames.get_frame_texture(animation_name, frame_index)
+	sprite_frames_list.append(animated_sprite.sprite_frames)
+	animations.append(animation_name)
+	frame_indices.append(clampi(animated_sprite.frame, 0, frame_count - 1))
+	frame_progresses.append(animated_sprite.frame_progress)
+	flip_hs.append(animated_sprite.flip_h)
+	scales.append(battle_scale)
+
+func _set_player_battle_visual(body: Node2D) -> void:
+	var player_sprite := body.get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
+	if player_sprite == null:
+		return
+
+	var animation_name := _get_battle_animation_name(player_sprite)
+	if animation_name.is_empty():
+		return
+
+	var frame_count := player_sprite.sprite_frames.get_frame_count(animation_name)
+	if frame_count <= 0:
+		return
+
+	BattleTransition.set_player_visual(
+		player_sprite.sprite_frames,
+		animation_name,
+		clampi(player_sprite.frame, 0, frame_count - 1),
+		player_sprite.frame_progress,
+		player_sprite.flip_h
+	)
+
+func _get_battle_animation_name(animated_sprite: AnimatedSprite2D) -> String:
+	if animated_sprite == null or animated_sprite.sprite_frames == null:
+		return ""
+
+	var animation_name := String(animated_sprite.animation)
+	if animation_name.is_empty() or not animated_sprite.sprite_frames.has_animation(animation_name):
+		return ""
+
+	if animation_name.begins_with("run_"):
+		var idle_animation := "idle_" + animation_name.substr("run_".length())
+		if animated_sprite.sprite_frames.has_animation(idle_animation):
+			return idle_animation
+
+	return animation_name

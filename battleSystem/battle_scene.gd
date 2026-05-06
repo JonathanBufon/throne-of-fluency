@@ -16,6 +16,7 @@ const MAX_VISIBLE_ENEMIES := 3
 
 func _ready() -> void:
 	_position_player_party()
+	_apply_player_visual()
 	_spawn_enemies_from_transition()
 	controller.battle_won.connect(_on_battle_won)
 	controller.battle_lost.connect(_on_battle_lost)
@@ -31,7 +32,11 @@ func _position_player_party() -> void:
 
 func _spawn_enemies_from_transition() -> void:
 	var resources := BattleTransition.enemy_resources
-	var textures := BattleTransition.enemy_textures
+	var sprite_frames := BattleTransition.enemy_sprite_frames
+	var animations := BattleTransition.enemy_animations
+	var frame_indices := BattleTransition.enemy_frame_indices
+	var frame_progresses := BattleTransition.enemy_frame_progresses
+	var flip_hs := BattleTransition.enemy_flip_hs
 	var scales := BattleTransition.enemy_scales
 	if resources.is_empty():
 		push_warning("battle_scene carregada sem inimigos em BattleTransition.enemy_resources")
@@ -46,25 +51,78 @@ func _spawn_enemies_from_transition() -> void:
 		var enemy := ENEMY_TEMPLATE.instantiate()
 		var agent: TurnBasedAgent = enemy.get_node("TurnBasedAgent")
 		agent.character_resource = resources[i]
-		_apply_enemy_visual(enemy, textures, scales, i)
+		_apply_animated_visual(enemy, sprite_frames, animations, frame_indices, frame_progresses, flip_hs, scales, i)
 		enemy.position = spawn.position
 		add_child(enemy)
 
-func _apply_enemy_visual(
+func _apply_player_visual() -> void:
+	if BattleTransition.player_sprite_frames == null:
+		return
+
+	var sprite_frames: Array[SpriteFrames] = [BattleTransition.player_sprite_frames]
+	var animations: Array[String] = [BattleTransition.player_animation]
+	var frame_indices: Array[int] = [BattleTransition.player_frame_index]
+	var frame_progresses: Array[float] = [BattleTransition.player_frame_progress]
+	var flip_hs: Array[bool] = [BattleTransition.player_flip_h]
+	var sprite := player_character.get_node_or_null("Sprite2D") as Sprite2D
+	var fallback_scale := Vector2.ZERO if sprite == null else sprite.scale
+	var scales: Array[Vector2] = [fallback_scale]
+
+	_apply_animated_visual(
+		player_character,
+		sprite_frames,
+		animations,
+		frame_indices,
+		frame_progresses,
+		flip_hs,
+		scales,
+		0
+	)
+
+	var agent := player_character.get_node_or_null("TurnBasedAgent") as TurnBasedAgent
+	if agent != null:
+		agent.refresh_visual_node()
+
+func _apply_animated_visual(
 	enemy: Node,
-	textures: Array[Texture2D],
+	sprite_frames: Array[SpriteFrames],
+	animations: Array[String],
+	frame_indices: Array[int],
+	frame_progresses: Array[float],
+	flip_hs: Array[bool],
 	scales: Array[Vector2],
 	index: int
 ) -> void:
-	var sprite := enemy.get_node_or_null("Sprite2D") as Sprite2D
-	if sprite == null:
-		push_warning("EnemyBattleTemplate sem Sprite2D para aplicar textura do overworld")
+	if index >= sprite_frames.size() or sprite_frames[index] == null:
 		return
 
-	if index < textures.size() and textures[index] != null:
-		sprite.texture = textures[index]
+	var fallback_sprite := enemy.get_node_or_null("Sprite2D") as Sprite2D
+	var animated_sprite := enemy.get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
+	if animated_sprite == null:
+		animated_sprite = AnimatedSprite2D.new()
+		animated_sprite.name = "AnimatedSprite2D"
+		enemy.add_child(animated_sprite)
+
+	if fallback_sprite != null:
+		animated_sprite.position = fallback_sprite.position
+		animated_sprite.scale = fallback_sprite.scale
+		fallback_sprite.hide()
+
+	animated_sprite.sprite_frames = sprite_frames[index]
+	if index < animations.size() and not animations[index].is_empty():
+		animated_sprite.animation = animations[index]
+	if index < frame_indices.size():
+		var frame_count := animated_sprite.sprite_frames.get_frame_count(animated_sprite.animation)
+		var frame_index := clampi(frame_indices[index], 0, maxi(frame_count - 1, 0))
+		var frame_progress := 0.0
+		if index < frame_progresses.size():
+			frame_progress = frame_progresses[index]
+		animated_sprite.set_frame_and_progress(frame_index, frame_progress)
+	if index < flip_hs.size():
+		animated_sprite.flip_h = flip_hs[index]
 	if index < scales.size() and scales[index] != Vector2.ZERO:
-		sprite.scale = scales[index]
+		animated_sprite.scale = scales[index]
+	animated_sprite.play()
 
 func _get_enemy_slots_for_count(enemy_count: int) -> Array[Node2D]:
 	var left_slot := enemy_slots.get_node_or_null("EnemySlot1") as Node2D
@@ -91,18 +149,46 @@ func _get_enemy_slots_for_count(enemy_count: int) -> Array[Node2D]:
 func _on_battle_won() -> void:
 	GameData.mark_encounter_defeated(BattleTransition.encounter_id)
 	BattleTransition.finish_battle(BattleTransition.Result.WON)
+	await _play_dying_animations_for_group("enemy")
 	await _show_result_message("Victory")
 	await _return_to_overworld()
 
 func _on_battle_lost() -> void:
 	BattleTransition.finish_battle(BattleTransition.Result.LOST)
+	await _play_dying_animations_for_group("player")
 	await _show_result_message("Defeat")
 	await _return_to_game_over()
 
 func _on_run_requested() -> void:
 	BattleTransition.finish_battle(BattleTransition.Result.FLED)
+	await _play_player_escape_animation()
 	await _show_result_message("Escaped")
 	await _return_to_overworld()
+
+func _play_dying_animations_for_group(group_name: String) -> void:
+	var dead_agents := get_tree().get_nodes_in_group(group_name).filter(
+		func(a: TurnBasedAgent): return a.character_resource != null and a.character_resource.is_dead()
+	)
+	if dead_agents.is_empty():
+		return
+
+	for agent: TurnBasedAgent in dead_agents:
+		await agent.play_dying_and_wait()
+
+func _play_player_escape_animation() -> void:
+	var player_agent := player_character.get_node_or_null("TurnBasedAgent") as TurnBasedAgent
+	if player_agent == null:
+		await get_tree().create_timer(0.25).timeout
+		return
+
+	command_menu.hide()
+	player_agent.play_run_down()
+
+	var start_position := player_character.position
+	var escape_position := start_position + Vector2(0, 96)
+	var tween := create_tween()
+	tween.tween_property(player_character, "position", escape_position, 0.45)
+	await tween.finished
 
 func _return_to_overworld() -> void:
 	if BattleTransition.return_scene.is_empty():
