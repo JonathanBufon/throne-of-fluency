@@ -39,14 +39,14 @@ Lore essencial:
 Antes de implementar, consulte as fontes nesta ordem:
 
 1. Estado atual do codigo e das cenas no repositorio.
-2. `backlog/*.md` quando a tarefa estiver ligada a uma feature planejada.
-3. `CLAUDE.md` para arquitetura e pendencias historicas.
-4. `README.md` para visao geral publica do projeto.
-5. `Throne_Of_Fluency_Documentacao.md` para lore e escopo de produto.
+2. `CLAUDE.md` para arquitetura e pendencias historicas.
+3. `README.md` para visao geral publica do projeto.
+4. `Throne_Of_Fluency_Documentacao.md` para lore e escopo de produto.
+5. `backlog/*.md`, apenas quando existir localmente e a tarefa citar esse planejamento.
 
 Se a documentacao divergir do codigo atual, o codigo atual vence para implementacao. Registre a divergencia no resumo final se ela afetar a tarefa.
 
-Exemplo de divergencia ja conhecida: algumas docs citam nomes antigos como `fase_cripta.tscn` e `cenario1.tscn`; o repositorio atual contem `world/cripta/cripta.tscn`, `world/shroom-lands.tscn` e `world/city_center.tscn`.
+`/backlog/` e local, ignorado pelo Git e nao deve subir para o GitHub.
 
 ---
 
@@ -119,10 +119,6 @@ world/
     game_data.gd
     porta.gd
     scenario.gd
-
-backlog/
-  README.md
-  001-batalha-instanciavel-overworld.md
 ```
 
 Nao reorganize pastas para seguir templates genericos como `scenes/` e `scripts/`. A estrutura acima e a base atual.
@@ -134,7 +130,7 @@ Nao reorganize pastas para seguir templates genericos como `scenes/` e `scripts/
 Para cada tarefa:
 
 1. Leia este `HARNESS.md`.
-2. Leia o backlog ou documentacao relacionada.
+2. Leia a documentacao relacionada e, se existir localmente, o backlog citado pela tarefa.
 3. Inspecione arquivos reais antes de assumir arquitetura.
 4. Liste mentalmente quais cenas, scripts e resources serao tocados.
 5. Faca a menor alteracao funcional possivel.
@@ -208,7 +204,7 @@ Nao coloque estado temporario de batalha em cenas de mundo. Use `BattleTransitio
 
 ## 8. Fluxo overworld -> batalha -> overworld
 
-Feature base: `backlog/001-batalha-instanciavel-overworld.md`.
+Fluxo base implementado no codigo atual.
 
 Arquivos principais:
 
@@ -226,13 +222,15 @@ Fluxo atual:
 1. Player entra na `DangerBox` do inimigo no overworld.
 2. `enemy.gd` monta a party de combate usando `battle_party` ou `battle_resource`.
 3. `BattleTransition.request_battle()` recebe inimigos, cena de retorno, posicao do player e `encounter_id`.
-4. `BattleTransition.change_scene_with_fade()` troca para `battleSystem/battle_scene.tscn`.
-5. `battle_scene.gd` instancia inimigos a partir de `BattleTransition.enemy_resources`.
-6. `TurnBasedController` emite `battle_won` ou `battle_lost`.
-7. Vitoria marca o encontro em `GameData.defeated_encounters` e retorna ao overworld.
-8. Fuga retorna ao overworld sem marcar o encontro como derrotado.
-9. Derrota volta para `main.tscn` como placeholder de game over.
-10. `world_scene.gd` reposiciona player/Lumen e remove inimigos derrotados.
+4. `BattleTransition` recebe dados visuais temporarios dos atores: `SpriteFrames`, animacao, frame, `flip_h` e escala quando aplicavel.
+5. `BattleTransition.change_scene_with_fade()` troca para `battleSystem/battle_scene.tscn`.
+6. `battle_scene.gd` instancia inimigos a partir de `BattleTransition.enemy_resources`.
+7. `battle_scene.gd` aplica os `SpriteFrames` reais do inimigo e do player na battle screen.
+8. `TurnBasedController` emite `battle_won` ou `battle_lost`.
+9. Vitoria toca `dying` nos inimigos mortos, marca o encontro em `GameData.defeated_encounters` e retorna ao overworld.
+10. Fuga toca `run_down` no player, retorna ao overworld sem marcar o encontro como derrotado.
+11. Derrota toca `dying` nos players mortos e volta para `main.tscn` como placeholder de game over/save anterior.
+12. `world_scene.gd` reposiciona player/Lumen e remove inimigos derrotados.
 
 Regras importantes:
 
@@ -241,6 +239,8 @@ Regras importantes:
 - Todo inimigo de overworld que dispara batalha deve ter `battle_resource` ou `battle_party`.
 - Use `encounter_id` unico quando possivel. O fallback baseado em path existe, mas IDs explicitos sao melhores para cenas editadas.
 - Nao limpe `BattleTransition` antes da cena de mundo ler retorno, exceto em derrota/game over.
+- A battle screen deve usar tela dedicada com fundo fixo, slots e UI inferior; nao mover o combate para o mapa de exploracao.
+- Atores de batalha devem preferir `AnimatedSprite2D` com animacoes reais (`idle_*`, `attack_*`, `dying`, `run_down`) quando vierem do overworld.
 
 ---
 
@@ -280,6 +280,8 @@ Regras:
 - Nao remova suporte a `battle_won` e `battle_lost`.
 - Ao adicionar skill, prefira `.tres` em `battleSystem/data/skills/`.
 - Ao adicionar personagem de batalha, prefira `.tres` em `battleSystem/data/characters/`.
+- `Run` e uma fuga funcional: anima o player com `run_down`, move para fora da arena e retorna ao overworld sem derrotar o encontro.
+- Ao matar ator com `AnimatedSprite2D`, toque `dying` antes da tela de resultado e transicao de cena.
 
 Ponto tecnico sensivel:
 
@@ -357,7 +359,7 @@ Se adicionar asset:
 
 ## 13. Backlog
 
-Backlog fica em `backlog/`.
+Backlog fica em `backlog/`, mas e local e ignorado pelo Git.
 
 Convenção:
 
@@ -377,7 +379,8 @@ Quando implementar uma tarefa do backlog:
 
 - leia o arquivo inteiro antes de alterar codigo;
 - preserve criterios de aceite ou explique mudancas;
-- nao apague o backlog entregue; atualize status apenas se solicitado ou se a tarefa pedir;
+- nao force add de arquivos de backlog;
+- nao inclua backlog em commits ou PRs;
 - se descobrir divergencia entre backlog e codigo atual, mencione no resumo.
 
 ---
@@ -480,7 +483,7 @@ Nao:
 ## 18. Prompt recomendado para tarefas
 
 ```md
-Leia o HARNESS.md e o backlog relacionado antes de alterar.
+Leia o HARNESS.md e, se existir localmente, o backlog relacionado antes de alterar.
 
 Tarefa:
 [descrever]
