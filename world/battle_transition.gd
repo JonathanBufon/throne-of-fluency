@@ -7,6 +7,8 @@ extends Node
 enum Result { IDLE, WON, LOST, FLED }
 
 var enemy_resources: Array[CharacterResource] = []
+var enemy_textures: Array[Texture2D] = []
+var enemy_scales: Array[Vector2] = []
 var return_scene: String = ""
 var return_position: Vector2 = Vector2.ZERO
 var encounter_id: String = ""
@@ -19,9 +21,13 @@ func request_battle(
 	enemies: Array[CharacterResource],
 	origin_scene: String,
 	player_position: Vector2,
-	id: String = ""
+	id: String = "",
+	textures: Array[Texture2D] = [],
+	scales: Array[Vector2] = []
 ) -> void:
 	enemy_resources = enemies
+	enemy_textures = textures
+	enemy_scales = scales
 	return_scene = origin_scene
 	return_position = player_position
 	encounter_id = id
@@ -32,6 +38,8 @@ func finish_battle(result: Result) -> void:
 
 func clear() -> void:
 	enemy_resources = []
+	enemy_textures = []
+	enemy_scales = []
 	return_scene = ""
 	return_position = Vector2.ZERO
 	encounter_id = ""

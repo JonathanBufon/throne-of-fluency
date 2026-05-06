@@ -31,6 +31,8 @@ func _position_player_party() -> void:
 
 func _spawn_enemies_from_transition() -> void:
 	var resources := BattleTransition.enemy_resources
+	var textures := BattleTransition.enemy_textures
+	var scales := BattleTransition.enemy_scales
 	if resources.is_empty():
 		push_warning("battle_scene carregada sem inimigos em BattleTransition.enemy_resources")
 		return
@@ -44,8 +46,25 @@ func _spawn_enemies_from_transition() -> void:
 		var enemy := ENEMY_TEMPLATE.instantiate()
 		var agent: TurnBasedAgent = enemy.get_node("TurnBasedAgent")
 		agent.character_resource = resources[i]
+		_apply_enemy_visual(enemy, textures, scales, i)
 		enemy.position = spawn.position
 		add_child(enemy)
+
+func _apply_enemy_visual(
+	enemy: Node,
+	textures: Array[Texture2D],
+	scales: Array[Vector2],
+	index: int
+) -> void:
+	var sprite := enemy.get_node_or_null("Sprite2D") as Sprite2D
+	if sprite == null:
+		push_warning("EnemyBattleTemplate sem Sprite2D para aplicar textura do overworld")
+		return
+
+	if index < textures.size() and textures[index] != null:
+		sprite.texture = textures[index]
+	if index < scales.size() and scales[index] != Vector2.ZERO:
+		sprite.scale = scales[index]
 
 func _get_enemy_slots_for_count(enemy_count: int) -> Array[Node2D]:
 	var left_slot := enemy_slots.get_node_or_null("EnemySlot1") as Node2D

@@ -18,6 +18,7 @@ enum State {
 @export var battle_resource: CharacterResource
 @export var battle_party: Array[CharacterResource] = []
 @export var encounter_id: String = ""
+@export var battle_sprite_scale := Vector2(5, 5)
 
 var state: State = State.PATROL
 var player: Node2D
@@ -198,12 +199,23 @@ func _on_danger_box_body_entered(body: Node2D) -> void:
 		push_warning("Enemy '%s' tocou o player sem battle_resource ou battle_party configurados" % name)
 		return
 
+	var battle_textures: Array[Texture2D] = []
+	var battle_texture := _get_current_battle_texture()
+	if battle_texture != null:
+		battle_textures.append(battle_texture)
+
+	var battle_scales: Array[Vector2] = []
+	if battle_texture != null:
+		battle_scales.append(battle_sprite_scale)
+
 	_battle_triggered = true
 	BattleTransition.request_battle(
 		party,
 		get_tree().current_scene.scene_file_path,
 		body.global_position,
-		get_effective_encounter_id()
+		get_effective_encounter_id(),
+		battle_textures,
+		battle_scales
 	)
 	await BattleTransition.change_scene_with_fade("res://battleSystem/battle_scene.tscn")
 
@@ -213,3 +225,18 @@ func _on_danger_box_body_exited(body: Node2D) -> void:
 
 	_battle_triggered = false
 	_wait_player_exit_before_retrigger = false
+
+func _get_current_battle_texture() -> Texture2D:
+	if animated_sprite_2d == null or animated_sprite_2d.sprite_frames == null:
+		return null
+
+	var animation_name := animated_sprite_2d.animation
+	if animation_name.is_empty() or not animated_sprite_2d.sprite_frames.has_animation(animation_name):
+		return null
+
+	var frame_count := animated_sprite_2d.sprite_frames.get_frame_count(animation_name)
+	if frame_count <= 0:
+		return null
+
+	var frame_index := clampi(animated_sprite_2d.frame, 0, frame_count - 1)
+	return animated_sprite_2d.sprite_frames.get_frame_texture(animation_name, frame_index)
