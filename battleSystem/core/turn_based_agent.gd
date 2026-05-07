@@ -93,6 +93,9 @@ func _select_target() -> void:
 		if not ComboDiscovery.pay_participant_costs(command, party_agents):
 			return
 		ComboDiscovery.consume_participant_gauges(command, party_agents)
+	elif command is ItemResource:
+		if not GameData.consume_battle_item(command):
+			return
 	action_resolving_started.emit()
 	_deselect_all_targets()
 	set_active(false)
@@ -320,6 +323,8 @@ func _on_command_selected(command: Resource) -> void:
 		command is ComboResource
 		and not ComboDiscovery.can_use_combo(command, self, get_tree().get_nodes_in_group("player"))
 	):
+		return
+	if command is ItemResource and not GameData.can_use_battle_item(command):
 		return
 	if (command is SkillResource) and not command.can_pay_cost(character_resource):
 		return

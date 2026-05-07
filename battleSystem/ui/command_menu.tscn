@@ -49,6 +49,7 @@ disabled = true
 text = "Combo"
 
 [node name="ItemButton" parent="MarginContainer/MainCommands" instance=ExtResource("1_p0m5m")]
+unique_name_in_owner = true
 layout_mode = 2
 disabled = true
 text = "Item"
