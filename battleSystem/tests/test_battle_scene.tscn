@@ -15,6 +15,8 @@
 [ext_resource type="PackedScene" uid="uid://b68xvpvlrxxes" path="res://battleSystem/ui/turn_order_bar.tscn" id="10_4jyio"]
 [ext_resource type="Resource" uid="uid://cj8g8f8ovsm0j" path="res://battleSystem/data/characters/player1.tres" id="10_w11w6"]
 [ext_resource type="PackedScene" uid="uid://bx3mv8ifljfrq" path="res://battleSystem/ui/Player_Status_Display.tscn" id="15_yvime"]
+[ext_resource type="PackedScene" path="res://battleSystem/ui/space_battle_background.tscn" id="16_background"]
+[ext_resource type="PackedScene" path="res://battleSystem/ui/enemy_health_bar.tscn" id="17_health"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xj6nq"]
 atlas = ExtResource("1_1ahfb")
@@ -24,6 +26,8 @@ atlas = ExtResource("2_ca7vg")
 region = Rect2(6.9660034, 390.57434, 36.634354, 40.980774)
 
 [node name="TestBattleScene" type="Node2D" unique_id=1500664384]
+
+[node name="Background" parent="." instance=ExtResource("16_background")]
 
 [node name="TurnBasedController" parent="." unique_id=1361258708 instance=ExtResource("1_jg7qw")]
 
@@ -41,6 +45,8 @@ character_resource = ExtResource("5_lx5g3")
 character_type = 1
 basicAttack = ExtResource("5_4kefl")
 
+[node name="EnemyHealthBar" parent="Enemy" instance=ExtResource("17_health")]
+
 [node name="Enemy2" type="StaticBody2D" parent="." unique_id=1695973519]
 position = Vector2(384, 268)
 scale = Vector2(0.9, 0.9)
@@ -56,6 +62,8 @@ character_resource = ExtResource("7_764ow")
 character_type = 1
 basicAttack = ExtResource("5_4kefl")
 
+[node name="EnemyHealthBar" parent="Enemy2" instance=ExtResource("17_health")]
+
 [node name="Enemy3" type="StaticBody2D" parent="." unique_id=1771662550]
 position = Vector2(384, 268)
 scale = Vector2(0.9, 0.9)
@@ -70,6 +78,8 @@ texture = SubResource("AtlasTexture_xj6nq")
 character_resource = ExtResource("8_irdlm")
 character_type = 1
 basicAttack = ExtResource("5_4kefl")
+
+[node name="EnemyHealthBar" parent="Enemy3" instance=ExtResource("17_health")]
 
 [node name="Player" type="StaticBody2D" parent="." unique_id=1718754404]
 position = Vector2(384, 393)

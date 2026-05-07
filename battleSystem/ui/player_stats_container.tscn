@@ -1,83 +1,167 @@
-[gd_scene format=3 uid="uid://rsqcnw42arug"]
+[gd_scene load_steps=11 format=3 uid="uid://rsqcnw42arug"]
 
-[ext_resource type="StyleBox" uid="uid://dxuw14vfsl8qk" path="res://battleSystem/data/characters/focus_player_stats.tres" id="1_hhc7q"]
+[ext_resource type="Texture2D" uid="uid://c1odmfm3wie4c" path="res://assets/ui/UI_Bars.png" id="2_bars"]
 [ext_resource type="Script" uid="uid://bvfc7c2jsq03c" path="res://battleSystem/ui/player_stats_container.gd" id="2_0humv"]
+[ext_resource type="Texture2D" uid="uid://7cfe0mx1fe1e" path="res://assets/ui/UI_Buttons.png" id="3_buttons"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0humv"]
-content_margin_left = 2.0
-content_margin_top = 2.0
-content_margin_right = 2.0
-content_margin_bottom = 2.0
-bg_color = Color(0, 0, 0, 0.3019608)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
-corner_detail = 6
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_panel"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o57nu"]
-content_margin_left = 2.0
-content_margin_top = 2.0
-content_margin_right = 2.0
-content_margin_bottom = 2.0
-bg_color = Color(0.8156863, 0.53333336, 0, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
-corner_detail = 6
+[sub_resource type="AtlasTexture" id="AtlasTexture_status_panel"]
+atlas = ExtResource("3_buttons")
+region = Rect2(0, 0, 32, 16)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_status_panel"]
+texture = SubResource("AtlasTexture_status_panel")
+texture_margin_left = 7.0
+texture_margin_top = 5.0
+texture_margin_right = 7.0
+texture_margin_bottom = 5.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hp_under"]
+atlas = ExtResource("2_bars")
+region = Rect2(0, 0, 32, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hp_progress"]
+atlas = ExtResource("2_bars")
+region = Rect2(0, 0, 32, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mp_progress"]
+atlas = ExtResource("2_bars")
+region = Rect2(32, 0, 32, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_drive_progress"]
+atlas = ExtResource("2_bars")
+region = Rect2(64, 0, 32, 7)
 
 [node name="PlayerStatusContainer" type="PanelContainer" unique_id=764564538]
-theme_override_styles/panel = ExtResource("1_hhc7q")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_panel")
 script = ExtResource("2_0humv")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=133313282]
 layout_mode = 2
-theme_override_constants/margin_left = 30
-theme_override_constants/margin_right = 30
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=196378131]
+[node name="StatusCard" type="Control" parent="MarginContainer"]
+custom_minimum_size = Vector2(312, 76)
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=2066491066]
-layout_mode = 2
-theme_override_constants/separation = 25
+[node name="StatusBacking" type="Panel" parent="MarginContainer/StatusCard"]
+layout_mode = 1
+offset_right = 312.0
+offset_bottom = 76.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_status_panel")
 
-[node name="Name" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1491749065]
+[node name="PlayerInitial" type="Label" parent="MarginContainer/StatusCard"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(110, 0)
-layout_mode = 2
-theme_override_font_sizes/font_size = 23
-text = "Name"
+visible = false
+layout_mode = 1
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 77.0
+offset_bottom = 77.0
+theme_override_font_sizes/font_size = 26
+text = "H"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="HP1" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=939911065]
+[node name="HPRow" type="HBoxContainer" parent="MarginContainer/StatusCard"]
+layout_mode = 1
+offset_left = 18.0
+offset_top = 13.0
+offset_right = 294.0
+offset_bottom = 29.0
+theme_override_constants/separation = 6
+
+[node name="HP1" type="Label" parent="MarginContainer/StatusCard/HPRow" unique_id=939911065]
+custom_minimum_size = Vector2(26, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 23
+theme_override_font_sizes/font_size = 13
 text = "HP"
+vertical_alignment = 1
 
-[node name="HP2" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1264178431]
+[node name="HPBar" type="TextureProgressBar" parent="MarginContainer/StatusCard/HPRow"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(244, 14)
 layout_mode = 2
-theme_override_font_sizes/font_size = 23
-text = "555"
+size_flags_horizontal = 3
+max_value = 100.0
+value = 100.0
+texture_under = SubResource("AtlasTexture_hp_under")
+texture_progress = SubResource("AtlasTexture_hp_progress")
+tint_under = Color(0.1, 0.08, 0.11, 0.92)
+stretch_margin_left = 5
+stretch_margin_top = 2
+stretch_margin_right = 5
+stretch_margin_bottom = 2
+nine_patch_stretch = true
 
-[node name="Mana1" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=658443731]
+[node name="HP2" type="Label" parent="MarginContainer/StatusCard/HPRow" unique_id=1264178431]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 23
+theme_override_font_sizes/font_size = 13
+text = "555"
+vertical_alignment = 1
+
+[node name="MPRow" type="HBoxContainer" parent="MarginContainer/StatusCard"]
+layout_mode = 1
+offset_left = 18.0
+offset_top = 42.0
+offset_right = 294.0
+offset_bottom = 58.0
+theme_override_constants/separation = 6
+
+[node name="Mana1" type="Label" parent="MarginContainer/StatusCard/MPRow" unique_id=658443731]
+custom_minimum_size = Vector2(26, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
 text = "MP"
+vertical_alignment = 1
 
-[node name="Mana2" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1997605595]
+[node name="ManaBar" type="TextureProgressBar" parent="MarginContainer/StatusCard/MPRow"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(244, 14)
 layout_mode = 2
-theme_override_font_sizes/font_size = 23
+size_flags_horizontal = 3
+max_value = 50.0
+value = 50.0
+texture_under = SubResource("AtlasTexture_hp_under")
+texture_progress = SubResource("AtlasTexture_mp_progress")
+tint_under = Color(0.08, 0.09, 0.14, 0.92)
+stretch_margin_left = 5
+stretch_margin_top = 2
+stretch_margin_right = 5
+stretch_margin_bottom = 2
+nine_patch_stretch = true
+
+[node name="Mana2" type="Label" parent="MarginContainer/StatusCard/MPRow" unique_id=1997605595]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
 text = "555"
+vertical_alignment = 1
 
-[node name="OverDriveBar" type="ProgressBar" parent="MarginContainer/VBoxContainer" unique_id=265947049]
+[node name="OverDriveBar" type="TextureProgressBar" parent="MarginContainer/StatusCard" unique_id=265947049]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 5)
-layout_mode = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_0humv")
-theme_override_styles/fill = SubResource("StyleBoxFlat_o57nu")
-step = 1.0
+visible = false
+layout_mode = 1
+offset_left = 18.0
+offset_top = 62.0
+offset_right = 294.0
+offset_bottom = 70.0
+max_value = 100.0
 value = 30.0
-show_percentage = false
+texture_under = SubResource("AtlasTexture_hp_under")
+texture_progress = SubResource("AtlasTexture_drive_progress")
+tint_under = Color(0.08, 0.1, 0.08, 0.92)
+stretch_margin_left = 5
+stretch_margin_top = 2
+stretch_margin_right = 5
+stretch_margin_bottom = 2
+nine_patch_stretch = true
