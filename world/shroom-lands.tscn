@@ -14,6 +14,7 @@
 [ext_resource type="Script" uid="uid://cxqd75s3t8f4f" path="res://world/cripta/scenario.gd" id="11_scnry"]
 [ext_resource type="PackedScene" uid="uid://bxsqpqdctqwjw" path="res://actors/enemy/enemy.tscn" id="12_jkgqs"]
 [ext_resource type="PackedScene" uid="uid://dwanm5msvdfpg" path="res://actors/lumen/lumen.tscn" id="14_canwo"]
+[ext_resource type="Resource" path="res://battleSystem/data/enemies/shroom_grunt_pressure.tres" id="17_enemy_model"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_h768n"]
 texture = ExtResource("1_jsao4")
@@ -1134,6 +1135,8 @@ limit_bottom = 2147
 [node name="Enemy" parent="." unique_id=1519665992 instance=ExtResource("12_jkgqs")]
 z_index = 3
 position = Vector2(1629, 1665)
+battle_model = ExtResource("17_enemy_model")
+encounter_id = "shroom_lands_entry_enemy_001"
 
 [node name="spawn_2" type="Marker2D" parent="." unique_id=313921313]
 z_index = 3

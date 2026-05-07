@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemResource" format=3]
+
+[ext_resource type="Script" path="res://battleSystem/resources/item_resource.gd" id="1_item"]
+
+[resource]
+script = ExtResource("1_item")
+name = "Potion"
+description = "Restores HP to one ally."
+effectType = 0
+power = 35
+targetType = 1
+targetScope = 0
+usableInBattle = true

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="EnemyAIResource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://battleSystem/resources/enemy_ai_resource.gd" id="1_ai"]
+[ext_resource type="Resource" uid="uid://dm5g3oqr6d2uh" path="res://battleSystem/data/skills/Attack.tres" id="2_attack"]
+[ext_resource type="Resource" uid="uid://66jy0hm02o01" path="res://battleSystem/data/skills/Slash.tres" id="3_slash"]
+
+[resource]
+script = ExtResource("1_ai")
+targetStrategy = 1
+preferSkillWhenAffordable = false
+healAllyHealthRatio = 0.35
+actionWindupSeconds = 0.7
+preferredSkillFirstTurn = 0
+preferredSkillCooldownTurns = 0
+actionPattern = Array[Resource]([ExtResource("2_attack"), ExtResource("3_slash")])

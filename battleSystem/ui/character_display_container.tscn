@@ -1,7 +1,5 @@
 [gd_scene format=3 uid="uid://c530fh5jle7jk"]
 
-[ext_resource type="Texture2D" uid="uid://c83ortgf2jrk8" path="res://icon.svg" id="1_kl4c2"]
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kln8k"]
 content_margin_left = 5.0
 content_margin_top = 5.0
@@ -20,10 +18,5 @@ corner_radius_bottom_left = 5
 corner_detail = 5
 
 [node name="PanelContainer" type="PanelContainer" unique_id=2032887238]
+visible = false
 theme_override_styles/panel = SubResource("StyleBoxFlat_kln8k")
-
-[node name="TextureRect" type="TextureRect" parent="." unique_id=993397602]
-custom_minimum_size = Vector2(50, 50)
-layout_mode = 2
-texture = ExtResource("1_kl4c2")
-expand_mode = 1

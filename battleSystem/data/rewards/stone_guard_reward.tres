@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="BattleRewardResource" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://battleSystem/resources/battle_reward_resource.gd" id="1_reward"]
+[ext_resource type="Resource" path="res://battleSystem/data/items/potion.tres" id="2_potion"]
+
+[resource]
+script = ExtResource("1_reward")
+experience = 35
+gold = 25
+drops = Array[ItemResource]([ExtResource("2_potion")])
+dropQuantities = Array[int]([2])

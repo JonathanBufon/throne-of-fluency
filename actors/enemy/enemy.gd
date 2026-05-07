@@ -10,11 +10,26 @@ enum State {
 @export var detection_range: float = 120.0
 @export var patrol_radius: float = 100.0
 
+# =========================
+# ⚔️ DADOS DE BATALHA
+# =========================
+# battle_models tem prioridade; cada entrada gera uma instancia unica em batalha.
+# Fallback legado: battle_party tem prioridade; se vazia, usa [battle_resource].
+# encounter_id identifica unicamente a instância para marcar como derrotada e não respawnar.
+@export var battle_model: EnemyModelResource
+@export var battle_models: Array[EnemyModelResource] = []
+@export var battle_resource: CharacterResource
+@export var battle_party: Array[CharacterResource] = []
+@export var encounter_id: String = ""
+@export var battle_sprite_scale := Vector2(5, 5)
+
 var state: State = State.PATROL
 var player: Node2D
 var patrol_target: Vector2
 var viu_player: bool = false
 var last_direction: Vector2 = Vector2.RIGHT
+var _battle_triggered: bool = false
+var _wait_player_exit_before_retrigger := false
 
 @onready var icone_visao = $Icone_Visao
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
@@ -23,6 +38,8 @@ func _ready():
 	player = get_tree().get_first_node_in_group("player")
 	icone_visao.visible = false
 	_pick_patrol_target()
+	_set_flee_retrigger_guard()
+	_set_danger_box_exit_signal()
 
 func _physics_process(delta):
 	if player == null:
@@ -119,6 +136,32 @@ func _pick_patrol_target():
 	)
 	patrol_target = global_position + random_offset
 
+func get_effective_encounter_id() -> String:
+	if not encounter_id.is_empty():
+		return encounter_id
+
+	var current_scene := get_tree().current_scene
+	if current_scene == null:
+		return ""
+
+	return "%s:%s" % [current_scene.scene_file_path, current_scene.get_path_to(self)]
+
+func _set_flee_retrigger_guard() -> void:
+	if BattleTransition.last_result != BattleTransition.Result.FLED:
+		return
+	if BattleTransition.encounter_id != get_effective_encounter_id():
+		return
+
+	_battle_triggered = true
+	_wait_player_exit_before_retrigger = true
+
+func _set_danger_box_exit_signal() -> void:
+	var danger_box := get_node_or_null("DangerBox") as Area2D
+	if danger_box == null:
+		return
+	if not danger_box.body_exited.is_connected(_on_danger_box_body_exited):
+		danger_box.body_exited.connect(_on_danger_box_body_exited)
+
 # =========================
 # ❗ ICONE DE VISÃO
 # =========================
@@ -140,3 +183,256 @@ func mostrar_icone_visao():
 
 func _esconder_icone():
 	icone_visao.visible = false
+
+# =========================
+# ⚔️ DANGER BOX → BATALHA
+# =========================
+func _on_danger_box_body_entered(body: Node2D) -> void:
+	if _battle_triggered:
+		return
+	if not body.is_in_group("player"):
+		return
+
+	var party := _build_battle_party()
+	if party.is_empty():
+		push_warning("Enemy '%s' tocou o player sem modelo ou battle_resource configurado" % name)
+		return
+	var enemy_sprite_frames: Array[SpriteFrames] = []
+	var enemy_animations: Array[String] = []
+	var enemy_frame_indices: Array[int] = []
+	var enemy_frame_progresses: Array[float] = []
+	var enemy_flip_hs: Array[bool] = []
+	var battle_scales: Array[Vector2] = []
+	_append_battle_visuals(
+		party.size(),
+		enemy_sprite_frames,
+		enemy_animations,
+		enemy_frame_indices,
+		enemy_frame_progresses,
+		enemy_flip_hs,
+		battle_scales
+	)
+
+	_battle_triggered = true
+	BattleTransition.request_battle(
+		party,
+		get_tree().current_scene.scene_file_path,
+		body.global_position,
+		get_effective_encounter_id()
+	)
+	BattleTransition.set_player_party(GameData.get_battle_party_resources())
+	BattleTransition.set_enemy_visuals(
+		enemy_sprite_frames,
+		enemy_animations,
+		enemy_frame_indices,
+		enemy_frame_progresses,
+		enemy_flip_hs,
+		battle_scales
+	)
+	_set_player_battle_visual(body)
+	await BattleTransition.change_scene_with_fade("res://battleSystem/battle_scene.tscn")
+
+func _build_battle_party() -> Array[CharacterResource]:
+	var party: Array[CharacterResource] = []
+	var models := _get_battle_models()
+	if not models.is_empty():
+		for model in models:
+			var character := model.create_character_instance()
+			if character != null:
+				party.append(character)
+		return party
+
+	for resource in _get_legacy_battle_resources():
+		if resource != null:
+			var character := resource.duplicate(true) as CharacterResource
+			if character != null:
+				character.currentHealth = character.maxHealth
+				character.currentMana = character.maxMana
+				character.overDriveValue = 0
+				party.append(character)
+
+	return party
+
+func _get_battle_models() -> Array[EnemyModelResource]:
+	var models: Array[EnemyModelResource] = []
+	for model in battle_models:
+		if model != null:
+			models.append(model)
+	if models.is_empty() and battle_model != null:
+		models.append(battle_model)
+	return models
+
+func _get_legacy_battle_resources() -> Array[CharacterResource]:
+	var resources: Array[CharacterResource] = []
+	if not battle_party.is_empty():
+		for resource in battle_party:
+			if resource != null:
+				resources.append(resource)
+	elif battle_resource != null:
+		resources.append(battle_resource)
+	return resources
+
+func _append_battle_visuals(
+	enemy_count: int,
+	sprite_frames_list: Array[SpriteFrames],
+	animations: Array[String],
+	frame_indices: Array[int],
+	frame_progresses: Array[float],
+	flip_hs: Array[bool],
+	scales: Array[Vector2]
+) -> void:
+	var models := _get_battle_models()
+	if not models.is_empty():
+		for model in models:
+			_append_model_battle_animation_data(
+				model,
+				animated_sprite_2d,
+				battle_sprite_scale,
+				sprite_frames_list,
+				animations,
+				frame_indices,
+				frame_progresses,
+				flip_hs,
+				scales
+			)
+		return
+
+	for i in enemy_count:
+		_append_battle_animation_data(
+			animated_sprite_2d,
+			battle_sprite_scale,
+			sprite_frames_list,
+			animations,
+			frame_indices,
+			frame_progresses,
+			flip_hs,
+			scales
+		)
+
+func _on_danger_box_body_exited(body: Node2D) -> void:
+	if not _wait_player_exit_before_retrigger or not body.is_in_group("player"):
+		return
+
+	_battle_triggered = false
+	_wait_player_exit_before_retrigger = false
+
+func _append_battle_animation_data(
+	animated_sprite: AnimatedSprite2D,
+	battle_scale: Vector2,
+	sprite_frames_list: Array[SpriteFrames],
+	animations: Array[String],
+	frame_indices: Array[int],
+	frame_progresses: Array[float],
+	flip_hs: Array[bool],
+	scales: Array[Vector2]
+) -> void:
+	if animated_sprite == null or animated_sprite.sprite_frames == null:
+		return
+
+	var animation_name := _get_battle_animation_name(animated_sprite)
+	if animation_name.is_empty():
+		return
+
+	var frame_count := animated_sprite.sprite_frames.get_frame_count(animation_name)
+	if frame_count <= 0:
+		return
+
+	sprite_frames_list.append(animated_sprite.sprite_frames)
+	animations.append(animation_name)
+	frame_indices.append(clampi(animated_sprite.frame, 0, frame_count - 1))
+	frame_progresses.append(animated_sprite.frame_progress)
+	flip_hs.append(animated_sprite.flip_h)
+	scales.append(battle_scale)
+
+func _append_model_battle_animation_data(
+	model: EnemyModelResource,
+	fallback_sprite: AnimatedSprite2D,
+	fallback_scale: Vector2,
+	sprite_frames_list: Array[SpriteFrames],
+	animations: Array[String],
+	frame_indices: Array[int],
+	frame_progresses: Array[float],
+	flip_hs: Array[bool],
+	scales: Array[Vector2]
+) -> void:
+	if model == null:
+		return
+
+	var sprite_frames := model.battleSpriteFrames
+	var animation_name := model.battleAnimation
+	var frame_index := model.battleFrameIndex
+	var frame_progress := 0.0
+	var flip_h := model.battleFlipH
+	var scale := model.battleScale
+
+	if sprite_frames == null and fallback_sprite != null:
+		sprite_frames = fallback_sprite.sprite_frames
+		animation_name = _get_battle_animation_name(fallback_sprite)
+		frame_index = fallback_sprite.frame
+		frame_progress = fallback_sprite.frame_progress
+		flip_h = fallback_sprite.flip_h
+	if scale == Vector2.ZERO:
+		scale = fallback_scale
+	if sprite_frames == null:
+		return
+	if animation_name.is_empty() or not sprite_frames.has_animation(animation_name):
+		animation_name = _get_first_available_battle_animation(sprite_frames)
+	if animation_name.is_empty():
+		return
+
+	var frame_count := sprite_frames.get_frame_count(animation_name)
+	if frame_count <= 0:
+		return
+
+	sprite_frames_list.append(sprite_frames)
+	animations.append(animation_name)
+	frame_indices.append(clampi(frame_index, 0, frame_count - 1))
+	frame_progresses.append(frame_progress)
+	flip_hs.append(flip_h)
+	scales.append(scale)
+
+func _set_player_battle_visual(body: Node2D) -> void:
+	var player_sprite := body.get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
+	if player_sprite == null:
+		return
+
+	var animation_name := _get_battle_animation_name(player_sprite)
+	if animation_name.is_empty():
+		return
+
+	var frame_count := player_sprite.sprite_frames.get_frame_count(animation_name)
+	if frame_count <= 0:
+		return
+
+	BattleTransition.set_player_visual(
+		player_sprite.sprite_frames,
+		animation_name,
+		clampi(player_sprite.frame, 0, frame_count - 1),
+		player_sprite.frame_progress,
+		player_sprite.flip_h
+	)
+
+func _get_battle_animation_name(animated_sprite: AnimatedSprite2D) -> String:
+	if animated_sprite == null or animated_sprite.sprite_frames == null:
+		return ""
+
+	var animation_name := String(animated_sprite.animation)
+	if animation_name.is_empty() or not animated_sprite.sprite_frames.has_animation(animation_name):
+		return ""
+
+	if animation_name.begins_with("run_"):
+		var idle_animation := "idle_" + animation_name.substr("run_".length())
+		if animated_sprite.sprite_frames.has_animation(idle_animation):
+			return idle_animation
+
+	return animation_name
+
+func _get_first_available_battle_animation(sprite_frames: SpriteFrames) -> String:
+	for animation_name in sprite_frames.get_animation_names():
+		var candidate := String(animation_name)
+		if candidate.begins_with("idle_"):
+			return candidate
+	var animation_names := sprite_frames.get_animation_names()
+	if animation_names.is_empty():
+		return ""
+	return String(animation_names[0])

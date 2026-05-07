@@ -1,0 +1,68 @@
+[gd_scene format=3 uid="uid://cy8m4rpa0q3xt"]
+
+[ext_resource type="Script" path="res://battleSystem/battle_scene.gd" id="1_scene"]
+[ext_resource type="PackedScene" uid="uid://djq2mu0mqkonh" path="res://battleSystem/core/turn_based_controller.tscn" id="2_ctrl"]
+[ext_resource type="PackedScene" uid="uid://b22m3i34hfut8" path="res://battleSystem/ui/command_menu.tscn" id="6_cmd"]
+[ext_resource type="PackedScene" uid="uid://b68xvpvlrxxes" path="res://battleSystem/ui/turn_order_bar.tscn" id="10_order"]
+[ext_resource type="PackedScene" uid="uid://bx3mv8ifljfrq" path="res://battleSystem/ui/Player_Status_Display.tscn" id="12_status"]
+[ext_resource type="PackedScene" path="res://battleSystem/ui/space_battle_background.tscn" id="13_background"]
+
+[node name="BattleScene" type="Node2D"]
+script = ExtResource("1_scene")
+
+[node name="Background" parent="." instance=ExtResource("13_background")]
+
+[node name="EnemySlots" type="Node2D" parent="."]
+
+[node name="EnemySlot1" type="Marker2D" parent="EnemySlots"]
+position = Vector2(192, 260)
+
+[node name="EnemySlot2" type="Marker2D" parent="EnemySlots"]
+position = Vector2(384, 246)
+
+[node name="EnemySlot3" type="Marker2D" parent="EnemySlots"]
+position = Vector2(576, 260)
+
+[node name="PlayerSlots" type="Node2D" parent="."]
+
+[node name="PlayerSlot1" type="Marker2D" parent="PlayerSlots"]
+position = Vector2(292, 474)
+
+[node name="PlayerSlot2" type="Marker2D" parent="PlayerSlots"]
+position = Vector2(384, 446)
+
+[node name="PlayerSlot3" type="Marker2D" parent="PlayerSlots"]
+position = Vector2(476, 474)
+
+[node name="EffectsLayer" type="Node2D" parent="."]
+
+[node name="CursorLayer" type="Node2D" parent="."]
+
+[node name="TurnBasedController" parent="." instance=ExtResource("2_ctrl")]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="BattleUI" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BottomPanel" type="ColorRect" parent="CanvasLayer/BattleUI"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -190.0
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(0.019607844, 0.023529412, 0.039215688, 0.86)
+
+[node name="CommandMenu" parent="CanvasLayer/BattleUI" instance=ExtResource("6_cmd")]
+
+[node name="TurnOrderBar" parent="CanvasLayer/BattleUI" instance=ExtResource("10_order")]
+
+[node name="PlayerStatusDisplay" parent="CanvasLayer/BattleUI" instance=ExtResource("12_status")]

@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://battleSystem/ui/enemy_health_bar.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://c1odmfm3wie4c" path="res://assets/ui/UI_Bars.png" id="1_bars"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hp_under"]
+atlas = ExtResource("1_bars")
+region = Rect2(0, 0, 32, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hp_progress"]
+atlas = ExtResource("1_bars")
+region = Rect2(0, 0, 32, 7)
+
+[node name="EnemyHealthBar" type="Control"]
+custom_minimum_size = Vector2(72, 10)
+offset_left = -36.0
+offset_top = -74.0
+offset_right = 36.0
+offset_bottom = -64.0
+script = ExtResource("1_script")
+
+[node name="HPBar" type="TextureProgressBar" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+max_value = 100.0
+value = 100.0
+texture_under = SubResource("AtlasTexture_hp_under")
+texture_progress = SubResource("AtlasTexture_hp_progress")
+tint_under = Color(0.1, 0.08, 0.11, 0.9)
+stretch_margin_left = 5
+stretch_margin_top = 2
+stretch_margin_right = 5
+stretch_margin_bottom = 2
+nine_patch_stretch = true

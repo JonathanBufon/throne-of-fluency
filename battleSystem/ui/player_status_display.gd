@@ -7,12 +7,11 @@ const PLAYER_STATS_CONTAINER := preload("res://battleSystem/ui/player_stats_cont
 # Resources must match the CharacterResources assigned to the player TurnBasedAgents in the scene
 var playerList: Array = [
 	preload("res://battleSystem/data/characters/player1.tres"),
-	preload("res://battleSystem/data/characters/player2.tres"),
 ]
 
 func _ready() -> void:
 	_reset_player_container()
-	_set_player_stats_ui()
+	call_deferred("_set_player_stats_ui")
 	_connect_player_signals.call_deferred()
 
 func _reset_player_container() -> void:
@@ -20,10 +19,23 @@ func _reset_player_container() -> void:
 		node.queue_free()
 
 func _set_player_stats_ui() -> void:
-	for player_resource in playerList:
+	var battle_players := _get_battle_player_resources()
+	for player_resource in battle_players:
 		var stat_display := PLAYER_STATS_CONTAINER.instantiate()
 		player_container.add_child(stat_display)
 		stat_display.set_player_stats(player_resource)
+
+func _get_battle_player_resources() -> Array:
+	var resources := []
+	for agent: TurnBasedAgent in get_tree().get_nodes_in_group("player"):
+		if agent.character_resource != null and not resources.has(agent.character_resource):
+			resources.append(agent.character_resource)
+
+	if resources.is_empty():
+		return playerList
+
+	playerList = resources
+	return resources
 
 func _connect_player_signals() -> void:
 	for agent: TurnBasedAgent in get_tree().get_nodes_in_group("player"):
