@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://b43yrin0qlny4" path="res://battleSystem/resources/character_resource.gd" id="1_10npn"]
 [ext_resource type="Resource" uid="uid://dm5g3oqr6d2uh" path="res://battleSystem/data/skills/Attack.tres" id="2_attack"]
 [ext_resource type="Resource" uid="uid://66jy0hm02o01" path="res://battleSystem/data/skills/Slash.tres" id="3_slash"]
+[ext_resource type="Resource" path="res://battleSystem/data/enemy_ai/skill_caster.tres" id="4_ai"]
 
 [resource]
 script = ExtResource("1_10npn")
@@ -21,3 +22,4 @@ techs = Array[Resource]([ExtResource("3_slash")])
 battleScale = Vector2(1, 1)
 battleOffset = Vector2(0, 0)
 isBoss = false
+enemyAI = ExtResource("4_ai")

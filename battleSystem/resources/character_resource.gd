@@ -17,6 +17,7 @@ class_name CharacterResource
 @export var battleScale := Vector2.ONE
 @export var battleOffset := Vector2.ZERO
 @export var isBoss := false
+@export var enemyAI: Resource
 
 func take_damage(damage: int) -> void:
 	currentHealth -= damage

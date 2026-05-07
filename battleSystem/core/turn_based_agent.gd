@@ -33,6 +33,7 @@ var _base_modulate := Color.WHITE
 var _visual_node: CanvasItem
 var _animated_sprite: AnimatedSprite2D
 var _last_facing_direction := Vector2.DOWN
+var _enemy_ai_turn_count := 0
 
 func get_global_position() -> Vector2:
 	return get_parent().global_position
@@ -120,19 +121,124 @@ func set_active(boolean: bool) -> void:
 		player_turn_started.emit()
 	elif character_type == Character_Type.ENEMY and isActive:
 		on_turn_icon_node.hide()
-		var alive_players := get_tree().get_nodes_in_group("player").filter(
-			func(a: TurnBasedAgent): return not a.character_resource.is_dead()
-		)
-		if alive_players.is_empty():
-			turn_finished.emit()
-			return
-		var attack := _get_basic_attack()
-		if attack == null:
+		var enemy_command := _get_enemy_command()
+		var enemy_target := _get_enemy_target(enemy_command)
+		if enemy_command == null or enemy_target == null:
 			turn_finished.emit()
 			return
 		action_resolving_started.emit()
-		target_selected.emit(alive_players.pick_random(), attack)
+		_enemy_ai_turn_count += 1
+		target_selected.emit(enemy_target, enemy_command)
 		set_active(false)
+
+func _get_enemy_command() -> Resource:
+	var ai := _get_enemy_ai()
+	if ai != null:
+		var pattern_command := ai.get_pattern_command(_enemy_ai_turn_count)
+		if _can_use_enemy_command(pattern_command):
+			return pattern_command
+
+		var heal_skill := _get_enemy_heal_skill_for_wounded_ally(ai)
+		if heal_skill != null:
+			return heal_skill
+
+		if ai.preferSkillWhenAffordable:
+			var affordable_skill := _get_first_affordable_enemy_skill()
+			if affordable_skill != null:
+				return affordable_skill
+
+	return _get_basic_attack()
+
+func _get_enemy_target(command: Resource) -> TurnBasedAgent:
+	if command == null:
+		return null
+
+	if command is SkillResource and command.targetType == SkillResource.Target_Type.PLAYERS:
+		var alive_enemies := _get_alive_group_agents("enemy")
+		if alive_enemies.is_empty():
+			return null
+		return _get_most_wounded_agent(alive_enemies)
+
+	var alive_players := _get_alive_group_agents("player")
+	if alive_players.is_empty():
+		return null
+
+	var ai := _get_enemy_ai()
+	if ai != null and ai.targetStrategy == EnemyAIResource.Target_Strategy.LOWEST_HP_PLAYER:
+		return _get_most_wounded_agent(alive_players)
+
+	return alive_players.pick_random()
+
+func _get_enemy_ai() -> EnemyAIResource:
+	if character_resource == null:
+		return null
+	return character_resource.enemyAI as EnemyAIResource
+
+func _get_enemy_heal_skill_for_wounded_ally(ai: EnemyAIResource) -> SkillResource:
+	var wounded_ally := _get_wounded_enemy_ally(ai.healAllyHealthRatio)
+	if wounded_ally == null:
+		return null
+
+	for skill in _get_enemy_skills():
+		var skill_resource := skill as SkillResource
+		if (
+			skill_resource != null
+			and skill_resource.skillType == SkillResource.Skill_Type.HEAL
+			and skill_resource.can_pay_cost(character_resource)
+		):
+			return skill_resource
+
+	return null
+
+func _get_first_affordable_enemy_skill() -> SkillResource:
+	for skill in _get_enemy_skills():
+		var skill_resource := skill as SkillResource
+		if (
+			skill_resource != null
+			and skill_resource.skillType != SkillResource.Skill_Type.HEAL
+			and skill_resource.can_pay_cost(character_resource)
+		):
+			return skill_resource
+	return null
+
+func _get_enemy_skills() -> Array[Resource]:
+	if not skills.is_empty():
+		return skills
+	if character_resource != null:
+		return character_resource.techs
+	return []
+
+func _can_use_enemy_command(command: Resource) -> bool:
+	if command == null:
+		return false
+	if command is SkillResource:
+		return command.can_pay_cost(character_resource)
+	return true
+
+func _get_alive_group_agents(group_name: StringName) -> Array:
+	return get_tree().get_nodes_in_group(group_name).filter(
+		func(a: TurnBasedAgent): return a.character_resource != null and not a.character_resource.is_dead()
+	)
+
+func _get_wounded_enemy_ally(health_ratio: float) -> TurnBasedAgent:
+	for agent in _get_alive_group_agents("enemy"):
+		var resource := agent.character_resource
+		if resource.maxHealth <= 0:
+			continue
+		if float(resource.currentHealth) / float(resource.maxHealth) <= health_ratio:
+			return agent
+	return null
+
+func _get_most_wounded_agent(agents: Array) -> TurnBasedAgent:
+	var selected_agent: TurnBasedAgent = null
+	var lowest_health := INF
+	for agent: TurnBasedAgent in agents:
+		if agent.character_resource == null or agent.character_resource.maxHealth <= 0:
+			continue
+		if agent.character_resource.currentHealth < lowest_health:
+			lowest_health = agent.character_resource.currentHealth
+			selected_agent = agent
+	return selected_agent
 
 func _select_between_targets(event: InputEvent, targets: Array) -> void:
 	var alive_targets := targets.filter(
