@@ -13,6 +13,7 @@ var enemy_frame_indices: Array[int] = []
 var enemy_frame_progresses: Array[float] = []
 var enemy_flip_hs: Array[bool] = []
 var enemy_scales: Array[Vector2] = []
+var player_resources: Array[CharacterResource] = []
 var player_sprite_frames: SpriteFrames
 var player_animation: String = ""
 var player_frame_index: int = 0
@@ -38,6 +39,12 @@ func request_battle(
 	return_position = player_position
 	encounter_id = id
 	last_result = Result.IDLE
+
+func set_player_party(players: Array[CharacterResource]) -> void:
+	player_resources.clear()
+	for resource in players:
+		if resource != null:
+			player_resources.append(resource)
 
 func set_enemy_visuals(
 	sprite_frames: Array[SpriteFrames],
@@ -72,6 +79,7 @@ func finish_battle(result: Result) -> void:
 
 func clear() -> void:
 	enemy_resources = []
+	player_resources = []
 	_clear_visual_data()
 	return_scene = ""
 	return_position = Vector2.ZERO

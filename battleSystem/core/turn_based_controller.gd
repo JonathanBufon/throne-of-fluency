@@ -31,6 +31,7 @@ func _on_turn_done() -> void:
 	_set_next_active_character()
 
 func _set_turn_order() -> void:
+	characterTurnOrder.clear()
 	var players := get_tree().get_nodes_in_group("player")
 	var enemies := get_tree().get_nodes_in_group("enemy")
 	for node in players + enemies:

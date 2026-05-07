@@ -5,30 +5,64 @@ extends Node2D
 # ao overworld via change_scene_to_file ao final.
 
 const ENEMY_TEMPLATE := preload("res://battleSystem/core/enemy_battle_template.tscn")
+const PLAYER_TEMPLATE := preload("res://battleSystem/core/player_battle_template.tscn")
+const DEFAULT_PLAYER_RESOURCE := preload("res://battleSystem/data/characters/player1.tres")
 const MAX_VISIBLE_ENEMIES := 3
+const MAX_VISIBLE_PLAYERS := 3
 
 @onready var enemy_slots: Node2D = $EnemySlots
 @onready var player_slots: Node2D = $PlayerSlots
-@onready var player_character: Node2D = $Player
 @onready var controller: TurnBasedController = $TurnBasedController
 @onready var command_menu: CommandMenu = $CanvasLayer/BattleUI/CommandMenu
 @onready var canvas_layer: CanvasLayer = $CanvasLayer
 
+var player_characters: Array[Node2D] = []
+
 func _ready() -> void:
-	_position_player_party()
-	_apply_player_visual()
+	_spawn_player_party()
+	_apply_player_visuals()
 	_spawn_enemies_from_transition()
 	controller.battle_won.connect(_on_battle_won)
 	controller.battle_lost.connect(_on_battle_lost)
 	command_menu.run_requested.connect(_on_run_requested)
 
-func _position_player_party() -> void:
-	var center_slot := player_slots.get_node_or_null("PlayerSlot2") as Node2D
-	if center_slot == null:
-		push_warning("PlayerSlot2 nao encontrado em PlayerSlots")
+func _spawn_player_party() -> void:
+	var resources := _get_player_party_resources()
+	var spawns := _get_player_slots_for_count(resources.size())
+	if spawns.is_empty():
 		return
 
-	player_character.position = center_slot.position
+	for i in resources.size():
+		if i >= spawns.size():
+			push_warning("Mais jogadores (%d) do que slots visiveis (%d); excedentes ignorados" % [resources.size(), MAX_VISIBLE_PLAYERS])
+			break
+
+		var spawn := spawns[i] as Node2D
+		var player := PLAYER_TEMPLATE.instantiate() as Node2D
+		player.name = "Player%d" % (i + 1)
+		player.position = spawn.position
+
+		var agent: TurnBasedAgent = player.get_node("TurnBasedAgent")
+		agent.character_resource = resources[i]
+
+		add_child(player)
+		player_characters.append(player)
+
+func _get_player_party_resources() -> Array[CharacterResource]:
+	var resources: Array[CharacterResource] = []
+	for resource in BattleTransition.player_resources:
+		if resource != null:
+			resources.append(resource)
+
+	if resources.is_empty() and GameData.has_method("get_battle_party_resources"):
+		for resource in GameData.get_battle_party_resources():
+			if resource != null:
+				resources.append(resource)
+
+	if resources.is_empty():
+		resources.append(DEFAULT_PLAYER_RESOURCE)
+
+	return resources
 
 func _spawn_enemies_from_transition() -> void:
 	var resources := BattleTransition.enemy_resources
@@ -55,8 +89,8 @@ func _spawn_enemies_from_transition() -> void:
 		enemy.position = spawn.position
 		add_child(enemy)
 
-func _apply_player_visual() -> void:
-	if BattleTransition.player_sprite_frames == null:
+func _apply_player_visuals() -> void:
+	if BattleTransition.player_sprite_frames == null or player_characters.is_empty():
 		return
 
 	var sprite_frames: Array[SpriteFrames] = [BattleTransition.player_sprite_frames]
@@ -64,12 +98,13 @@ func _apply_player_visual() -> void:
 	var frame_indices: Array[int] = [BattleTransition.player_frame_index]
 	var frame_progresses: Array[float] = [BattleTransition.player_frame_progress]
 	var flip_hs: Array[bool] = [BattleTransition.player_flip_h]
-	var sprite := player_character.get_node_or_null("Sprite2D") as Sprite2D
+	var player := player_characters[0]
+	var sprite := player.get_node_or_null("Sprite2D") as Sprite2D
 	var fallback_scale := Vector2.ZERO if sprite == null else sprite.scale
 	var scales: Array[Vector2] = [fallback_scale]
 
 	_apply_animated_visual(
-		player_character,
+		player,
 		sprite_frames,
 		animations,
 		frame_indices,
@@ -79,7 +114,7 @@ func _apply_player_visual() -> void:
 		0
 	)
 
-	var agent := player_character.get_node_or_null("TurnBasedAgent") as TurnBasedAgent
+	var agent := player.get_node_or_null("TurnBasedAgent") as TurnBasedAgent
 	if agent != null:
 		agent.refresh_visual_node()
 
@@ -146,6 +181,28 @@ func _get_enemy_slots_for_count(enemy_count: int) -> Array[Node2D]:
 
 	return selected_slots
 
+func _get_player_slots_for_count(player_count: int) -> Array[Node2D]:
+	var left_slot := player_slots.get_node_or_null("PlayerSlot1") as Node2D
+	var center_slot := player_slots.get_node_or_null("PlayerSlot2") as Node2D
+	var right_slot := player_slots.get_node_or_null("PlayerSlot3") as Node2D
+	var selected_slots: Array[Node2D] = []
+
+	if left_slot == null or center_slot == null or right_slot == null:
+		push_warning("PlayerSlots precisa conter PlayerSlot1, PlayerSlot2 e PlayerSlot3")
+		return selected_slots
+
+	if player_count == 1:
+		selected_slots.append(center_slot)
+	elif player_count == 2:
+		selected_slots.append(left_slot)
+		selected_slots.append(right_slot)
+	else:
+		selected_slots.append(left_slot)
+		selected_slots.append(center_slot)
+		selected_slots.append(right_slot)
+
+	return selected_slots
+
 func _on_battle_won() -> void:
 	GameData.mark_encounter_defeated(BattleTransition.encounter_id)
 	BattleTransition.finish_battle(BattleTransition.Result.WON)
@@ -176,18 +233,28 @@ func _play_dying_animations_for_group(group_name: String) -> void:
 		await agent.play_dying_and_wait()
 
 func _play_player_escape_animation() -> void:
-	var player_agent := player_character.get_node_or_null("TurnBasedAgent") as TurnBasedAgent
-	if player_agent == null:
+	var escaping_players := player_characters.filter(
+		func(player: Node2D):
+			var agent := player.get_node_or_null("TurnBasedAgent") as TurnBasedAgent
+			return agent != null and agent.character_resource != null and not agent.character_resource.is_dead()
+	)
+	if escaping_players.is_empty():
 		await get_tree().create_timer(0.25).timeout
 		return
 
 	command_menu.hide()
-	player_agent.play_run_down()
-
-	var start_position := player_character.position
-	var escape_position := start_position + Vector2(0, 96)
 	var tween := create_tween()
-	tween.tween_property(player_character, "position", escape_position, 0.45)
+	for i in escaping_players.size():
+		var player := escaping_players[i] as Node2D
+		var player_agent := player.get_node_or_null("TurnBasedAgent") as TurnBasedAgent
+		if player_agent != null:
+			player_agent.play_run_down()
+
+		var escape_position := player.position + Vector2(0, 96)
+		if i == 0:
+			tween.tween_property(player, "position", escape_position, 0.45)
+		else:
+			tween.parallel().tween_property(player, "position", escape_position, 0.45)
 	await tween.finished
 
 func _return_to_overworld() -> void:

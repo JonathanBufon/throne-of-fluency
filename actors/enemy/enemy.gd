@@ -223,6 +223,7 @@ func _on_danger_box_body_entered(body: Node2D) -> void:
 		body.global_position,
 		get_effective_encounter_id()
 	)
+	BattleTransition.set_player_party(GameData.get_battle_party_resources())
 	BattleTransition.set_enemy_visuals(
 		enemy_sprite_frames,
 		enemy_animations,

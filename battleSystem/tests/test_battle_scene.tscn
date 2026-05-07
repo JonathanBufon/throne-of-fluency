@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://bx3mv8ifljfrq" path="res://battleSystem/ui/Player_Status_Display.tscn" id="15_yvime"]
 [ext_resource type="PackedScene" path="res://battleSystem/ui/space_battle_background.tscn" id="16_background"]
 [ext_resource type="PackedScene" path="res://battleSystem/ui/enemy_health_bar.tscn" id="17_health"]
+[ext_resource type="Resource" uid="uid://bigdcgiflmeju" path="res://battleSystem/data/characters/player2.tres" id="18_player2"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xj6nq"]
 atlas = ExtResource("1_1ahfb")
@@ -82,7 +83,7 @@ basicAttack = ExtResource("5_4kefl")
 [node name="EnemyHealthBar" parent="Enemy3" instance=ExtResource("17_health")]
 
 [node name="Player" type="StaticBody2D" parent="." unique_id=1718754404]
-position = Vector2(384, 393)
+position = Vector2(292, 420)
 script = ExtResource("1_m08ds")
 
 [node name="Sprite2D" type="Sprite2D" parent="Player" unique_id=1414676888]
@@ -94,6 +95,19 @@ character_resource = ExtResource("10_w11w6")
 basicAttack = ExtResource("5_4kefl")
 skills = Array[Resource]([ExtResource("7_4jyio"), ExtResource("8_j3fa2")])
 isActive = true
+
+[node name="Player2" type="StaticBody2D" parent="."]
+position = Vector2(476, 420)
+script = ExtResource("1_m08ds")
+
+[node name="Sprite2D" type="Sprite2D" parent="Player2"]
+scale = Vector2(5, 5)
+texture = SubResource("AtlasTexture_m08ds")
+
+[node name="TurnBasedAgent" parent="Player2" instance=ExtResource("2_xj6nq")]
+character_resource = ExtResource("18_player2")
+basicAttack = ExtResource("5_4kefl")
+skills = Array[Resource]([ExtResource("7_4jyio")])
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1848290934]
 
