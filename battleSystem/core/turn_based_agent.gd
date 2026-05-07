@@ -5,6 +5,9 @@ signal target_selected(target: TurnBasedAgent, command: Resource)
 signal undo_command_selected()
 signal turn_finished()
 signal player_turn_started()
+signal targeting_started()
+signal targeting_cancelled()
+signal action_resolving_started()
 
 @export var character_resource: CharacterResource
 @export var character_type: Character_Type
@@ -25,16 +28,38 @@ enum Character_Type { PLAYER, ENEMY }
 @export var isActive := false
 var selectedCommand: Resource
 var target: TurnBasedAgent
+var actionGauge := 0.0
 var _base_modulate := Color.WHITE
 var _visual_node: CanvasItem
 var _animated_sprite: AnimatedSprite2D
 var _last_facing_direction := Vector2.DOWN
+var _enemy_ai_turn_count := 0
 
 func get_global_position() -> Vector2:
 	return get_parent().global_position
 
 func command_done() -> void:
 	turn_finished.emit()
+
+func reset_action_gauge() -> void:
+	set_action_gauge(0.0)
+
+func add_action_gauge(amount: float) -> void:
+	if character_resource == null or character_resource.is_dead():
+		set_action_gauge(0.0)
+		return
+	set_action_gauge(actionGauge + amount)
+
+func set_action_gauge(value: float) -> void:
+	actionGauge = clampf(value, 0.0, 100.0)
+	if character_resource != null:
+		character_resource.overDriveValue = roundi(actionGauge)
+
+func is_action_ready() -> bool:
+	return actionGauge >= 100.0
+
+func consume_action_gauge() -> void:
+	reset_action_gauge()
 
 func _input(event: InputEvent) -> void:
 	if not isActive or not target:
@@ -56,16 +81,30 @@ func _input(event: InputEvent) -> void:
 func _undo_command() -> void:
 	target = null
 	_deselect_all_targets()
+	targeting_cancelled.emit()
 	undo_command_selected.emit()
 
 func _select_target() -> void:
-	target_selected.emit(target, selectedCommand)
+	var selected_target := target
+	var command := selectedCommand
+	if command is ComboResource:
+		var party_agents := get_tree().get_nodes_in_group("player")
+		if not ComboDiscovery.can_use_combo(command, self, party_agents):
+			return
+		if not ComboDiscovery.pay_participant_costs(command, party_agents):
+			return
+		ComboDiscovery.consume_participant_gauges(command, party_agents)
+	elif command is ItemResource:
+		if not GameData.consume_battle_item(command):
+			return
+	action_resolving_started.emit()
 	_deselect_all_targets()
 	set_active(false)
 	target = null
+	target_selected.emit(selected_target, command)
 
 func set_active(boolean: bool) -> void:
-	if boolean and character_resource.is_dead():
+	if boolean and (character_resource == null or character_resource.is_dead()):
 		turn_finished.emit()
 		return
 
@@ -82,14 +121,156 @@ func set_active(boolean: bool) -> void:
 		player_turn_started.emit()
 	elif character_type == Character_Type.ENEMY and isActive:
 		on_turn_icon_node.hide()
-		var alive_players := get_tree().get_nodes_in_group("player").filter(
-			func(a: TurnBasedAgent): return not a.character_resource.is_dead()
-		)
-		if alive_players.is_empty():
+		_play_enemy_turn()
+
+func _play_enemy_turn() -> void:
+	var enemy_command := _get_enemy_command()
+	var enemy_target := _get_enemy_target(enemy_command)
+	if enemy_command == null or enemy_target == null:
+		turn_finished.emit()
+		return
+
+	var ai := _get_enemy_ai()
+	_show_enemy_intent(enemy_target)
+	if ai != null and ai.actionWindupSeconds > 0.0:
+		await get_tree().create_timer(ai.actionWindupSeconds).timeout
+
+	if not isActive or character_resource == null or character_resource.is_dead():
+		_deselect_all_targets()
+		turn_finished.emit()
+		return
+
+	if enemy_target.character_resource == null or enemy_target.character_resource.is_dead():
+		enemy_target = _get_enemy_target(enemy_command)
+		if enemy_target == null:
+			_deselect_all_targets()
 			turn_finished.emit()
 			return
-		target_selected.emit(alive_players.pick_random(), basicAttack)
-		set_active(false)
+
+	_deselect_all_targets()
+	action_resolving_started.emit()
+	_enemy_ai_turn_count += 1
+	target_selected.emit(enemy_target, enemy_command)
+	set_active(false)
+
+func _show_enemy_intent(enemy_target: TurnBasedAgent) -> void:
+	_deselect_all_targets()
+	enemy_target.set_target()
+	if _visual_node == null:
+		return
+	var base_modulate := _visual_node.modulate
+	var tween := create_tween()
+	tween.tween_property(_visual_node, "modulate", Color(1.35, 1.08, 0.55, 1.0), 0.08)
+	tween.tween_property(_visual_node, "modulate", base_modulate, 0.18)
+
+func _get_enemy_command() -> Resource:
+	var ai := _get_enemy_ai()
+	if ai != null:
+		var pattern_command := ai.get_pattern_command(_enemy_ai_turn_count)
+		if _can_use_enemy_command(pattern_command):
+			return pattern_command
+
+		var heal_skill := _get_enemy_heal_skill_for_wounded_ally(ai)
+		if heal_skill != null:
+			return heal_skill
+
+		if ai.preferSkillWhenAffordable and ai.can_use_preferred_skill(_enemy_ai_turn_count):
+			var affordable_skill := _get_first_affordable_enemy_skill()
+			if affordable_skill != null:
+				return affordable_skill
+
+	return _get_basic_attack()
+
+func _get_enemy_target(command: Resource) -> TurnBasedAgent:
+	if command == null:
+		return null
+
+	if command is SkillResource and command.targetType == SkillResource.Target_Type.PLAYERS:
+		var alive_enemies := _get_alive_group_agents("enemy")
+		if alive_enemies.is_empty():
+			return null
+		return _get_most_wounded_agent(alive_enemies)
+
+	var alive_players := _get_alive_group_agents("player")
+	if alive_players.is_empty():
+		return null
+
+	var ai := _get_enemy_ai()
+	if ai != null and ai.targetStrategy == EnemyAIResource.Target_Strategy.LOWEST_HP_PLAYER:
+		return _get_most_wounded_agent(alive_players)
+
+	return alive_players.pick_random()
+
+func _get_enemy_ai() -> EnemyAIResource:
+	if character_resource == null:
+		return null
+	return character_resource.enemyAI as EnemyAIResource
+
+func _get_enemy_heal_skill_for_wounded_ally(ai: EnemyAIResource) -> SkillResource:
+	var wounded_ally := _get_wounded_enemy_ally(ai.healAllyHealthRatio)
+	if wounded_ally == null:
+		return null
+
+	for skill in _get_enemy_skills():
+		var skill_resource := skill as SkillResource
+		if (
+			skill_resource != null
+			and skill_resource.skillType == SkillResource.Skill_Type.HEAL
+			and skill_resource.can_pay_cost(character_resource)
+		):
+			return skill_resource
+
+	return null
+
+func _get_first_affordable_enemy_skill() -> SkillResource:
+	for skill in _get_enemy_skills():
+		var skill_resource := skill as SkillResource
+		if (
+			skill_resource != null
+			and skill_resource.skillType != SkillResource.Skill_Type.HEAL
+			and skill_resource.can_pay_cost(character_resource)
+		):
+			return skill_resource
+	return null
+
+func _get_enemy_skills() -> Array[Resource]:
+	if not skills.is_empty():
+		return skills
+	if character_resource != null:
+		return character_resource.techs
+	return []
+
+func _can_use_enemy_command(command: Resource) -> bool:
+	if command == null:
+		return false
+	if command is SkillResource:
+		return command.can_pay_cost(character_resource)
+	return true
+
+func _get_alive_group_agents(group_name: StringName) -> Array:
+	return get_tree().get_nodes_in_group(group_name).filter(
+		func(a: TurnBasedAgent): return a.character_resource != null and not a.character_resource.is_dead()
+	)
+
+func _get_wounded_enemy_ally(health_ratio: float) -> TurnBasedAgent:
+	for agent in _get_alive_group_agents("enemy"):
+		var resource: CharacterResource = agent.character_resource
+		if resource.maxHealth <= 0:
+			continue
+		if float(resource.currentHealth) / float(resource.maxHealth) <= health_ratio:
+			return agent
+	return null
+
+func _get_most_wounded_agent(agents: Array) -> TurnBasedAgent:
+	var selected_agent: TurnBasedAgent = null
+	var lowest_health := INF
+	for agent: TurnBasedAgent in agents:
+		if agent.character_resource == null or agent.character_resource.maxHealth <= 0:
+			continue
+		if agent.character_resource.currentHealth < lowest_health:
+			lowest_health = agent.character_resource.currentHealth
+			selected_agent = agent
+	return selected_agent
 
 func _select_between_targets(event: InputEvent, targets: Array) -> void:
 	var alive_targets := targets.filter(
@@ -145,6 +326,18 @@ func refresh_visual_node() -> void:
 	_set_visual_node()
 	_refresh_character_state_visual()
 	play_idle_current_direction()
+
+func play_feedback_flash(is_heal: bool) -> void:
+	if _visual_node == null:
+		return
+	if character_resource != null and character_resource.is_dead():
+		return
+
+	var base_modulate := _visual_node.modulate
+	var flash_modulate := Color(0.55, 1.35, 0.65, 1.0) if is_heal else Color(1.45, 0.45, 0.45, 1.0)
+	var tween := create_tween()
+	tween.tween_property(_visual_node, "modulate", flash_modulate, 0.05)
+	tween.tween_property(_visual_node, "modulate", base_modulate, 0.16)
 
 func play_idle_current_direction() -> void:
 	_play_directional_animation("idle", _last_facing_direction)
@@ -274,6 +467,17 @@ func _set_late_signals() -> void:
 func _on_command_selected(command: Resource) -> void:
 	if not isActive:
 		return
+	if command == null:
+		return
+	if (
+		command is ComboResource
+		and not ComboDiscovery.can_use_combo(command, self, get_tree().get_nodes_in_group("player"))
+	):
+		return
+	if command is ItemResource and not GameData.can_use_battle_item(command):
+		return
+	if (command is SkillResource) and not command.can_pay_cost(character_resource):
+		return
 
 	selectedCommand = command
 
@@ -293,7 +497,15 @@ func _on_command_selected(command: Resource) -> void:
 			return
 		target = alive_players[0]
 
+	targeting_started.emit()
 	target.set_target()
+
+func _get_basic_attack() -> Resource:
+	if basicAttack:
+		return basicAttack
+	if character_resource != null:
+		return character_resource.basicAttack
+	return null
 
 func set_target() -> void:
 	target_icon_node.show()

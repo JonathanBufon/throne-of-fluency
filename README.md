@@ -64,10 +64,13 @@ battleSystem/
   battle_scene.tscn   Tela real de batalha fixa estilo JRPG
   battle_scene.gd
   core/               Controller, agents, character e templates
-  data/               Recursos .tres de personagens e skills
+  data/               Recursos .tres de personagens, inimigos, IA, rewards e skills
   resources/          Classes Resource
   tests/              Cena isolada de teste do combate
   ui/                 Menu de comandos, status e ordem de turno
+
+docs/
+  battle-and-enemy-system.md
 
 ui/
   dialog/             Diálogo e input linguístico
@@ -106,13 +109,14 @@ O combate é iniciado pelo overworld, mas acontece em uma tela dedicada de batal
 Fluxo atual:
 
 1. O inimigo do overworld detecta o player pela `DangerBox`.
-2. `enemy.gd` monta o encontro usando `battle_party` ou `battle_resource`.
-3. `BattleTransition` guarda inimigos, cena de retorno, posição de retorno, `encounter_id` e dados visuais dos atores.
-4. A cena muda para `battleSystem/battle_scene.tscn`.
-5. A batalha usa fundo fixo espacial, slots para inimigos e player, UI inferior e barra de turno.
-6. Vitória marca o encontro em `GameData.defeated_encounters` e retorna ao overworld.
-7. Fuga toca `run_down`, retorna ao overworld e não marca o inimigo como derrotado.
-8. Derrota toca `dying` nos players mortos e retorna para `main.tscn` como fluxo provisório de game over.
+2. `enemy.gd` monta o encontro usando `battle_model` / `battle_models`.
+3. Cada `EnemyModelResource` cria uma instância própria de `CharacterResource`, evitando compartilhamento de HP/MP entre inimigos.
+4. `BattleTransition` guarda inimigos, cena de retorno, posição de retorno, `encounter_id` e dados visuais dos atores.
+5. A cena muda para `battleSystem/battle_scene.tscn`.
+6. A batalha usa fundo fixo espacial, slots para inimigos e player, UI inferior e barra de turno.
+7. Vitória concede recompensas, marca o encontro em `GameData.defeated_encounters` e retorna ao overworld.
+8. Fuga toca `run_down`, retorna ao overworld e não marca o inimigo como derrotado.
+9. Derrota toca `dying` nos players mortos e retorna para `main.tscn` como fluxo provisório de game over.
 
 Recursos atuais:
 
@@ -123,12 +127,15 @@ Recursos atuais:
 - Barra lateral de ordem de turno.
 - Feedback visual de personagem ativo, alvo e personagem morto.
 - Atores animados com `idle_*`, `attack_*`, `dying` e `run_down` na fuga.
-- Inimigos de batalha instanciados a partir do inimigo real que ativou o encontro.
+- Inimigos de batalha instanciados a partir de `EnemyModelResource`, com IA e visual configuráveis por instância.
 
 ### Dados de Combate
 
 - `CharacterResource`: nome, HP, MP, speed, OverDrive.
 - `SkillResource`: nome, tipo de alvo, tipo de skill e poder.
+- `EnemyModelResource`: modelo de inimigo para criar instâncias únicas em batalha.
+- `EnemyAIResource`: padrões de comportamento, alvo, windup e uso de skills.
+- `BattleRewardResource`: XP, gold e drops.
 - Skills existentes: `Attack`, `Heal`, `Slash`.
 - Personagens de teste em `battleSystem/data/characters/`.
 
@@ -147,6 +154,7 @@ Recursos atuais:
 - `HARNESS.md`: guia operacional detalhado para IA e fluxo de desenvolvimento.
 - `CLAUDE.md`: visão técnica e arquitetura atual.
 - `Throne_Of_Fluency_Documentacao.md`: documento de produto, lore e design.
+- `docs/battle-and-enemy-system.md`: guia de batalha, criação de inimigos e IA.
 
 `/backlog/` é local e ignorado pelo Git. Use para planejamento temporário, sem subir para o GitHub.
 

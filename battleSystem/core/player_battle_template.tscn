@@ -1,0 +1,19 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" uid="uid://dxsc4wn5ypvjn" path="res://battleSystem/core/character.gd" id="1_character"]
+[ext_resource type="Texture2D" uid="uid://bd72l60i2gdk5" path="res://assets/sprites/characters/Knights/Swordman.png" id="2_swordman"]
+[ext_resource type="PackedScene" uid="uid://cefek1e0d8i2m" path="res://battleSystem/core/turn_based_agent.tscn" id="3_agent"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_player"]
+atlas = ExtResource("2_swordman")
+region = Rect2(6.9660034, 390.57434, 36.634354, 40.980774)
+
+[node name="PlayerBattleTemplate" type="StaticBody2D"]
+script = ExtResource("1_character")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(5, 5)
+texture = SubResource("AtlasTexture_player")
+
+[node name="TurnBasedAgent" parent="." instance=ExtResource("3_agent")]
+character_type = 0
