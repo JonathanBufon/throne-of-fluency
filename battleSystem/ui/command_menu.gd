@@ -15,6 +15,7 @@ const COMMAND_BUTTON := preload("res://battleSystem/ui/command_button.tscn")
 
 # Stores the current character's basic attack to avoid multiple signal connections
 var _current_basic_attack: Resource = preload("res://battleSystem/data/skills/Attack.tres")
+var _current_character: TurnBasedAgent
 
 func _ready() -> void:
 	add_to_group("commandMenu")
@@ -35,6 +36,7 @@ func _set_late_signals() -> void:
 
 func _on_player_turn(character: TurnBasedAgent) -> void:
 	if character:
+		_current_character = character
 		_set_command_options(character)
 	main_commands.show()
 	skill_container.hide()
@@ -45,6 +47,12 @@ func _on_attack_button_pressed() -> void:
 	_on_command_pressed(_current_basic_attack)
 
 func _on_command_pressed(command: Resource) -> void:
+	if (
+		_current_character != null
+		and command is SkillResource
+		and not command.can_pay_cost(_current_character.character_resource)
+	):
+		return
 	hide()
 	command_selected.emit(command)
 	main_commands.show()
@@ -63,13 +71,15 @@ func _on_run_button_pressed() -> void:
 	run_requested.emit()
 
 func _set_command_options(character: TurnBasedAgent) -> void:
-	if character.basicAttack:
-		_current_basic_attack = character.basicAttack
+	var basic_attack := _get_basic_attack(character)
+	if basic_attack:
+		_current_basic_attack = basic_attack
 		attack_button.show()
 	else:
 		attack_button.hide()
 
-	if character.skills.is_empty():
+	var available_skills := _get_character_skills(character)
+	if available_skills.is_empty():
 		skills_button.hide()
 		skills_button.disabled = true
 	else:
@@ -77,8 +87,44 @@ func _set_command_options(character: TurnBasedAgent) -> void:
 		skills_button.disabled = false
 		for skill in skill_container.get_children():
 			skill.queue_free()
-		for skill in character.skills:
+		for skill in available_skills:
 			var btn := COMMAND_BUTTON.instantiate()
-			btn.text = skill.name
-			btn.pressed.connect(_on_command_pressed.bind(skill))
+			btn.text = _get_skill_button_text(skill)
+			btn.disabled = not _can_character_use_skill(character, skill)
+			btn.tooltip_text = _get_skill_tooltip(character, skill)
+			if not btn.disabled:
+				btn.pressed.connect(_on_command_pressed.bind(skill))
 			skill_container.add_child(btn)
+
+func _get_basic_attack(character: TurnBasedAgent) -> Resource:
+	if character.basicAttack:
+		return character.basicAttack
+	if character.character_resource != null and character.character_resource.basicAttack:
+		return character.character_resource.basicAttack
+	return null
+
+func _get_character_skills(character: TurnBasedAgent) -> Array[Resource]:
+	if not character.skills.is_empty():
+		return character.skills
+	if character.character_resource != null:
+		return character.character_resource.techs
+	return []
+
+func _get_skill_button_text(skill: Resource) -> String:
+	if skill is SkillResource and skill.manaCost > 0:
+		return "%s %dMP" % [skill.name, skill.manaCost]
+	return skill.name
+
+func _can_character_use_skill(character: TurnBasedAgent, skill: Resource) -> bool:
+	if not (skill is SkillResource):
+		return true
+	return skill.can_pay_cost(character.character_resource)
+
+func _get_skill_tooltip(character: TurnBasedAgent, skill: Resource) -> String:
+	if not (skill is SkillResource):
+		return ""
+	if skill.manaCost <= 0:
+		return skill.name
+	if _can_character_use_skill(character, skill):
+		return "%s - costs %d MP" % [skill.name, skill.manaCost]
+	return "%s - needs %d MP" % [skill.name, skill.manaCost]

@@ -88,7 +88,11 @@ func set_active(boolean: bool) -> void:
 		if alive_players.is_empty():
 			turn_finished.emit()
 			return
-		target_selected.emit(alive_players.pick_random(), basicAttack)
+		var attack := _get_basic_attack()
+		if attack == null:
+			turn_finished.emit()
+			return
+		target_selected.emit(alive_players.pick_random(), attack)
 		set_active(false)
 
 func _select_between_targets(event: InputEvent, targets: Array) -> void:
@@ -274,6 +278,10 @@ func _set_late_signals() -> void:
 func _on_command_selected(command: Resource) -> void:
 	if not isActive:
 		return
+	if command == null:
+		return
+	if (command is SkillResource) and not command.can_pay_cost(character_resource):
+		return
 
 	selectedCommand = command
 
@@ -294,6 +302,13 @@ func _on_command_selected(command: Resource) -> void:
 		target = alive_players[0]
 
 	target.set_target()
+
+func _get_basic_attack() -> Resource:
+	if basicAttack:
+		return basicAttack
+	if character_resource != null:
+		return character_resource.basicAttack
+	return null
 
 func set_target() -> void:
 	target_icon_node.show()

@@ -1,14 +1,21 @@
 [gd_resource type="Resource" script_class="CharacterResource" format=3 uid="uid://brgiobtl5h6p0"]
 
 [ext_resource type="Script" uid="uid://b43yrin0qlny4" path="res://battleSystem/resources/character_resource.gd" id="1_5abhp"]
+[ext_resource type="Resource" uid="uid://dm5g3oqr6d2uh" path="res://battleSystem/data/skills/Attack.tres" id="2_attack"]
 
 [resource]
 script = ExtResource("1_5abhp")
 metadata/_custom_type_script = "uid://b43yrin0qlny4"
 name = "Orc Grunt"
+level = 1
+experience = 0
 maxHealth = 60
 currentHealth = 60
 maxMana = 0
 currentMana = 0
 speed = 40
 overDriveValue = 0
+basicAttack = ExtResource("2_attack")
+battleScale = Vector2(1, 1)
+battleOffset = Vector2(0, 0)
+isBoss = false
