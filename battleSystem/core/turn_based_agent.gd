@@ -295,6 +295,18 @@ func refresh_visual_node() -> void:
 	_refresh_character_state_visual()
 	play_idle_current_direction()
 
+func play_feedback_flash(is_heal: bool) -> void:
+	if _visual_node == null:
+		return
+	if character_resource != null and character_resource.is_dead():
+		return
+
+	var base_modulate := _visual_node.modulate
+	var flash_modulate := Color(0.55, 1.35, 0.65, 1.0) if is_heal else Color(1.45, 0.45, 0.45, 1.0)
+	var tween := create_tween()
+	tween.tween_property(_visual_node, "modulate", flash_modulate, 0.05)
+	tween.tween_property(_visual_node, "modulate", base_modulate, 0.16)
+
 func play_idle_current_direction() -> void:
 	_play_directional_animation("idle", _last_facing_direction)
 

@@ -1,5 +1,7 @@
 extends StaticBody2D
 
+const DAMAGE_NUMBER := preload("res://battleSystem/ui/damage_number.tscn")
+
 @onready var turn_based_agent: TurnBasedAgent = $TurnBasedAgent
 
 func _ready() -> void:
@@ -16,8 +18,11 @@ func _on_target_selected(target: TurnBasedAgent, command: Resource) -> void:
 
 	await _animation_example(target)
 
+	var previous_health := target.character_resource.currentHealth
+	var previous_mana := target.character_resource.currentMana
 	_apply_command_effect(target, command)
 	target._refresh_character_state_visual()
+	_show_command_feedback(target, previous_health, previous_mana)
 
 	turn_based_agent.command_done()
 
@@ -28,6 +33,27 @@ func _apply_command_effect(target: TurnBasedAgent, command: Resource) -> void:
 		target.character_resource.heal(command.power)
 	elif command is SkillResource:
 		target.character_resource.take_damage(command.power)
+
+func _show_command_feedback(target: TurnBasedAgent, previous_health: int, previous_mana: int) -> void:
+	var health_delta := target.character_resource.currentHealth - previous_health
+	var mana_delta := target.character_resource.currentMana - previous_mana
+	if health_delta != 0:
+		_spawn_damage_number(target, health_delta)
+		target.play_feedback_flash(health_delta > 0)
+	elif mana_delta > 0:
+		_spawn_damage_number(target, mana_delta, "MP")
+		target.play_feedback_flash(true)
+
+func _spawn_damage_number(target: TurnBasedAgent, amount: int, suffix := "") -> void:
+	var damage_number := DAMAGE_NUMBER.instantiate() as DamageNumber
+	damage_number.global_position = target.get_global_position() + Vector2(0, -72)
+	get_tree().current_scene.add_child(damage_number)
+
+	var prefix := "+" if amount > 0 else ""
+	var text := "%s%d" % [prefix, amount]
+	if not suffix.is_empty():
+		text = "%s %s" % [text, suffix]
+	damage_number.show_value(text, amount > 0)
 
 func _animation_example(target: TurnBasedAgent) -> void:
 	var start_position := global_position
