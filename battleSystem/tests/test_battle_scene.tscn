@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://b68xvpvlrxxes" path="res://battleSystem/ui/turn_order_bar.tscn" id="10_4jyio"]
 [ext_resource type="Resource" uid="uid://cj8g8f8ovsm0j" path="res://battleSystem/data/characters/player1.tres" id="10_w11w6"]
 [ext_resource type="PackedScene" uid="uid://bx3mv8ifljfrq" path="res://battleSystem/ui/Player_Status_Display.tscn" id="15_yvime"]
+[ext_resource type="PackedScene" path="res://battleSystem/ui/space_battle_background.tscn" id="16_background"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xj6nq"]
 atlas = ExtResource("1_1ahfb")
@@ -24,6 +25,8 @@ atlas = ExtResource("2_ca7vg")
 region = Rect2(6.9660034, 390.57434, 36.634354, 40.980774)
 
 [node name="TestBattleScene" type="Node2D" unique_id=1500664384]
+
+[node name="Background" parent="." instance=ExtResource("16_background")]
 
 [node name="TurnBasedController" parent="." unique_id=1361258708 instance=ExtResource("1_jg7qw")]
 

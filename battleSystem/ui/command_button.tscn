@@ -1,20 +1,61 @@
-[gd_scene format=3 uid="uid://cebxpibu8ob32"]
+[gd_scene load_steps=10 format=3 uid="uid://cebxpibu8ob32"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nndek"]
-content_margin_left = 4.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
-bg_color = Color(0.5176471, 0.39607844, 0.94509804, 0.627451)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-corner_detail = 5
+[ext_resource type="Texture2D" uid="uid://7cfe0mx1fe1e" path="res://assets/ui/UI_Buttons.png" id="1_buttons"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_normal"]
+atlas = ExtResource("1_buttons")
+region = Rect2(0, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hover"]
+atlas = ExtResource("1_buttons")
+region = Rect2(32, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pressed"]
+atlas = ExtResource("1_buttons")
+region = Rect2(64, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_disabled"]
+atlas = ExtResource("1_buttons")
+region = Rect2(0, 384, 32, 16)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_normal"]
+texture = SubResource("AtlasTexture_normal")
+texture_margin_left = 7.0
+texture_margin_top = 5.0
+texture_margin_right = 7.0
+texture_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hover"]
+texture = SubResource("AtlasTexture_hover")
+texture_margin_left = 7.0
+texture_margin_top = 5.0
+texture_margin_right = 7.0
+texture_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pressed"]
+texture = SubResource("AtlasTexture_pressed")
+texture_margin_left = 7.0
+texture_margin_top = 5.0
+texture_margin_right = 7.0
+texture_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_disabled"]
+texture = SubResource("AtlasTexture_disabled")
+texture_margin_left = 7.0
+texture_margin_top = 5.0
+texture_margin_right = 7.0
+texture_margin_bottom = 5.0
 
 [node name="AttackButton" type="Button" unique_id=1333535008]
-custom_minimum_size = Vector2(200, 0)
-theme_override_font_sizes/font_size = 25
-theme_override_styles/normal = SubResource("StyleBoxFlat_nndek")
-theme_override_styles/focus = SubResource("StyleBoxFlat_nndek")
+custom_minimum_size = Vector2(180, 44)
+theme_override_colors/font_color = Color(0.27450982, 0.11764706, 0.0627451, 1)
+theme_override_colors/font_hover_color = Color(0.27450982, 0.11764706, 0.0627451, 1)
+theme_override_colors/font_pressed_color = Color(0.27450982, 0.11764706, 0.0627451, 1)
+theme_override_colors/font_disabled_color = Color(0.42, 0.42, 0.46, 1)
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxTexture_normal")
+theme_override_styles/hover = SubResource("StyleBoxTexture_hover")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_pressed")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_disabled")
+theme_override_styles/focus = SubResource("StyleBoxTexture_hover")
 text = "Attack"

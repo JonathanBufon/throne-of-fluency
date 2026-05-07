@@ -40,7 +40,7 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 disabled = true
-text = "Combo"
+text = "Skills"
 
 [node name="ItemButton" parent="MarginContainer/MainCommands" instance=ExtResource("1_p0m5m")]
 layout_mode = 2
@@ -62,4 +62,4 @@ visible = false
 layout_mode = 2
 theme_override_constants/h_separation = 25
 theme_override_constants/v_separation = 25
-columns = 2
+columns = 1

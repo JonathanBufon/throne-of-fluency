@@ -71,9 +71,10 @@ func _set_command_options(character: TurnBasedAgent) -> void:
 
 	if character.skills.is_empty():
 		skills_button.hide()
+		skills_button.disabled = true
 	else:
 		skills_button.show()
-		skills_button.disabled = true
+		skills_button.disabled = false
 		for skill in skill_container.get_children():
 			skill.queue_free()
 		for skill in character.skills:
