@@ -7,7 +7,6 @@ const PLAYER_STATS_CONTAINER := preload("res://battleSystem/ui/player_stats_cont
 # Resources must match the CharacterResources assigned to the player TurnBasedAgents in the scene
 var playerList: Array = [
 	preload("res://battleSystem/data/characters/player1.tres"),
-	preload("res://battleSystem/data/characters/player2.tres"),
 ]
 
 func _ready() -> void:

@@ -222,7 +222,7 @@ func _get_alive_group_agents(group_name: StringName) -> Array:
 
 func _get_wounded_enemy_ally(health_ratio: float) -> TurnBasedAgent:
 	for agent in _get_alive_group_agents("enemy"):
-		var resource := agent.character_resource
+		var resource: CharacterResource = agent.character_resource
 		if resource.maxHealth <= 0:
 			continue
 		if float(resource.currentHealth) / float(resource.maxHealth) <= health_ratio:

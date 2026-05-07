@@ -1,7 +1,6 @@
 extends Node
 
 const DEFAULT_PLAYER_1 = preload("res://battleSystem/data/characters/player1.tres")
-const DEFAULT_PLAYER_2 = preload("res://battleSystem/data/characters/player2.tres")
 const DEFAULT_POTION = preload("res://battleSystem/data/items/potion.tres")
 
 var _spawn_id: String = ""
@@ -28,7 +27,6 @@ func _ready() -> void:
 func reset_default_party() -> void:
 	party_resources.clear()
 	party_resources.append(DEFAULT_PLAYER_1 as CharacterResource)
-	party_resources.append(DEFAULT_PLAYER_2 as CharacterResource)
 
 func reset_default_inventory() -> void:
 	battle_inventory.clear()
@@ -50,10 +48,11 @@ func get_battle_party_resources() -> Array[CharacterResource]:
 	for resource in party_resources:
 		if resource != null:
 			resources.append(resource)
+			break
 
 	if resources.is_empty():
 		reset_default_party()
-		resources.append_array(party_resources)
+		resources.append(party_resources[0])
 
 	return resources
 
