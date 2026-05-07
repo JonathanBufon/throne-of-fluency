@@ -18,7 +18,7 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -180.0
+offset_top = -260.0
 grow_vertical = 0
 theme_override_constants/margin_left = 48
 theme_override_constants/margin_top = 24
@@ -40,7 +40,13 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 disabled = true
-text = "Skills"
+text = "Techs"
+
+[node name="ComboButton" parent="MarginContainer/MainCommands" instance=ExtResource("1_p0m5m")]
+unique_name_in_owner = true
+layout_mode = 2
+disabled = true
+text = "Combo"
 
 [node name="ItemButton" parent="MarginContainer/MainCommands" instance=ExtResource("1_p0m5m")]
 layout_mode = 2

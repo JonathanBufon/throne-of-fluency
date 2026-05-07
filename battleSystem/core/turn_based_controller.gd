@@ -8,7 +8,7 @@ signal battle_lost()
 enum Battle_State { FILLING, PLAYER_COMMAND, TARGETING, RESOLVING_ACTION, BATTLE_END }
 
 @export var action_gauge_fill_multiplier := 0.8
-@export var pause_gauges_during_player_command := true
+@export var pause_gauges_during_player_command := false
 
 var characterTurnOrder: Array[TurnBasedAgent] = []
 var activeCharacter: TurnBasedAgent

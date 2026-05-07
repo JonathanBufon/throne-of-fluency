@@ -86,6 +86,13 @@ func _undo_command() -> void:
 func _select_target() -> void:
 	var selected_target := target
 	var command := selectedCommand
+	if command is ComboResource:
+		var party_agents := get_tree().get_nodes_in_group("player")
+		if not ComboDiscovery.can_use_combo(command, self, party_agents):
+			return
+		if not ComboDiscovery.pay_participant_costs(command, party_agents):
+			return
+		ComboDiscovery.consume_participant_gauges(command, party_agents)
 	action_resolving_started.emit()
 	_deselect_all_targets()
 	set_active(false)
@@ -308,6 +315,11 @@ func _on_command_selected(command: Resource) -> void:
 	if not isActive:
 		return
 	if command == null:
+		return
+	if (
+		command is ComboResource
+		and not ComboDiscovery.can_use_combo(command, self, get_tree().get_nodes_in_group("player"))
+	):
 		return
 	if (command is SkillResource) and not command.can_pay_cost(character_resource):
 		return
