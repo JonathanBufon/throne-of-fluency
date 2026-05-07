@@ -7,8 +7,9 @@ signal battle_lost()
 
 enum Battle_State { FILLING, PLAYER_COMMAND, TARGETING, RESOLVING_ACTION, BATTLE_END }
 
-@export var action_gauge_fill_multiplier := 0.8
+@export var action_gauge_fill_multiplier := 0.45
 @export var pause_gauges_during_player_command := false
+@export var pause_gauges_during_action := true
 
 var characterTurnOrder: Array[TurnBasedAgent] = []
 var activeCharacter: TurnBasedAgent
@@ -25,6 +26,8 @@ func _process(delta: float) -> void:
 	if not _initialized:
 		return
 	if _battle_ended or battle_state == Battle_State.BATTLE_END:
+		return
+	if pause_gauges_during_action and battle_state == Battle_State.RESOLVING_ACTION:
 		return
 	if pause_gauges_during_player_command and activeCharacter != null:
 		return

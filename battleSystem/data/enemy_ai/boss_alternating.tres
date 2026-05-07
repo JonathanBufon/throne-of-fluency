@@ -9,4 +9,7 @@ script = ExtResource("1_ai")
 targetStrategy = 1
 preferSkillWhenAffordable = false
 healAllyHealthRatio = 0.35
+actionWindupSeconds = 0.7
+preferredSkillFirstTurn = 0
+preferredSkillCooldownTurns = 0
 actionPattern = Array[Resource]([ExtResource("2_attack"), ExtResource("3_slash")])

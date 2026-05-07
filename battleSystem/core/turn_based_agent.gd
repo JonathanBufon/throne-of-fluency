@@ -121,15 +121,47 @@ func set_active(boolean: bool) -> void:
 		player_turn_started.emit()
 	elif character_type == Character_Type.ENEMY and isActive:
 		on_turn_icon_node.hide()
-		var enemy_command := _get_enemy_command()
-		var enemy_target := _get_enemy_target(enemy_command)
-		if enemy_command == null or enemy_target == null:
+		_play_enemy_turn()
+
+func _play_enemy_turn() -> void:
+	var enemy_command := _get_enemy_command()
+	var enemy_target := _get_enemy_target(enemy_command)
+	if enemy_command == null or enemy_target == null:
+		turn_finished.emit()
+		return
+
+	var ai := _get_enemy_ai()
+	_show_enemy_intent(enemy_target)
+	if ai != null and ai.actionWindupSeconds > 0.0:
+		await get_tree().create_timer(ai.actionWindupSeconds).timeout
+
+	if not isActive or character_resource == null or character_resource.is_dead():
+		_deselect_all_targets()
+		turn_finished.emit()
+		return
+
+	if enemy_target.character_resource == null or enemy_target.character_resource.is_dead():
+		enemy_target = _get_enemy_target(enemy_command)
+		if enemy_target == null:
+			_deselect_all_targets()
 			turn_finished.emit()
 			return
-		action_resolving_started.emit()
-		_enemy_ai_turn_count += 1
-		target_selected.emit(enemy_target, enemy_command)
-		set_active(false)
+
+	_deselect_all_targets()
+	action_resolving_started.emit()
+	_enemy_ai_turn_count += 1
+	target_selected.emit(enemy_target, enemy_command)
+	set_active(false)
+
+func _show_enemy_intent(enemy_target: TurnBasedAgent) -> void:
+	_deselect_all_targets()
+	enemy_target.set_target()
+	if _visual_node == null:
+		return
+	var base_modulate := _visual_node.modulate
+	var tween := create_tween()
+	tween.tween_property(_visual_node, "modulate", Color(1.35, 1.08, 0.55, 1.0), 0.08)
+	tween.tween_property(_visual_node, "modulate", base_modulate, 0.18)
 
 func _get_enemy_command() -> Resource:
 	var ai := _get_enemy_ai()
@@ -142,7 +174,7 @@ func _get_enemy_command() -> Resource:
 		if heal_skill != null:
 			return heal_skill
 
-		if ai.preferSkillWhenAffordable:
+		if ai.preferSkillWhenAffordable and ai.can_use_preferred_skill(_enemy_ai_turn_count):
 			var affordable_skill := _get_first_affordable_enemy_skill()
 			if affordable_skill != null:
 				return affordable_skill
