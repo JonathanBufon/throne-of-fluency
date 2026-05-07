@@ -5,6 +5,9 @@ signal target_selected(target: TurnBasedAgent, command: Resource)
 signal undo_command_selected()
 signal turn_finished()
 signal player_turn_started()
+signal targeting_started()
+signal targeting_cancelled()
+signal action_resolving_started()
 
 @export var character_resource: CharacterResource
 @export var character_type: Character_Type
@@ -25,6 +28,7 @@ enum Character_Type { PLAYER, ENEMY }
 @export var isActive := false
 var selectedCommand: Resource
 var target: TurnBasedAgent
+var actionGauge := 0.0
 var _base_modulate := Color.WHITE
 var _visual_node: CanvasItem
 var _animated_sprite: AnimatedSprite2D
@@ -35,6 +39,26 @@ func get_global_position() -> Vector2:
 
 func command_done() -> void:
 	turn_finished.emit()
+
+func reset_action_gauge() -> void:
+	set_action_gauge(0.0)
+
+func add_action_gauge(amount: float) -> void:
+	if character_resource == null or character_resource.is_dead():
+		set_action_gauge(0.0)
+		return
+	set_action_gauge(actionGauge + amount)
+
+func set_action_gauge(value: float) -> void:
+	actionGauge = clampf(value, 0.0, 100.0)
+	if character_resource != null:
+		character_resource.overDriveValue = roundi(actionGauge)
+
+func is_action_ready() -> bool:
+	return actionGauge >= 100.0
+
+func consume_action_gauge() -> void:
+	reset_action_gauge()
 
 func _input(event: InputEvent) -> void:
 	if not isActive or not target:
@@ -56,16 +80,20 @@ func _input(event: InputEvent) -> void:
 func _undo_command() -> void:
 	target = null
 	_deselect_all_targets()
+	targeting_cancelled.emit()
 	undo_command_selected.emit()
 
 func _select_target() -> void:
-	target_selected.emit(target, selectedCommand)
+	var selected_target := target
+	var command := selectedCommand
+	action_resolving_started.emit()
 	_deselect_all_targets()
 	set_active(false)
 	target = null
+	target_selected.emit(selected_target, command)
 
 func set_active(boolean: bool) -> void:
-	if boolean and character_resource.is_dead():
+	if boolean and (character_resource == null or character_resource.is_dead()):
 		turn_finished.emit()
 		return
 
@@ -92,6 +120,7 @@ func set_active(boolean: bool) -> void:
 		if attack == null:
 			turn_finished.emit()
 			return
+		action_resolving_started.emit()
 		target_selected.emit(alive_players.pick_random(), attack)
 		set_active(false)
 
@@ -301,6 +330,7 @@ func _on_command_selected(command: Resource) -> void:
 			return
 		target = alive_players[0]
 
+	targeting_started.emit()
 	target.set_target()
 
 func _get_basic_attack() -> Resource:

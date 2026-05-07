@@ -94,7 +94,6 @@ texture = SubResource("AtlasTexture_m08ds")
 character_resource = ExtResource("10_w11w6")
 basicAttack = ExtResource("5_4kefl")
 skills = Array[Resource]([ExtResource("7_4jyio"), ExtResource("8_j3fa2")])
-isActive = true
 
 [node name="Player2" type="StaticBody2D" parent="."]
 position = Vector2(476, 420)

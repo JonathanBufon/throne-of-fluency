@@ -45,13 +45,13 @@ theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 0
 
 [node name="StatusCard" type="Control" parent="MarginContainer"]
-custom_minimum_size = Vector2(312, 76)
+custom_minimum_size = Vector2(312, 84)
 layout_mode = 2
 
 [node name="StatusBacking" type="Panel" parent="MarginContainer/StatusCard"]
 layout_mode = 1
 offset_right = 312.0
-offset_bottom = 76.0
+offset_bottom = 84.0
 theme_override_styles/panel = SubResource("StyleBoxTexture_status_panel")
 
 [node name="PlayerInitial" type="Label" parent="MarginContainer/StatusCard"]
@@ -149,12 +149,11 @@ vertical_alignment = 1
 
 [node name="OverDriveBar" type="TextureProgressBar" parent="MarginContainer/StatusCard" unique_id=265947049]
 unique_name_in_owner = true
-visible = false
 layout_mode = 1
-offset_left = 18.0
+offset_left = 50.0
 offset_top = 62.0
 offset_right = 294.0
-offset_bottom = 70.0
+offset_bottom = 76.0
 max_value = 100.0
 value = 30.0
 texture_under = SubResource("AtlasTexture_hp_under")
@@ -165,3 +164,13 @@ stretch_margin_top = 2
 stretch_margin_right = 5
 stretch_margin_bottom = 2
 nine_patch_stretch = true
+
+[node name="ATB1" type="Label" parent="MarginContainer/StatusCard"]
+layout_mode = 1
+offset_left = 18.0
+offset_top = 60.0
+offset_right = 44.0
+offset_bottom = 78.0
+theme_override_font_sizes/font_size = 13
+text = "ATB"
+vertical_alignment = 1
