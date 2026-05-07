@@ -204,10 +204,11 @@ func _get_player_slots_for_count(player_count: int) -> Array[Node2D]:
 	return selected_slots
 
 func _on_battle_won() -> void:
+	var reward_summary := GameData.grant_battle_rewards(_get_enemy_reward_sources())
 	GameData.mark_encounter_defeated(BattleTransition.encounter_id)
 	BattleTransition.finish_battle(BattleTransition.Result.WON)
 	await _play_dying_animations_for_group("enemy")
-	await _show_result_message("Victory")
+	await _show_result_message(_format_victory_message(reward_summary))
 	await _return_to_overworld()
 
 func _on_battle_lost() -> void:
@@ -231,6 +232,32 @@ func _play_dying_animations_for_group(group_name: String) -> void:
 
 	for agent: TurnBasedAgent in dead_agents:
 		await agent.play_dying_and_wait()
+
+func _get_enemy_reward_sources() -> Array[CharacterResource]:
+	var resources: Array[CharacterResource] = []
+	for agent: TurnBasedAgent in get_tree().get_nodes_in_group("enemy"):
+		if agent.character_resource != null:
+			resources.append(agent.character_resource)
+	return resources
+
+func _format_victory_message(reward_summary: Dictionary) -> String:
+	var lines: Array[String] = ["Victory"]
+	var experience := int(reward_summary.get("experience", 0))
+	var reward_gold := int(reward_summary.get("gold", 0))
+	if experience > 0:
+		lines.append("+%d XP" % experience)
+	if reward_gold > 0:
+		lines.append("+%d Gold" % reward_gold)
+
+	var drops := reward_summary.get("drops", {}) as Dictionary
+	for item_name in drops.keys():
+		lines.append("+%d %s" % [int(drops[item_name]), item_name])
+
+	var level_results := reward_summary.get("level_results", []) as Array
+	for result in level_results:
+		lines.append("%s Lv %d" % [result["character"], int(result["end_level"])])
+
+	return "\n".join(PackedStringArray(lines))
 
 func _play_player_escape_animation() -> void:
 	var escaping_players := player_characters.filter(

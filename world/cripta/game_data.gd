@@ -16,6 +16,8 @@ var cripta_porta_aberta := false
 var defeated_encounters: Array[String] = []
 var party_resources: Array[CharacterResource] = []
 var battle_inventory: Dictionary = {}
+var gold := 0
+var last_battle_reward: Dictionary = {}
 
 func _ready() -> void:
 	if party_resources.is_empty():
@@ -82,3 +84,47 @@ func consume_battle_item(item: ItemResource) -> bool:
 
 	battle_inventory[item] = get_item_quantity(item) - 1
 	return true
+
+func add_battle_item(item: ItemResource, quantity: int) -> void:
+	if item == null or quantity <= 0:
+		return
+	battle_inventory[item] = get_item_quantity(item) + quantity
+
+func grant_battle_rewards(enemy_resources: Array[CharacterResource]) -> Dictionary:
+	var summary: Dictionary = {
+		"experience": 0,
+		"gold": 0,
+		"drops": {},
+		"level_results": [],
+	}
+
+	for enemy in enemy_resources:
+		if enemy == null or enemy.battleReward == null:
+			continue
+		var reward := enemy.battleReward as BattleRewardResource
+		if reward == null:
+			continue
+
+		summary["experience"] = int(summary["experience"]) + reward.experience
+		summary["gold"] = int(summary["gold"]) + reward.gold
+		for i in reward.drops.size():
+			var item := reward.drops[i]
+			if item == null:
+				continue
+			var quantity := reward.get_drop_quantity(i)
+			add_battle_item(item, quantity)
+			var drops := summary["drops"] as Dictionary
+			drops[item.name] = int(drops.get(item.name, 0)) + quantity
+
+	gold += int(summary["gold"])
+
+	for party_member in get_battle_party_resources():
+		if party_member == null:
+			continue
+		var level_result := party_member.add_experience(int(summary["experience"]))
+		if int(level_result["levels_gained"]) > 0:
+			var level_results := summary["level_results"] as Array
+			level_results.append(level_result)
+
+	last_battle_reward = summary
+	return summary
