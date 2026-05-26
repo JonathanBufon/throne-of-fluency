@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://b6kr8nqz4p2vw"]
+[gd_scene format=3 uid="uid://b6kr8nq04p2vw"]
 
 [ext_resource type="Script" uid="uid://dxsc4wn5ypvjn" path="res://battleSystem/core/character.gd" id="1_char"]
 [ext_resource type="Texture2D" uid="uid://c83ortgf2jrk8" path="res://icon.svg" id="2_icon"]
