@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="ComboResource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://battleSystem/resources/combo_resource.gd" id="1_combo"]
+[ext_resource type="Resource" uid="uid://66jy0hm02o01" path="res://battleSystem/data/skills/Slash.tres" id="2_slash"]
+[ext_resource type="Resource" uid="uid://c37nasegxx0yo" path="res://battleSystem/data/skills/Heal.tres" id="3_heal"]
+
+[resource]
+script = ExtResource("1_combo")
+name = "Focus Strike"
+targetType = 0
+skillType = 0
+power = 45
+manaCost = 0
+targetScope = 0
+hitCount = 1
+element = 1
+animationKey = "focus_strike"
+requiresAliveTarget = true
+participantNames = Array[StringName]([&"Hero", &"Lumen"])
+requiredTechs = Array[Resource]([ExtResource("2_slash"), ExtResource("3_heal")])
+participantManaCosts = Array[int]([6, 8])

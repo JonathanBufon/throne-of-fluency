@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://c83ortgf2jrk8" path="res://icon.svg" id="2_icon"]
 [ext_resource type="PackedScene" uid="uid://cefek1e0d8i2m" path="res://battleSystem/core/turn_based_agent.tscn" id="3_agent"]
 [ext_resource type="Resource" uid="uid://dm5g3oqr6d2uh" path="res://battleSystem/data/skills/Attack.tres" id="4_attack"]
+[ext_resource type="PackedScene" path="res://battleSystem/ui/enemy_health_bar.tscn" id="5_health"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_placeholder"]
 atlas = ExtResource("2_icon")
@@ -19,3 +20,5 @@ texture = SubResource("AtlasTexture_placeholder")
 [node name="TurnBasedAgent" parent="." instance=ExtResource("3_agent")]
 character_type = 1
 basicAttack = ExtResource("4_attack")
+
+[node name="EnemyHealthBar" parent="." instance=ExtResource("5_health")]
