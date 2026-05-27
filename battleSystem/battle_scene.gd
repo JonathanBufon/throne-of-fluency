@@ -219,6 +219,7 @@ func _on_battle_lost() -> void:
 
 func _on_run_requested() -> void:
 	BattleTransition.finish_battle(BattleTransition.Result.FLED)
+	GameData.save_game()
 	await _play_player_escape_animation()
 	await _show_result_message("Escaped")
 	await _return_to_overworld()
