@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="SkillResource" format=3]
+
+[ext_resource type="Script" path="res://battleSystem/resources/skillResource.gd" id="1_skill"]
+
+[resource]
+script = ExtResource("1_skill")
+name = "Bola de Fogo"
+targetType = 0
+skillType = 0
+power = 30
+manaCost = 10
+targetScope = 0
+hitCount = 1
+element = 2
+animationKey = "fireball"
+requiresAliveTarget = true
