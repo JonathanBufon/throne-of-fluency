@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_k4eyv")
 metadata/_custom_type_script = "uid://c421fsjpurk6x"
-name = "Heal"
+name = "Cura"
 targetType = 1
 skillType = 1
 power = 25

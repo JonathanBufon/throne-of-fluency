@@ -4,10 +4,11 @@
 
 [resource]
 script = ExtResource("1_item")
-name = "Potion"
-description = "Restores HP to one ally."
+name = "Poção"
+description = "Restaura HP de um aliado."
 effectType = 0
 power = 35
 targetType = 1
 targetScope = 0
 usableInBattle = true
+usableInWorld = true

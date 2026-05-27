@@ -8,7 +8,7 @@
 [resource]
 script = ExtResource("1_umnqp")
 metadata/_custom_type_script = "uid://b43yrin0qlny4"
-name = "Hero"
+name = "Herói"
 level = 1
 experience = 0
 maxHealth = 100

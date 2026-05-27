@@ -9,7 +9,7 @@
 [resource]
 script = ExtResource("1_iioin")
 metadata/_custom_type_script = "uid://b43yrin0qlny4"
-name = "Stone Guard"
+name = "Guarda de Pedra"
 level = 1
 experience = 0
 maxHealth = 80

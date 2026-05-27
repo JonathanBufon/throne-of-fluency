@@ -7,7 +7,7 @@
 [resource]
 script = ExtResource("1_5abhp")
 metadata/_custom_type_script = "uid://b43yrin0qlny4"
-name = "Orc Grunt"
+name = "Orc Recruta"
 level = 1
 experience = 0
 maxHealth = 60

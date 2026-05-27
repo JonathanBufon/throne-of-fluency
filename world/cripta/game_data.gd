@@ -84,6 +84,27 @@ func consume_battle_item(item: ItemResource) -> bool:
 	battle_inventory[item] = get_item_quantity(item) - 1
 	return true
 
+func get_inventory_items() -> Array[ItemResource]:
+	if battle_inventory.is_empty():
+		reset_default_inventory()
+
+	var items: Array[ItemResource] = []
+	for item in battle_inventory.keys():
+		var item_resource := item as ItemResource
+		if item_resource != null and get_item_quantity(item_resource) > 0:
+			items.append(item_resource)
+	return items
+
+func can_use_world_item(item: ItemResource) -> bool:
+	return item != null and item.can_use_in_world() and get_item_quantity(item) > 0
+
+func consume_world_item(item: ItemResource) -> bool:
+	if not can_use_world_item(item):
+		return false
+
+	battle_inventory[item] = get_item_quantity(item) - 1
+	return true
+
 func add_battle_item(item: ItemResource, quantity: int) -> void:
 	if item == null or quantity <= 0:
 		return
