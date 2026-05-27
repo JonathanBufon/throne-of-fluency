@@ -9,7 +9,7 @@
 [resource]
 script = ExtResource("1_10npn")
 metadata/_custom_type_script = "uid://b43yrin0qlny4"
-name = "Echo Shade"
+name = "Sombra do Eco"
 level = 1
 experience = 0
 maxHealth = 45

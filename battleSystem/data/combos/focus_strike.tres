@@ -6,7 +6,7 @@
 
 [resource]
 script = ExtResource("1_combo")
-name = "Focus Strike"
+name = "Golpe Focado"
 targetType = 0
 skillType = 0
 power = 45
@@ -16,6 +16,6 @@ hitCount = 1
 element = 1
 animationKey = "focus_strike"
 requiresAliveTarget = true
-participantNames = Array[StringName]([&"Hero", &"Lumen"])
+participantNames = Array[StringName]([&"Herói", &"Lumen"])
 requiredTechs = Array[Resource]([ExtResource("2_slash"), ExtResource("3_heal")])
 participantManaCosts = Array[int]([6, 8])
