@@ -8,6 +8,7 @@ class_name ItemResource
 @export var targetType: Target_Type = Target_Type.PLAYERS
 @export var targetScope: Target_Scope = Target_Scope.SINGLE_TARGET
 @export var usableInBattle := true
+@export var usableInWorld := false
 
 enum Effect_Type { HEAL_HP, RESTORE_MP, DAMAGE }
 enum Target_Type { ENEMIES, PLAYERS }
@@ -15,6 +16,9 @@ enum Target_Scope { SINGLE_TARGET, ALL_TARGETS, SELF }
 
 func can_use_in_battle() -> bool:
 	return usableInBattle
+
+func can_use_in_world() -> bool:
+	return usableInWorld
 
 func apply_to(target: CharacterResource) -> void:
 	if target == null:

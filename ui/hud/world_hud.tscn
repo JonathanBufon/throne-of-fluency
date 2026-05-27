@@ -1,0 +1,128 @@
+[gd_scene load_steps=6 format=3 uid="uid://b8w0rldhud0001"]
+
+[ext_resource type="Script" path="res://ui/hud/world_hud.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://b1w5bj6vkt8qq" path="res://assets/sprites/characters/Knights/Swordman.png" id="2_portrait"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_portrait"]
+atlas = ExtResource("2_portrait")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0, 0, 0, 0.6)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 0.45)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="WorldHud" type="CanvasLayer"]
+layer = 10
+script = ExtResource("1_script")
+
+[node name="Root" type="PanelContainer" parent="."]
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 280.0
+offset_bottom = 96.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Margin" type="MarginContainer" parent="Root"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 6
+
+[node name="HBox" type="HBoxContainer" parent="Root/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Portrait" type="TextureRect" parent="Root/Margin/HBox"]
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+texture = SubResource("AtlasTexture_portrait")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Stats" type="VBoxContainer" parent="Root/Margin/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="NameLevelLabel" type="Label" parent="Root/Margin/HBox/Stats"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "Hero  Lv.1"
+
+[node name="HpRow" type="HBoxContainer" parent="Root/Margin/HBox/Stats"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="HpLabel" type="Label" parent="Root/Margin/HBox/Stats/HpRow"]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.45, 0.45, 1)
+theme_override_font_sizes/font_size = 14
+text = "HP"
+
+[node name="HpBar" type="ProgressBar" parent="Root/Margin/HBox/Stats/HpRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 10)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="HpText" type="Label" parent="Root/Margin/HBox/Stats/HpRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(56, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "100/100"
+horizontal_alignment = 2
+
+[node name="MpRow" type="HBoxContainer" parent="Root/Margin/HBox/Stats"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="MpLabel" type="Label" parent="Root/Margin/HBox/Stats/MpRow"]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.7, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "MP"
+
+[node name="MpBar" type="ProgressBar" parent="Root/Margin/HBox/Stats/MpRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 10)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 50.0
+value = 50.0
+show_percentage = false
+
+[node name="MpText" type="Label" parent="Root/Margin/HBox/Stats/MpRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(56, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "50/50"
+horizontal_alignment = 2
+
+[node name="GoldLabel" type="Label" parent="Root/Margin/HBox/Stats"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.3, 1)
+theme_override_font_sizes/font_size = 14
+text = "$ 0"

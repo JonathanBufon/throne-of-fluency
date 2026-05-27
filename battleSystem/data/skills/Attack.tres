@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_68qga")
 metadata/_custom_type_script = "uid://c421fsjpurk6x"
-name = "Attack"
+name = "Ataque"
 targetType = 0
 skillType = 0
 power = 15
