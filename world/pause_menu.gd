@@ -15,3 +15,16 @@ func _unhandled_input(event):
 		animator.play("pause_game")
 		get_tree().paused = true	
 		resume_button.grab_focus()
+
+
+func _on_resume_button_pressed() -> void:
+	animator.play("resume_game")
+	get_tree().paused = false
+	await animator.animation_finished
+	visible = false
+	
+	
+
+
+func _on_quit_button_pressed() -> void:
+	get_tree().quit()

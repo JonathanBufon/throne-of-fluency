@@ -4,14 +4,11 @@
 
 [resource]
 script = ExtResource("1_k4eyv")
-metadata/_custom_type_script = "uid://c421fsjpurk6x"
 name = "Cura"
 targetType = 1
 skillType = 1
 power = 25
 manaCost = 8
-targetScope = 0
-hitCount = 1
 element = 5
 animationKey = "heal"
-requiresAliveTarget = true
+metadata/_custom_type_script = "uid://c421fsjpurk6x"
