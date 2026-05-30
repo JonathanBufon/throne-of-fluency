@@ -4,14 +4,9 @@
 
 [resource]
 script = ExtResource("1_6vb83")
-metadata/_custom_type_script = "uid://c421fsjpurk6x"
 name = "Talho"
-targetType = 0
-skillType = 0
 power = 22
 manaCost = 6
-targetScope = 0
-hitCount = 1
 element = 1
 animationKey = "slash"
-requiresAliveTarget = true
+metadata/_custom_type_script = "uid://c421fsjpurk6x"

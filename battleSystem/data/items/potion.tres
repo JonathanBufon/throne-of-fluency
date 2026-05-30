@@ -1,14 +1,10 @@
-[gd_resource type="Resource" script_class="ItemResource" format=3]
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://0d715p7bpweb"]
 
-[ext_resource type="Script" path="res://battleSystem/resources/item_resource.gd" id="1_item"]
+[ext_resource type="Script" uid="uid://bk5el3755vv3u" path="res://battleSystem/resources/item_resource.gd" id="1_item"]
 
 [resource]
 script = ExtResource("1_item")
 name = "Poção"
 description = "Restaura HP de um aliado."
-effectType = 0
 power = 35
-targetType = 1
-targetScope = 0
-usableInBattle = true
 usableInWorld = true
