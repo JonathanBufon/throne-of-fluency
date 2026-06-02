@@ -1,9 +1,12 @@
-[gd_resource type="Resource" script_class="BattleRewardResource" format=3]
+[gd_resource type="Resource" script_class="BattleRewardResource" load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://battleSystem/resources/battle_reward_resource.gd" id="1_reward"]
+[ext_resource type="Resource" path="res://battleSystem/data/words/fire.tres" id="2_fire"]
+[ext_resource type="Resource" path="res://battleSystem/data/words/ball.tres" id="3_ball"]
 
 [resource]
 script = ExtResource("1_reward")
 experience = 12
 gold = 8
 dropQuantities = Array[int]([])
+word_drops = Array[WordResource]([ExtResource("2_fire"), ExtResource("3_ball")])

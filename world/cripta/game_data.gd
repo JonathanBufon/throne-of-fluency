@@ -127,6 +127,7 @@ func grant_battle_rewards(enemy_resources: Array[CharacterResource]) -> Dictiona
 		"gold": 0,
 		"drops": {},
 		"level_results": [],
+		"new_words": [],
 	}
 
 	for enemy in enemy_resources:
@@ -146,6 +147,13 @@ func grant_battle_rewards(enemy_resources: Array[CharacterResource]) -> Dictiona
 			add_battle_item(item, quantity)
 			var drops := summary["drops"] as Dictionary
 			drops[item.name] = int(drops.get(item.name, 0)) + quantity
+
+		for word in reward.word_drops:
+			if word == null:
+				continue
+			if discover_word(word):
+				var new_words := summary["new_words"] as Array
+				new_words.append(word.text_en)
 
 	gold += int(summary["gold"])
 

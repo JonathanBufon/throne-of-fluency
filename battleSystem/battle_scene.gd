@@ -254,6 +254,10 @@ func _format_victory_message(reward_summary: Dictionary) -> String:
 	for item_name in drops.keys():
 		lines.append("+%d %s" % [int(drops[item_name]), item_name])
 
+	var new_words := reward_summary.get("new_words", []) as Array
+	if not new_words.is_empty():
+		lines.append("Palavras aprendidas: %s" % ", ".join(PackedStringArray(new_words)))
+
 	var level_results := reward_summary.get("level_results", []) as Array
 	for result in level_results:
 		lines.append("%s Lv %d" % [result["character"], int(result["end_level"])])
