@@ -62,18 +62,18 @@ func _on_prepare_pressed() -> void:
 
 	var recipe := GameData.find_recipe_for_words(selected)
 	if recipe == null:
-		feedback_label.text = "Essas palavras não formam uma magia conhecida."
+		feedback_label.text = "Essa combinação não forma nenhuma magia."
 		return
 
 	if GameData.is_spell_prepared(recipe):
-		feedback_label.text = "%s já está preparada." % recipe.result_skill.name
+		feedback_label.text = "Essa magia já está preparada."
 		return
 
 	if not GameData.prepare_spell(recipe):
 		feedback_label.text = "Não foi possível preparar essa magia."
 		return
 
-	feedback_label.text = "%s preparada!" % recipe.result_skill.name
+	feedback_label.text = "Magia preparada: %s." % recipe.result_skill.name
 	spell_prepared.emit(recipe)
 	for toggle in _toggles:
 		toggle.set_pressed_no_signal(false)

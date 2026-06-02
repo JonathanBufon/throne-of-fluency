@@ -3,7 +3,7 @@ extends CanvasLayer
 const OVERWORLD_PATH_PREFIX := "res://world/"
 const EXCLUDED_PATH_FRAGMENTS := ["tittle_screen", "troca_fase"]
 
-@onready var grimoire_tabs: TabContainer = %GrimoireTabs
+@onready var grimoire_tabs: TabContainer = $Root/VBox/GrimoireTabs
 
 var _is_open := false
 
@@ -28,6 +28,10 @@ func _can_open() -> bool:
 	var current := get_tree().current_scene
 	if current == null:
 		return false
+	if _is_inventory_open():
+		return false
+	if _has_visible_dialog(current):
+		return false
 	var path := current.scene_file_path
 	if not path.begins_with(OVERWORLD_PATH_PREFIX):
 		return false
@@ -35,6 +39,18 @@ func _can_open() -> bool:
 		if path.contains(fragment):
 			return false
 	return true
+
+func _has_visible_dialog(current: Node) -> bool:
+	var dialog := current.find_child("Dialogo_Acao_Input", true, false)
+	return dialog is CanvasItem and (dialog as CanvasItem).visible
+
+func _is_inventory_open() -> bool:
+	var inventory := get_node_or_null("/root/WorldInventory")
+	if inventory == null:
+		return false
+	if inventory.has_method("is_open"):
+		return inventory.is_open()
+	return inventory is CanvasItem and (inventory as CanvasItem).visible
 
 func open() -> void:
 	if _is_open:
