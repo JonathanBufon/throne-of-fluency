@@ -6,6 +6,7 @@ signal run_requested()
 
 @onready var attack_button: Button = %AttackButton
 @onready var skills_button: Button = %SkillsButton
+@onready var magic_button: Button = %MagicButton
 @onready var combo_button: Button = %ComboButton
 @onready var item_button: Button = %ItemButton
 @onready var run_button: Button = %RunButton
@@ -22,6 +23,7 @@ const DEFAULT_COMBOS := [
 var _current_basic_attack: Resource = preload("res://battleSystem/data/skills/Attack.tres")
 var _current_character: TurnBasedAgent
 var _current_skills: Array[Resource] = []
+var _current_spells: Array[Resource] = []
 var _current_combos: Array[ComboResource] = []
 var _current_items: Array[ItemResource] = []
 
@@ -31,6 +33,7 @@ func _ready() -> void:
 
 	attack_button.pressed.connect(_on_attack_button_pressed)
 	skills_button.pressed.connect(_on_skill_button_pressed)
+	magic_button.pressed.connect(_on_magic_button_pressed)
 	combo_button.pressed.connect(_on_combo_button_pressed)
 	item_button.pressed.connect(_on_item_button_pressed)
 	run_button.pressed.connect(_on_run_button_pressed)
@@ -91,6 +94,14 @@ func _on_skill_button_pressed() -> void:
 	if not children.is_empty():
 		children[0].grab_focus()
 
+func _on_magic_button_pressed() -> void:
+	main_commands.hide()
+	_populate_command_list(_current_spells)
+	skill_container.show()
+	var children := skill_container.get_children()
+	if not children.is_empty():
+		children[0].grab_focus()
+
 func _on_combo_button_pressed() -> void:
 	main_commands.hide()
 	_populate_command_list(_current_combos)
@@ -128,8 +139,16 @@ func _set_command_options(character: TurnBasedAgent) -> void:
 		skills_button.show()
 		skills_button.disabled = false
 
+	_set_spell_options()
 	_set_combo_options(character)
 	_set_item_options()
+
+func _set_spell_options() -> void:
+	_current_spells.clear()
+	for recipe in GameData.prepared_spells:
+		if recipe != null and recipe.result_skill != null:
+			_current_spells.append(recipe.result_skill)
+	magic_button.disabled = _current_spells.is_empty()
 
 func _set_combo_options(character: TurnBasedAgent) -> void:
 	_current_combos = ComboDiscovery.get_available_combos(
