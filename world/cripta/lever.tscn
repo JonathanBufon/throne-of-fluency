@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://wcd4skcnehoi"]
+
+[ext_resource type="Texture2D" uid="uid://dwd8fwewajf3o" path="res://assets/sprites/world/dungeon-scenario/Objects/Dungeon_Objects.png" id="1_67uk5"]
+[ext_resource type="Script" uid="uid://yfgsofhc7p1y" path="res://world/cripta/lever.gd" id="2_cw2cu"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kaiii"]
+atlas = ExtResource("1_67uk5")
+region = Rect2(112.58588, 65.36668, 16.221191, 15.378548)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sybhn"]
+atlas = ExtResource("1_67uk5")
+region = Rect2(112.06189, 80.107285, 15.827568, 15.7627945)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cw2cu"]
+size = Vector2(20, 11)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kaiii"]
+size = Vector2(16, 6.5)
+
+[node name="lever" type="Node2D" unique_id=2016720345]
+script = ExtResource("2_cw2cu")
+
+[node name="lever_esquerda" type="Sprite2D" parent="." unique_id=1836955844]
+texture = SubResource("AtlasTexture_kaiii")
+
+[node name="lever_direita" type="Sprite2D" parent="." unique_id=92382031]
+position = Vector2(0, -0.75)
+scale = Vector2(1, 1.0882353)
+texture = SubResource("AtlasTexture_sybhn")
+
+[node name="Area_Lever" type="Area2D" parent="." unique_id=1167924775]
+collision_layer = 8
+collision_mask = 2
+
+[node name="Area_de_Interacao" type="CollisionShape2D" parent="Area_Lever" unique_id=684729872]
+position = Vector2(0, -3.5)
+shape = SubResource("RectangleShape2D_cw2cu")
+
+[node name="Body" type="StaticBody2D" parent="." unique_id=1305422441]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Body" unique_id=528356510]
+position = Vector2(0, -4.25)
+shape = SubResource("RectangleShape2D_kaiii")
+
+[connection signal="body_entered" from="Area_Lever" to="." method="_on_area_lever_body_entered"]
+[connection signal="body_exited" from="Area_Lever" to="." method="_on_area_lever_body_exited"]
