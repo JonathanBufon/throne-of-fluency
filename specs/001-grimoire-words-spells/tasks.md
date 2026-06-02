@@ -33,8 +33,8 @@ description: "Task list for grimoire feature implementation"
 
 **Purpose**: Garantir baseline limpo antes de codar.
 
-- [ ] T001 Rodar smoke headless do projeto atual para snapshot pré-mudanças: `godot --headless --path . --quit` e confirmar exit code 0
-- [ ] T002 Verificar que não há conflito com a tecla `G`: `grep -n 'KEY_G\b\|"G"' project.godot` (esperar zero matches)
+- [X] T001 Rodar smoke headless do projeto atual para snapshot pré-mudanças: `godot --headless --path . --quit` e confirmar exit code 0
+- [X] T002 Verificar que não há conflito com a tecla `G`: `grep -n 'KEY_G\b\|"G"' project.godot` (esperar zero matches)
 
 ---
 
