@@ -2967,7 +2967,6 @@ letter = "E"
 [node name="parede_1" parent="Paredes" unique_id=869614529 instance=ExtResource("18_cokbk")]
 position = Vector2(-95.8, -3.0517578e-05)
 scale = Vector2(0.99999994, 0.99999994)
-letter = "O"
 
 [connection signal="body_entered" from="Scenario/Porta/Area_Porta" to="Scenario/Porta" method="_on_area_porta_body_entered"]
 [connection signal="body_exited" from="Scenario/Porta/Area_Porta" to="Scenario/Porta" method="_on_area_porta_body_exited"]

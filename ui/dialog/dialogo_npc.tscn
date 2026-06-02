@@ -1,0 +1,78 @@
+[gd_scene format=3 uid="uid://bnhxlhm1rh8gm"]
+
+[ext_resource type="Script" uid="uid://cxjjmyili80cl" path="res://ui/dialog/dialogo_npc.gd" id="1_g4gsw"]
+[ext_resource type="Texture2D" uid="uid://xmftldkbvwb" path="res://assets/ui/UI_ALL.png" id="2_vvk3j"]
+[ext_resource type="Texture2D" uid="uid://ddx1ll2ugx6rj" path="res://assets/sprites/characters/Angels/Angel_1.png" id="3_d5jrv"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1mxeg"]
+atlas = ExtResource("2_vvk3j")
+region = Rect2(587.8681, 12.059751, 24.220154, 23.858662)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5ed5b"]
+atlas = ExtResource("3_d5jrv")
+region = Rect2(23.20229, 272.53775, 16.391766, 20.231293)
+
+[node name="Dialogo_NPC" type="CanvasLayer" unique_id=1102862277]
+layer = 10
+script = ExtResource("1_g4gsw")
+
+[node name="Painel" type="TextureRect" parent="." unique_id=2023222480]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 14.0
+offset_top = -185.0
+offset_right = -18.0
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = SubResource("AtlasTexture_1mxeg")
+
+[node name="MarginContainer" type="MarginContainer" parent="Painel" unique_id=757232126]
+layout_mode = 0
+offset_right = 768.0
+offset_bottom = 170.0
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 10
+
+[node name="HBox" type="HBoxContainer" parent="Painel/MarginContainer" unique_id=1545693711]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Retrato" type="TextureRect" parent="Painel/MarginContainer/HBox" unique_id=888163982]
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 2
+texture = SubResource("AtlasTexture_5ed5b")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="Vbox" type="VBoxContainer" parent="Painel/MarginContainer/HBox" unique_id=1631189502]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 5
+
+[node name="Nome" type="Label" parent="Painel/MarginContainer/HBox/Vbox" unique_id=1127685143]
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "Lumen"
+
+[node name="Separador" type="HSeparator" parent="Painel/MarginContainer/HBox/Vbox" unique_id=873662671]
+layout_mode = 2
+theme_override_constants/separation = 9
+
+[node name="Texto" type="RichTextLabel" parent="Painel/MarginContainer/HBox/Vbox" unique_id=15309365]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 17
+bbcode_enabled = true
+text = "Hello. I´m Lumen"
+scroll_active = false
+
+[node name="Icone_Avancar" type="Label" parent="Painel/MarginContainer/HBox/Vbox" unique_id=2117692552]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_font_sizes/font_size = 22
+text = "▼"

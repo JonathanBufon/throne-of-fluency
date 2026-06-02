@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bbxu1cnm435ry" path="res://world/troca_fase.gd" id="1_xvjgc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3yc8x"]
-size = Vector2(128.5, 155)
+size = Vector2(325.25, 155)
 
 [node name="Fim_da_Fase" type="Area2D" unique_id=804320922]
 collision_layer = 8
