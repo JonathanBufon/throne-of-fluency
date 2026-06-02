@@ -38,3 +38,9 @@ PRs should follow `pull_request_template.md`: include a direct description, chan
 ## Agent-Specific Instructions
 
 Before editing `.tscn` files, inspect the diff carefully and preserve `ext_resource`, `sub_resource`, signals, groups, and node names. Keep changes scoped to the requested gameplay flow and avoid mixing unrelated gameplay, UI, persistence, or asset work.
+
+<!-- SPECKIT START -->
+For additional context about technologies to be used, project structure,
+shell commands, and other important information, read the current plan:
+[specs/001-grimoire-words-spells/plan.md](specs/001-grimoire-words-spells/plan.md)
+<!-- SPECKIT END -->
