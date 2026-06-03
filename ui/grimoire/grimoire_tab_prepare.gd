@@ -32,7 +32,7 @@ func refresh() -> void:
 		toggle.process_mode = Node.PROCESS_MODE_ALWAYS
 		toggle.text = _format_word_label(word)
 		toggle.set_meta("word", word)
-		toggle.toggled.connect(_on_toggle_changed)
+		toggle.toggled.connect(_on_toggle_changed.bind(toggle))
 		word_list.add_child(toggle)
 		_toggles.append(toggle)
 
@@ -42,8 +42,10 @@ func _format_word_label(word: WordResource) -> String:
 		return "%s — %s" % [word.text_en, word.text_pt]
 	return "%s — %s (%s)" % [word.text_en, word.text_pt, pos]
 
-func _on_toggle_changed(_pressed: bool) -> void:
+func _on_toggle_changed(pressed: bool, toggle: CheckBox) -> void:
 	feedback_label.text = ""
+	if pressed and _collect_selected_words().size() > MAX_SELECTION:
+		toggle.set_pressed_no_signal(false)
 
 func _collect_selected_words() -> Array[WordResource]:
 	var selected: Array[WordResource] = []
