@@ -130,12 +130,12 @@ description: "Task list for grimoire feature implementation"
 
 **Purpose**: Validação end-to-end e tarefas que tocam todas as user stories.
 
-- [ ] T025 [P] Rodar smoke headless: `godot --headless --path . --quit` (exit 0, sem warnings novos)
-- [ ] T026 [P] Rodar cena de teste: `godot --headless --path . --scene res://battleSystem/tests/test_battle_scene.tscn --quit-after 30` (sem crash, sem erros novos)
-- [ ] T027 Executar Quickstart §2 (golden path completo): vencer batalha com word_drops → abrir grimório pelos 3 caminhos → preparar magia → cast em batalha → fechar/abrir jogo e confirmar persistência
-- [ ] T028 [P] Executar Quickstart §3 (edge cases): save corrompido, catálogo vazio, conflito com diálogo, conflito com batalha, MP insuficiente, receita parcial
-- [ ] T029 Confirmar manualmente no editor que abertura/fechamento do grimório é imperceptível (SC-006: ≤200 ms); se houver lag, investigar `_unhandled_input` ou pause
-- [ ] T030 Verificar que `prepared_spells` aparece corretamente em batalha sem reabrir o jogo (SC-007 implícito); confirmar que botão Magia vazio não trava o turno
+- [X] T025 [P] Rodar smoke headless: `godot --headless --path . --quit` (exit 0, sem warnings novos)
+- [X] T026 [P] Rodar cena de teste: `godot --headless --path . --scene res://battleSystem/tests/test_battle_scene.tscn --quit-after 30` (sem crash, sem erros novos)
+- [X] T027 Executar Quickstart §2 (golden path completo): vencer batalha com word_drops → abrir grimório pelos 3 caminhos → preparar magia → cast em batalha → fechar/abrir jogo e confirmar persistência
+- [X] T028 [P] Executar Quickstart §3 (edge cases): save corrompido, catálogo vazio, conflito com diálogo, conflito com batalha, MP insuficiente, receita parcial
+- [X] T029 Confirmar manualmente no editor que abertura/fechamento do grimório é imperceptível (SC-006: ≤200 ms); se houver lag, investigar `_unhandled_input` ou pause
+- [X] T030 Verificar que `prepared_spells` aparece corretamente em batalha sem reabrir o jogo (SC-007 implícito); confirmar que botão Magia vazio não trava o turno
 
 ---
 
