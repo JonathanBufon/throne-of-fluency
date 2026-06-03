@@ -21,6 +21,7 @@ var spawn_id: String:
 		_spawn_id = value
 
 var cripta_porta_aberta := false
+var play_intro_crypt_sequence := false
 var defeated_encounters: Array[String] = []
 var party_resources: Array[CharacterResource] = []
 var battle_inventory: Dictionary = {}

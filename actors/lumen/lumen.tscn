@@ -5,27 +5,27 @@
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_w6t6a"]
 atlas = ExtResource("1_iqmvm")
-region = Rect2(0, 0, 64, 64)
+region = Rect2(0, 192, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_12xng"]
 atlas = ExtResource("1_iqmvm")
-region = Rect2(64, 0, 64, 64)
+region = Rect2(64, 192, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_w2qrr"]
 atlas = ExtResource("1_iqmvm")
-region = Rect2(128, 0, 64, 64)
+region = Rect2(128, 192, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_m0d65"]
 atlas = ExtResource("1_iqmvm")
-region = Rect2(192, 0, 64, 64)
+region = Rect2(192, 192, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k7a0a"]
 atlas = ExtResource("1_iqmvm")
-region = Rect2(256, 0, 64, 64)
+region = Rect2(256, 192, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_o6cy1"]
 atlas = ExtResource("1_iqmvm")
-region = Rect2(320, 0, 64, 64)
+region = Rect2(320, 192, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mkmay"]
 atlas = ExtResource("1_iqmvm")
@@ -170,7 +170,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"idle_down",
-"speed": 10.0
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -294,4 +294,4 @@ script = ExtResource("1_w6t6a")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1897861689]
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_mi4l8")
-animation = &"run_up"
+animation = &"idle_down"
