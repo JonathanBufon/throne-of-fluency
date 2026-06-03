@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://b5g7iol9ctabs"]
+
+[ext_resource type="PackedScene" path="res://ui/grimoire/grimoire_tab_words.tscn" id="1_words"]
+[ext_resource type="PackedScene" path="res://ui/grimoire/grimoire_tab_recipes.tscn" id="2_recipes"]
+[ext_resource type="PackedScene" path="res://ui/grimoire/grimoire_tab_prepare.tscn" id="3_prepare"]
+
+[node name="GrimoireTabs" type="TabContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+process_mode = 3
+
+[node name="Words" parent="." instance=ExtResource("1_words")]
+layout_mode = 2
+
+[node name="Recipes" parent="." instance=ExtResource("2_recipes")]
+layout_mode = 2
+
+[node name="Prepare" parent="." instance=ExtResource("3_prepare")]
+layout_mode = 2

@@ -2,17 +2,22 @@ extends CanvasLayer
 
 const OVERWORLD_PATH_PREFIX := "res://world/"
 const EXCLUDED_PATH_FRAGMENTS := ["tittle_screen", "troca_fase"]
+const GRIMOIRE_TABS_SCENE := preload("res://ui/grimoire/grimoire_tabs.tscn")
 
 @onready var root_panel: PanelContainer = $Root
 @onready var item_list: VBoxContainer = %ItemList
 @onready var feedback_label: Label = %FeedbackLabel
 @onready var empty_label: Label = %EmptyLabel
+@onready var grimoire_content: Control = %GrimoireContent
+
+var _embedded_grimoire_tabs: TabContainer
 
 var _is_open := false
 
 func _ready() -> void:
 	layer = 20
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	_setup_grimoire_tab()
 	hide()
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -31,6 +36,8 @@ func _can_open() -> bool:
 	var current := get_tree().current_scene
 	if current == null:
 		return false
+	if WorldGrimoire.is_open():
+		return false
 	var path := current.scene_file_path
 	if not path.begins_with(OVERWORLD_PATH_PREFIX):
 		return false
@@ -44,12 +51,32 @@ func _open() -> void:
 	get_tree().paused = true
 	feedback_label.text = ""
 	_refresh_items()
+	_refresh_grimoire_tabs()
 	show()
+
+func _setup_grimoire_tab() -> void:
+	_embedded_grimoire_tabs = GRIMOIRE_TABS_SCENE.instantiate() as TabContainer
+	if _embedded_grimoire_tabs == null:
+		return
+	_embedded_grimoire_tabs.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_embedded_grimoire_tabs.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_embedded_grimoire_tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	grimoire_content.add_child(_embedded_grimoire_tabs)
+
+func _refresh_grimoire_tabs() -> void:
+	if _embedded_grimoire_tabs == null:
+		return
+	for tab in _embedded_grimoire_tabs.get_children():
+		if tab.has_method("refresh"):
+			tab.refresh()
 
 func _close() -> void:
 	_is_open = false
 	get_tree().paused = false
 	hide()
+
+func is_open() -> bool:
+	return _is_open
 
 func _refresh_items() -> void:
 	for child in item_list.get_children():

@@ -219,6 +219,7 @@ func _on_battle_lost() -> void:
 
 func _on_run_requested() -> void:
 	BattleTransition.finish_battle(BattleTransition.Result.FLED)
+	GameData.save_game()
 	await _play_player_escape_animation()
 	await _show_result_message("Escaped")
 	await _return_to_overworld()
@@ -252,6 +253,10 @@ func _format_victory_message(reward_summary: Dictionary) -> String:
 	var drops := reward_summary.get("drops", {}) as Dictionary
 	for item_name in drops.keys():
 		lines.append("+%d %s" % [int(drops[item_name]), item_name])
+
+	var new_words := reward_summary.get("new_words", []) as Array
+	if not new_words.is_empty():
+		lines.append("Palavras aprendidas: %s" % ", ".join(PackedStringArray(new_words)))
 
 	var level_results := reward_summary.get("level_results", []) as Array
 	for result in level_results:

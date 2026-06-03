@@ -285,3 +285,9 @@ Também validar manualmente:
 ## Backlog
 
 `/backlog/` é local e está ignorado pelo Git. Pode ser usado para planejamento temporário, mas não deve ser tratado como documentação versionada nem subir para o GitHub.
+
+<!-- SPECKIT START -->
+For additional context about technologies to be used, project structure,
+shell commands, and other important information, read the current plan:
+[specs/001-grimoire-words-spells/plan.md](specs/001-grimoire-words-spells/plan.md)
+<!-- SPECKIT END -->
