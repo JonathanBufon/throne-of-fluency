@@ -1142,7 +1142,7 @@ encounter_id = "shroom_lands_entry_enemy_001"
 z_index = 3
 position = Vector2(907, 896)
 battle_model = ExtResource("17_enemy_model")
-encounter_id = "shroom_lands_entry_enemy_001"
+encounter_id = "shroom_lands_fire_test_enemy_002"
 
 [node name="spawn_2" type="Marker2D" parent="." unique_id=313921313]
 z_index = 3

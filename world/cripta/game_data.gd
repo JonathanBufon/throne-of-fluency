@@ -2,6 +2,7 @@ extends Node
 
 const SAVE_PATH := "user://save.json"
 const SAVE_VERSION := 1
+const DISABLE_PERSISTENCE_IN_DEBUG := true
 
 const DEFAULT_PLAYER_1 = preload("res://battleSystem/data/characters/player1.tres")
 const DEFAULT_POTION = preload("res://battleSystem/data/items/potion.tres")
@@ -34,6 +35,9 @@ func _ready() -> void:
 			reset_default_party()
 		if battle_inventory.is_empty():
 			reset_default_inventory()
+
+func _is_persistence_enabled() -> bool:
+	return not (DISABLE_PERSISTENCE_IN_DEBUG and OS.is_debug_build())
 
 func reset_default_party() -> void:
 	party_resources.clear()
@@ -207,6 +211,9 @@ func find_recipe_for_words(input_words: Array) -> SpellRecipeResource:
 	return null
 
 func save_game() -> bool:
+	if not _is_persistence_enabled():
+		return true
+
 	var data := {
 		"version": SAVE_VERSION,
 		"gold": gold,
@@ -226,6 +233,9 @@ func save_game() -> bool:
 	return true
 
 func load_game() -> bool:
+	if not _is_persistence_enabled():
+		return false
+
 	if not FileAccess.file_exists(SAVE_PATH):
 		return false
 
