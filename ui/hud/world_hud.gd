@@ -10,9 +10,11 @@ const EXCLUDED_PATH_FRAGMENTS := ["tittle_screen", "troca_fase"]
 @onready var mp_bar: ProgressBar = %MpBar
 @onready var mp_text: Label = %MpText
 @onready var gold_label: Label = %GoldLabel
+@onready var grimoire_button: Button = %GrimoireButton
 
 func _ready() -> void:
 	layer = 10
+	grimoire_button.pressed.connect(_on_grimoire_button_pressed)
 	hide()
 
 func _process(_delta: float) -> void:
@@ -53,3 +55,6 @@ func _refresh() -> void:
 	mp_text.text = "%d/%d" % [character.currentMana, character.maxMana]
 
 	gold_label.text = "$ %d" % GameData.gold
+
+func _on_grimoire_button_pressed() -> void:
+	WorldGrimoire.open()
