@@ -1,12 +1,13 @@
-[gd_resource type="Resource" script_class="SpellRecipeResource" load_steps=4 format=3]
+[gd_resource type="Resource" script_class="SpellRecipeResource" format=3 uid="uid://e4bycgkmjxhg"]
 
-[ext_resource type="Script" path="res://battleSystem/resources/spell_recipe_resource.gd" id="1_recipe"]
-[ext_resource type="Resource" path="res://battleSystem/data/words/fire.tres" id="2_fire"]
-[ext_resource type="Resource" path="res://battleSystem/data/words/ball.tres" id="3_ball"]
-[ext_resource type="Resource" path="res://battleSystem/data/skills/Fireball.tres" id="4_skill"]
+[ext_resource type="Script" uid="uid://dhpms062ctsms" path="res://battleSystem/resources/spell_recipe_resource.gd" id="1_recipe"]
+[ext_resource type="Resource" uid="uid://ivnv2qqj8cg7" path="res://battleSystem/data/words/fire.tres" id="2_fire"]
+[ext_resource type="Resource" uid="uid://h2velfblf0ao" path="res://battleSystem/data/words/ball.tres" id="3_ball"]
+[ext_resource type="Script" uid="uid://c0eqemspa5eih" path="res://battleSystem/resources/word_resource.gd" id="3_m0we3"]
+[ext_resource type="Resource" uid="uid://c11jcwpaj7yl0" path="res://battleSystem/data/skills/Fireball.tres" id="4_skill"]
 
 [resource]
 script = ExtResource("1_recipe")
-words = Array[Resource]([ExtResource("2_fire"), ExtResource("3_ball")])
+words = Array[ExtResource("3_m0we3")]([ExtResource("2_fire"), ExtResource("3_ball")])
 result_skill = ExtResource("4_skill")
 description = "Concentra fogo em forma de projétil e arremessa no inimigo."
