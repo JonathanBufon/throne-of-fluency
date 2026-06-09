@@ -2,9 +2,8 @@ extends Control
 
 const CRYPT_SCENE := "res://world/cripta/cripta.tscn"
 const DIALOG_SCENE := preload("res://ui/dialog/dialogo_npc.tscn")
-const ANGEL_SHEET := preload("res://assets/sprites/characters/Angels/Angel_1.png")
+const LUMEN_SCENE := preload("res://actors/lumen/lumen.tscn")
 
-const LUMEN_REGION := Rect2(23.0, 272.0, 17.0, 21.0)
 const GEM_POSITION := Vector2(400.0, 270.0)
 const SECONDARY_GEM_POSITIONS := {
 	"gema_conversacao": Vector2(310.0, 275.0),
@@ -17,7 +16,7 @@ var _background: ColorRect
 var _gem_dialogo: Node2D
 var _secondary_gems: Array[Node2D] = []
 var _explosion: Node2D
-var _lumen: Sprite2D
+var _lumen: Node2D
 var _fade: ColorRect
 var _is_transitioning := false
 
@@ -52,10 +51,11 @@ func _build_scene() -> void:
 		_explosion.modulate.a = 0.0
 		_explosion.hide()
 
-	_lumen = _create_lumen_sprite()
+	_lumen = LUMEN_SCENE.instantiate()
 	_lumen.position = Vector2(400.0, 300.0)
 	_lumen.scale = Vector2.ZERO
 	_lumen.modulate.a = 0.0
+	_lumen.set_physics_process(false)
 	add_child(_lumen)
 
 	_dialog = DIALOG_SCENE.instantiate()
@@ -70,10 +70,10 @@ func _build_scene() -> void:
 
 
 func _play_intro() -> void:
-	await get_tree().create_timer(0.3).timeout
-	await _say_verbum("Antes das espadas... vieram as palavras.")
-	await _say_verbum("Antes das guerras... existia o entendimento.")
-	await _say_verbum("Eu sou Verbum...")
+	await get_tree().create_timer(0.5).timeout
+	await _say_unknown("Antes das espadas... vieram as palavras.")
+	await _say_unknown("Antes das guerras... existia o entendimento.")
+	await _say_unknown("Eu sou Verbum...")
 	await _show_gem_scene()
 	await _say_verbum("Mas a voz do mundo foi quebrada.")
 	await _explode_gem()
@@ -95,17 +95,27 @@ func _say_verbum(text: String) -> void:
 	], true)
 
 
+func _say_unknown(text: String) -> void:
+	await _dialog.start_dialog([
+		{
+			"name": "?????",
+			"text": text,
+			"portrait_visible": false,
+		},
+	], true)
+
+
 func _show_gem_scene() -> void:
 	_play_canvas_animation(_gem_dialogo)
 
 	var tween := create_tween().set_parallel(true)
-	tween.tween_property(_gem_dialogo, "modulate:a", 1.0, 0.75)
+	tween.tween_property(_gem_dialogo, "modulate:a", 1.0, 0.8)
 	tween.tween_property(_gem_dialogo, "position:y", _gem_dialogo.position.y - 18.0, 0.9).set_trans(Tween.TRANS_SINE)
 	await tween.finished
 
-	var float_tween := create_tween().set_loops(2)
-	float_tween.tween_property(_gem_dialogo, "position:y", _gem_dialogo.position.y + 18.0, 0.7).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	float_tween.tween_property(_gem_dialogo, "position:y", _gem_dialogo.position.y - 18.0, 0.7).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	var float_tween := create_tween().set_loops(1)
+	float_tween.tween_property(_gem_dialogo, "position:y", _gem_dialogo.position.y + 18.0, 0.75).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	float_tween.tween_property(_gem_dialogo, "position:y", _gem_dialogo.position.y - 18.0, 0.75).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	await float_tween.finished
 
 
@@ -113,36 +123,36 @@ func _explode_gem() -> void:
 	await _prepare_dialog_gem_break()
 
 	var gem_tween := create_tween().set_parallel(true)
-	gem_tween.tween_property(_gem_dialogo, "scale", _gem_dialogo.scale * 1.25, 0.16).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	gem_tween.tween_property(_gem_dialogo, "modulate:a", 0.0, 0.18)
+	gem_tween.tween_property(_gem_dialogo, "scale", _gem_dialogo.scale * 1.25, 0.22).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	gem_tween.tween_property(_gem_dialogo, "modulate:a", 0.0, 0.24)
 	await gem_tween.finished
 
 	if _explosion:
 		_explosion.show()
 		_explosion.modulate.a = 1.0
 		_play_canvas_animation(_explosion)
-		await get_tree().create_timer(minf(_get_animation_length(_explosion, 0.45), 0.45)).timeout
+		await get_tree().create_timer(minf(_get_animation_length(_explosion, 0.8), 0.8)).timeout
 		var explosion_tween := create_tween()
-		explosion_tween.tween_property(_explosion, "modulate:a", 0.0, 0.16)
+		explosion_tween.tween_property(_explosion, "modulate:a", 0.0, 0.25)
 		await explosion_tween.finished
 		_explosion.hide()
 	else:
-		await get_tree().create_timer(0.22).timeout
+		await get_tree().create_timer(0.35).timeout
 
 
 func _prepare_dialog_gem_break() -> void:
 	var original_position := _gem_dialogo.position
 	var original_scale := _gem_dialogo.scale
 	var pulse := create_tween()
-	pulse.tween_property(_gem_dialogo, "scale", original_scale * 1.12, 0.18).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	pulse.tween_property(_gem_dialogo, "scale", original_scale * 0.94, 0.12).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-	pulse.tween_property(_gem_dialogo, "scale", original_scale * 1.18, 0.16).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	pulse.tween_property(_gem_dialogo, "scale", original_scale * 1.12, 0.22).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	pulse.tween_property(_gem_dialogo, "scale", original_scale * 0.94, 0.16).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	pulse.tween_property(_gem_dialogo, "scale", original_scale * 1.18, 0.24).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	await pulse.finished
 
 	var shake := create_tween()
 	for offset in [Vector2(-8.0, 0.0), Vector2(7.0, -3.0), Vector2(-5.0, 4.0), Vector2(4.0, 0.0)]:
-		shake.tween_property(_gem_dialogo, "position", original_position + offset, 0.035)
-	shake.tween_property(_gem_dialogo, "position", original_position, 0.04)
+		shake.tween_property(_gem_dialogo, "position", original_position + offset, 0.05)
+	shake.tween_property(_gem_dialogo, "position", original_position, 0.05)
 	await shake.finished
 
 
@@ -157,33 +167,34 @@ func _show_secondary_gems() -> void:
 		gem.scale = target_scale * 0.28
 		gem.rotation = -0.45 + float(index) * 0.45
 		_play_canvas_animation(gem)
-		appear.tween_property(gem, "modulate:a", 1.0, 0.18).set_delay(index * 0.06)
-		appear.tween_property(gem, "position", midpoint, 0.28).set_delay(index * 0.06).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-		appear.tween_property(gem, "position", target_position, 0.34).set_delay(0.28 + index * 0.06).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-		appear.tween_property(gem, "scale", target_scale * 1.18, 0.28).set_delay(index * 0.06).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-		appear.tween_property(gem, "scale", target_scale, 0.22).set_delay(0.3 + index * 0.06).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-		appear.tween_property(gem, "rotation", 0.0, 0.52).set_delay(index * 0.06).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		appear.tween_property(gem, "modulate:a", 1.0, 0.22).set_delay(index * 0.08)
+		appear.tween_property(gem, "position", midpoint, 0.35).set_delay(index * 0.08).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+		appear.tween_property(gem, "position", target_position, 0.45).set_delay(0.35 + index * 0.08).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		appear.tween_property(gem, "scale", target_scale * 1.18, 0.35).set_delay(index * 0.08).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		appear.tween_property(gem, "scale", target_scale, 0.25).set_delay(0.45 + index * 0.08).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+		appear.tween_property(gem, "rotation", 0.0, 0.65).set_delay(index * 0.08).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	await appear.finished
 
 	await get_tree().create_timer(0.8).timeout
 
 	var leave := create_tween().set_parallel(true)
 	for gem in _secondary_gems:
-		leave.tween_property(gem, "modulate:a", 0.0, 0.28)
-		leave.tween_property(gem, "position:y", gem.position.y + 8.0, 0.28).set_trans(Tween.TRANS_SINE)
+		leave.tween_property(gem, "modulate:a", 0.0, 0.35)
+		leave.tween_property(gem, "position:y", gem.position.y + 8.0, 0.35).set_trans(Tween.TRANS_SINE)
 	await leave.finished
 
 
 func _show_lumen_scene() -> void:
+	_play_actor_animation(_lumen, "idle_right")
 	var tween := create_tween().set_parallel(true)
 	tween.tween_property(_lumen, "modulate:a", 1.0, 0.7)
 	tween.tween_property(_lumen, "scale", Vector2(3.4, 3.4), 0.7).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	tween.tween_property(_lumen, "position:y", _lumen.position.y - 50.0, 1.0).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.tween_property(_lumen, "position:y", _lumen.position.y - 50.0, 0.9).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	await tween.finished
 
-	var pulse := create_tween().set_loops(3)
-	pulse.tween_property(_lumen, "scale", Vector2(3.8, 3.8), 0.28)
-	pulse.tween_property(_lumen, "scale", Vector2(3.4, 3.4), 0.28)
+	var pulse := create_tween().set_loops(1)
+	pulse.tween_property(_lumen, "scale", Vector2(3.8, 3.8), 0.3)
+	pulse.tween_property(_lumen, "scale", Vector2(3.4, 3.4), 0.3)
 	await pulse.finished
 
 
@@ -194,7 +205,7 @@ func _go_to_crypt() -> void:
 	_is_transitioning = true
 	GameData.play_intro_crypt_sequence = true
 	var tween := create_tween()
-	tween.tween_property(_fade, "modulate:a", 1.0, 0.55)
+	tween.tween_property(_fade, "modulate:a", 1.0, 0.6)
 	await tween.finished
 	get_tree().change_scene_to_file(CRYPT_SCENE)
 
@@ -225,6 +236,12 @@ func _play_canvas_animation(node: Node2D) -> void:
 		animated_sprite.play()
 
 
+func _play_actor_animation(actor: Node2D, animation_name: String) -> void:
+	var sprite := actor.get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
+	if sprite and sprite.sprite_frames and sprite.sprite_frames.has_animation(animation_name):
+		sprite.play(animation_name)
+
+
 func _get_animation_length(node: Node2D, fallback: float) -> float:
 	if not node is AnimatedSprite2D:
 		return fallback
@@ -240,11 +257,3 @@ func _get_animation_length(node: Node2D, fallback: float) -> float:
 		return fallback
 
 	return float(frame_count) / speed
-
-
-func _create_lumen_sprite() -> Sprite2D:
-	var sprite := Sprite2D.new()
-	sprite.texture = ANGEL_SHEET
-	sprite.region_enabled = true
-	sprite.region_rect = LUMEN_REGION
-	return sprite

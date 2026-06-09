@@ -3,7 +3,7 @@ extends CanvasLayer
 signal dialog_finished
 
 const DEFAULT_STEP := 0.04
-const AUTO_ADVANCE_DELAY := 1.65
+const AUTO_ADVANCE_DELAY := 1.4
 
 var _dialog_data: Array = []
 var _index := 0
@@ -11,7 +11,8 @@ var _is_typing := false
 var _typing_id := 0
 var _auto_advance := false
 
-@onready var _portrait: TextureRect = $Painel/MarginContainer/HBox/Retrato
+@onready var _lumen_portrait: TextureRect = $"Painel/MarginContainer/HBox/Retrato Lumen"
+@onready var _knight_portrait: TextureRect = $"Painel/MarginContainer/HBox/Retrato Cavaleiro"
 @onready var _name_label: Label = $Painel/MarginContainer/HBox/Vbox/Nome
 @onready var _text_label: RichTextLabel = $Painel/MarginContainer/HBox/Vbox/Texto
 @onready var _advance_icon: Label = $Painel/MarginContainer/HBox/Vbox/Icone_Avancar
@@ -60,16 +61,30 @@ func _show_current_line() -> void:
 
 func _apply_portrait(line: Dictionary) -> void:
 	var portrait_visible := bool(line.get("portrait_visible", true))
+	var speaker := String(line.get("speaker", "")).to_lower()
 	var portrait_path := String(line.get("portrait", line.get("faceset", "")))
 
-	if not portrait_visible or portrait_path.is_empty():
-		_portrait.hide()
+	_lumen_portrait.hide()
+	_knight_portrait.hide()
+
+	if not portrait_visible:
+		return
+
+	if speaker == "lumen":
+		_lumen_portrait.show()
+		return
+
+	if speaker == "cavaleiro" or speaker == "knight" or speaker == "player":
+		_knight_portrait.show()
+		return
+
+	if portrait_path.is_empty():
 		return
 
 	var portrait_texture := load(portrait_path)
 	if portrait_texture:
-		_portrait.texture = portrait_texture
-	_portrait.show()
+		_lumen_portrait.texture = portrait_texture
+	_lumen_portrait.show()
 
 
 func _type_text() -> void:
