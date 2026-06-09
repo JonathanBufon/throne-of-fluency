@@ -92,15 +92,31 @@ func _type_text() -> void:
 	_typing_id += 1
 	var current_typing_id := _typing_id
 
-	while _text_label.visible_ratio < 1.0 and _is_typing and current_typing_id == _typing_id:
+	# Esperar um frame para o RichTextLabel processar o bbcode e calcular
+	# total_character_count. Sem isso, visible_ratio pode retornar 1.0 logo
+	# apos setar o texto e o loop sai sem animar nada.
+	await get_tree().process_frame
+	if current_typing_id != _typing_id or not _is_typing:
+		return
+
+	var total := _text_label.get_total_character_count()
+	if total <= 0:
+		_finish_typing()
+		return
+
+	while _text_label.visible_characters < total and _is_typing and current_typing_id == _typing_id:
 		await get_tree().create_timer(DEFAULT_STEP).timeout
+		if current_typing_id != _typing_id or not _is_typing:
+			return
 		_text_label.visible_characters += 1
 
-	if current_typing_id == _typing_id:
+	if current_typing_id == _typing_id and _is_typing:
 		_finish_typing()
 
 
 func _finish_typing() -> void:
+	if not _is_typing:
+		return
 	_is_typing = false
 	_typing_id += 1
 	_text_label.visible_characters = -1
