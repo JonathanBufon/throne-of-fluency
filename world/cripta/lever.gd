@@ -1,5 +1,6 @@
 extends Node2D
 
+const DIALOG_SCENE := preload("res://ui/dialog/dialogo_npc.tscn")
 const LOWERED_SPIKE_FRAME := 4
 const RAISED_SPIKE_FRAME := 0
 const TUTORIAL_SPIKES := [
@@ -32,6 +33,9 @@ const TUTORIAL_LEVER_NAME := "lever_1"
 
 static var sequence_progress := 0
 static var sequence_completed := false
+static var sequence_hint_shown := false
+static var sequence_complete_hint_shown := false
+static var lumen_dialog_playing := false
 
 var player_near := false
 var pulled := false
@@ -56,7 +60,7 @@ func _process(_delta: float) -> void:
 
 
 func try_pull() -> void:
-	if pulled or waiting_input:
+	if pulled or waiting_input or lumen_dialog_playing:
 		return
 
 	waiting_input = true
@@ -65,6 +69,8 @@ func try_pull() -> void:
 
 	if correct and not _is_sequence_lever():
 		_set_pulled(true)
+		if name == TUTORIAL_LEVER_NAME:
+			_deactivate_pull_hint_area()
 		var player := get_tree().get_first_node_in_group("player")
 		if player:
 			_set_player_interaction_icon(player, false)
@@ -183,6 +189,10 @@ func _is_sequence_lever() -> bool:
 func _open_sequence_puzzle() -> void:
 	_set_spikes_frame(SEQUENCE_SPIKES, LOWERED_SPIKE_FRAME)
 	_set_walls_open(true)
+	_deactivate_sequence_hint_area()
+	if not sequence_complete_hint_shown:
+		sequence_complete_hint_shown = true
+		call_deferred("_show_sequence_complete_lumen_dialog")
 
 
 func _reset_sequence_puzzle() -> void:
@@ -219,11 +229,41 @@ func reset_pulled_state() -> void:
 	_set_pulled(false)
 
 
+func _deactivate_pull_hint_area() -> void:
+	var scene := get_tree().current_scene
+	if scene == null:
+		return
+
+	var pull_hint_area := scene.get_node_or_null("LumenDialogArea")
+	if pull_hint_area and pull_hint_area.has_method("deactivate"):
+		pull_hint_area.deactivate()
+
+
+func _deactivate_sequence_hint_area() -> void:
+	var scene := get_tree().current_scene
+	if scene == null:
+		return
+
+	var sequence_hint_area := scene.get_node_or_null("LumenDialogArea3")
+	if sequence_hint_area == null:
+		sequence_hint_area = scene.find_child("LumenDialogArea3", true, false)
+
+	if sequence_hint_area and sequence_hint_area.has_method("deactivate"):
+		sequence_hint_area.deactivate()
+
+
 func _on_area_lever_body_entered(body: Node) -> void:
 	if body.is_in_group("player"):
 		player_near = true
 		if not pulled:
 			_set_player_interaction_icon(body, true)
+		if _should_show_sequence_hint():
+			sequence_hint_shown = true
+			_show_lumen_dialog([
+				"Espere... essas alavancas parecem estar conectadas.",
+				"Acho que existe uma sequencia correta para abrir o caminho.",
+				"Observe com cuidado. Se errarmos, talvez seja preciso recomecar."
+			], body as Node2D)
 
 
 func _on_area_lever_body_exited(body: Node) -> void:
@@ -232,7 +272,57 @@ func _on_area_lever_body_exited(body: Node) -> void:
 		_set_player_interaction_icon(body, false)
 
 
-func _set_player_interaction_icon(player: Node, visible: bool) -> void:
+func _set_player_interaction_icon(player: Node, icon_visible: bool) -> void:
 	var icon := player.get_node_or_null("Icone_interacao/Sprite2D")
 	if icon:
-		icon.visible = visible
+		icon.visible = icon_visible
+
+
+func _should_show_sequence_hint() -> bool:
+	return _is_sequence_lever() and not sequence_completed and not sequence_hint_shown and not lumen_dialog_playing
+
+
+func _show_sequence_complete_lumen_dialog() -> void:
+	await get_tree().create_timer(0.25).timeout
+	var player := get_tree().get_first_node_in_group("player") as Node2D
+	await _show_lumen_dialog([
+		"Conseguimos!",
+		"Open...",
+		"Devemos memorizar esta palavra,",
+		"De qualquer forma, o caminho esta livre agora."
+	], player)
+
+
+func _show_lumen_dialog(lines: Array[String], player: Node2D = null) -> void:
+	if lumen_dialog_playing:
+		return
+
+	lumen_dialog_playing = true
+	var previous_player_near := player_near
+	player_near = false
+	if player:
+		_set_player_interaction_icon(player, false)
+		player.set_physics_process(false)
+
+	var dialog := DIALOG_SCENE.instantiate()
+	get_tree().current_scene.add_child(dialog)
+	await dialog.start_dialog(_build_lumen_dialog(lines))
+	dialog.queue_free()
+
+	if player and is_instance_valid(player):
+		player.set_physics_process(true)
+		if previous_player_near and not pulled:
+			_set_player_interaction_icon(player, true)
+	player_near = previous_player_near
+	lumen_dialog_playing = false
+
+
+func _build_lumen_dialog(lines: Array[String]) -> Array[Dictionary]:
+	var dialog_data: Array[Dictionary] = []
+	for line in lines:
+		dialog_data.append({
+			"name": "Lumen",
+			"text": line,
+			"speaker": "lumen"
+		})
+	return dialog_data
