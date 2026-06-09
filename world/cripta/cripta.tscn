@@ -2,22 +2,22 @@
 
 [ext_resource type="PackedScene" uid="uid://ji64y4xps3oq" path="res://ui/dialog/dialogo_acao_input.tscn" id="1_a8fn1"]
 [ext_resource type="Script" uid="uid://cxqd75s3t8f4f" path="res://world/cripta/scenario.gd" id="2_abv6k"]
-[ext_resource type="Texture2D" uid="uid://dwd8fwewajf3o" path="res://assets/sprites/world/dungeon-scenario/Objects/Dungeon_Objects.png" id="3_b8phd"]
-[ext_resource type="Texture2D" uid="uid://ce88ale5w8by6" path="res://assets/sprites/world/dungeon-scenario/Dungeon_1/Dungeon_1_Stairs.png" id="4_vw5y5"]
-[ext_resource type="Texture2D" uid="uid://flbvhutynmm1" path="res://assets/sprites/world/dungeon-scenario/Dungeon_2/Dungeon_2.png" id="5_pbee5"]
-[ext_resource type="Texture2D" uid="uid://dfc8n2j1661dp" path="res://assets/sprites/world/dungeon-scenario/Dungeon_2/Dungeon_2_Arch_small.png" id="6_7nh4p"]
-[ext_resource type="Texture2D" uid="uid://cltq1ed5asfa0" path="res://assets/sprites/world/dungeon-scenario/Dungeon_1/Dungeon_1_Pressure_Plate.png" id="7_n5e2d"]
+[ext_resource type="Texture2D" uid="uid://dnpmo3xh0tchi" path="res://assets/sprites/world/dungeon-scenario/Objects/Dungeon_Objects.png" id="3_b8phd"]
+[ext_resource type="Texture2D" uid="uid://bq1o4yh86gu5" path="res://assets/sprites/world/dungeon-scenario/Dungeon_1/Dungeon_1_Stairs.png" id="4_vw5y5"]
+[ext_resource type="Texture2D" uid="uid://bygjcklps35gh" path="res://assets/sprites/world/dungeon-scenario/Dungeon_2/Dungeon_2.png" id="5_pbee5"]
+[ext_resource type="Texture2D" uid="uid://bp5y827jlqmc7" path="res://assets/sprites/world/dungeon-scenario/Dungeon_2/Dungeon_2_Arch_small.png" id="6_7nh4p"]
+[ext_resource type="Texture2D" uid="uid://cy2qioaf17tmv" path="res://assets/sprites/world/dungeon-scenario/Dungeon_1/Dungeon_1_Pressure_Plate.png" id="7_n5e2d"]
 [ext_resource type="PackedScene" uid="uid://bbupi2yx1vb1h" path="res://world/troca_fase.tscn" id="8_7tmc5"]
 [ext_resource type="Script" uid="uid://drjdfok8nfni1" path="res://world/cripta/porta.gd" id="9_n1h8o"]
 [ext_resource type="Texture2D" uid="uid://c78rm8c4urg48" path="res://assets/ui/UI_Frames.png" id="9_u0d6a"]
 [ext_resource type="Texture2D" uid="uid://cpwqj5rowbes6" path="res://assets/ui/UI_Button_Icons.png" id="10_4hesd"]
-[ext_resource type="Texture2D" uid="uid://cyun1yi6ar1iq" path="res://assets/sprites/world/dungeon-scenario/Dungeon_1/Dungeon_1_Door_anim.png" id="10_cclv1"]
+[ext_resource type="Texture2D" uid="uid://c7jiig6qxxib8" path="res://assets/sprites/world/dungeon-scenario/Dungeon_1/Dungeon_1_Door_anim.png" id="10_cclv1"]
 [ext_resource type="PackedScene" uid="uid://cvmyqqm2xgget" path="res://actors/player/player.tscn" id="11_6fsqc"]
 [ext_resource type="PackedScene" uid="uid://dwanm5msvdfpg" path="res://actors/lumen/lumen.tscn" id="12_ti6rb"]
 [ext_resource type="Script" uid="uid://cwj4dd4kkp4pv" path="res://intro/intro_crypt_sequence.gd" id="13_intro"]
-[ext_resource type="Texture2D" uid="uid://b60qyxmhstlq7" path="res://assets/sprites/world/dungeon-scenario/Dungeon_2/Floor_Spikes_2.png" id="14_4hesd"]
-[ext_resource type="Texture2D" uid="uid://cfbkb2t7j4032" path="res://assets/sprites/world/dungeon-scenario/Dungeon_2/Dungeon_2_Sewer_Anim.png" id="15_pdsw0"]
-[ext_resource type="Texture2D" uid="uid://clqj7ex4eh8bj" path="res://assets/sprites/world/dungeon-scenario/Dungeon_2/Dungeon_2_Sewer_Tileset.png" id="16_wua4d"]
+[ext_resource type="Texture2D" uid="uid://chhddlb7if0pg" path="res://assets/sprites/world/dungeon-scenario/Dungeon_2/Floor_Spikes_2.png" id="14_4hesd"]
+[ext_resource type="Texture2D" uid="uid://dg0tqr0yd26uy" path="res://assets/sprites/world/dungeon-scenario/Dungeon_2/Dungeon_2_Sewer_Anim.png" id="15_pdsw0"]
+[ext_resource type="Texture2D" uid="uid://kfbdapij61by" path="res://assets/sprites/world/dungeon-scenario/Dungeon_2/Dungeon_2_Sewer_Tileset.png" id="16_wua4d"]
 [ext_resource type="PackedScene" uid="uid://wcd4skcnehoi" path="res://world/cripta/lever.tscn" id="17_s7o1u"]
 [ext_resource type="PackedScene" uid="uid://d01qofvvmn55l" path="res://world/cripta/parede.tscn" id="18_cokbk"]
 [ext_resource type="PackedScene" path="res://world/lumen_dialog_area.tscn" id="21_x5os5"]
@@ -2875,7 +2875,7 @@ shape = SubResource("RectangleShape2D_spike_block")
 
 [node name="player" parent="." unique_id=1143594569 instance=ExtResource("11_6fsqc")]
 z_index = 2
-position = Vector2(1817, 499)
+position = Vector2(746, 272)
 
 [node name="AnimatedSprite2D" parent="player" index="0" unique_id=96383351]
 position = Vector2(2, 3.5)
