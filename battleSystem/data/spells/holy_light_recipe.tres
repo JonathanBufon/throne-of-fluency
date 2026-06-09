@@ -1,12 +1,13 @@
-[gd_resource type="Resource" script_class="SpellRecipeResource" load_steps=4 format=3]
+[gd_resource type="Resource" script_class="SpellRecipeResource" format=3 uid="uid://bwihw0c70h0o1"]
 
-[ext_resource type="Script" path="res://battleSystem/resources/spell_recipe_resource.gd" id="1_recipe"]
-[ext_resource type="Resource" path="res://battleSystem/data/words/holy.tres" id="2_holy"]
-[ext_resource type="Resource" path="res://battleSystem/data/words/light.tres" id="3_light"]
-[ext_resource type="Resource" path="res://battleSystem/data/skills/HolyLight.tres" id="4_skill"]
+[ext_resource type="Script" uid="uid://dhpms062ctsms" path="res://battleSystem/resources/spell_recipe_resource.gd" id="1_recipe"]
+[ext_resource type="Resource" uid="uid://b636m3iod5fq6" path="res://battleSystem/data/words/holy.tres" id="2_holy"]
+[ext_resource type="Script" uid="uid://c0eqemspa5eih" path="res://battleSystem/resources/word_resource.gd" id="3_f05mq"]
+[ext_resource type="Resource" uid="uid://hw4yhsqkru3j" path="res://battleSystem/data/words/light.tres" id="3_light"]
+[ext_resource type="Resource" uid="uid://htcpv1eqki85" path="res://battleSystem/data/skills/HolyLight.tres" id="4_skill"]
 
 [resource]
 script = ExtResource("1_recipe")
-words = Array[Resource]([ExtResource("2_holy"), ExtResource("3_light")])
+words = Array[ExtResource("3_f05mq")]([ExtResource("2_holy"), ExtResource("3_light")])
 result_skill = ExtResource("4_skill")
 description = "Invoca luz sagrada que cura aliados feridos."
