@@ -6,6 +6,7 @@ extends CanvasLayer
 @onready var quit_button: TextureButton = $bg_overlay/menu_holder/quit_button
 
 var _is_open := false
+var _previous_focus: Control = null
 
 
 func _ready() -> void:
@@ -44,10 +45,11 @@ func _is_other_overlay_open() -> bool:
 
 func _open() -> void:
 	_is_open = true
+	_previous_focus = get_viewport().gui_get_focus_owner()
 	visible = true
 	_apply_visual_state(true)
 	get_tree().paused = true
-	resume_button.grab_focus()
+	resume_button.call_deferred("grab_focus")
 
 
 func _close() -> void:
@@ -57,13 +59,26 @@ func _close() -> void:
 	_apply_visual_state(false)
 	visible = false
 	get_tree().paused = false
+	_restore_previous_focus()
+
+
+func _restore_previous_focus() -> void:
+	var target := _previous_focus
+	_previous_focus = null
+	if target == null or not is_instance_valid(target):
+		return
+	if not target.is_visible_in_tree():
+		return
+	target.call_deferred("grab_focus")
 
 
 func _apply_visual_state(open: bool) -> void:
 	if menu_holder:
 		menu_holder.modulate.a = 1.0 if open else 0.0
-	if bg_overlay and bg_overlay.material is ShaderMaterial:
-		(bg_overlay.material as ShaderMaterial).set_shader_parameter("lod", 1.0 if open else 0.0)
+	if bg_overlay:
+		bg_overlay.mouse_filter = Control.MOUSE_FILTER_STOP if open else Control.MOUSE_FILTER_IGNORE
+		if bg_overlay.material is ShaderMaterial:
+			(bg_overlay.material as ShaderMaterial).set_shader_parameter("lod", 1.0 if open else 0.0)
 
 
 func is_open() -> bool:
