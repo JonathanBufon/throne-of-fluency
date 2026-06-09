@@ -4,14 +4,8 @@
 
 [resource]
 script = ExtResource("1_68qga")
-metadata/_custom_type_script = "uid://c421fsjpurk6x"
 name = "Ataque"
-targetType = 0
-skillType = 0
 power = 15
-manaCost = 0
-targetScope = 0
-hitCount = 1
 element = 1
 animationKey = "attack"
-requiresAliveTarget = true
+metadata/_custom_type_script = "uid://c421fsjpurk6x"

@@ -363,7 +363,7 @@ func _append_model_battle_animation_data(
 	var frame_index := model.battleFrameIndex
 	var frame_progress := 0.0
 	var flip_h := model.battleFlipH
-	var scale := model.battleScale
+	var battle_scale := model.battleScale
 
 	if sprite_frames == null and fallback_sprite != null:
 		sprite_frames = fallback_sprite.sprite_frames
@@ -371,8 +371,8 @@ func _append_model_battle_animation_data(
 		frame_index = fallback_sprite.frame
 		frame_progress = fallback_sprite.frame_progress
 		flip_h = fallback_sprite.flip_h
-	if scale == Vector2.ZERO:
-		scale = fallback_scale
+	if battle_scale == Vector2.ZERO:
+		battle_scale = fallback_scale
 	if sprite_frames == null:
 		return
 	if animation_name.is_empty() or not sprite_frames.has_animation(animation_name):
@@ -389,7 +389,7 @@ func _append_model_battle_animation_data(
 	frame_indices.append(clampi(frame_index, 0, frame_count - 1))
 	frame_progresses.append(frame_progress)
 	flip_hs.append(flip_h)
-	scales.append(scale)
+	scales.append(battle_scale)
 
 func _set_player_battle_visual(body: Node2D) -> void:
 	var player_sprite := body.get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
