@@ -22,6 +22,7 @@ BattleTransition="*res://world/battle_transition.gd"
 WorldHud="*res://ui/hud/world_hud.tscn"
 WorldInventory="*res://ui/hud/world_inventory.tscn"
 WorldGrimoire="*res://ui/grimoire/world_grimoire.tscn"
+PauseMenu="*res://world/pause_menu.tscn"
 
 [display]
 
