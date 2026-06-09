@@ -1,6 +1,7 @@
 extends StaticBody2D
 
 const DAMAGE_NUMBER := preload("res://battleSystem/ui/damage_number.tscn")
+const MAGIC_PROJECTILE := preload("res://battleSystem/vfx/magic_projectile.tscn")
 
 @onready var turn_based_agent: TurnBasedAgent = $TurnBasedAgent
 
@@ -16,7 +17,7 @@ func _on_target_selected(target: TurnBasedAgent, command: Resource) -> void:
 		turn_based_agent.command_done()
 		return
 
-	await _animation_example(target)
+	await _play_command_animation(target, command)
 
 	var previous_health := target.character_resource.currentHealth
 	var previous_mana := target.character_resource.currentMana
@@ -54,6 +55,41 @@ func _spawn_damage_number(target: TurnBasedAgent, amount: int, suffix := "") -> 
 	if not suffix.is_empty():
 		text = "%s %s" % [text, suffix]
 	damage_number.show_value(text, amount > 0)
+
+func _play_command_animation(target: TurnBasedAgent, command: Resource) -> void:
+	if command is SkillResource and _uses_projectile_animation(command):
+		await _play_magic_projectile(target, command)
+		return
+	await _animation_example(target)
+
+func _uses_projectile_animation(skill: SkillResource) -> bool:
+	return skill.element != SkillResource.Element.NONE and skill.element != SkillResource.Element.PHYSICAL
+
+func _play_magic_projectile(target: TurnBasedAgent, skill: SkillResource) -> void:
+	var start_position := turn_based_agent.get_global_position() + Vector2(0, -48)
+	var target_position := target.get_global_position() + Vector2(0, -48)
+	turn_based_agent.play_attack_towards(target_position)
+
+	var projectile := MAGIC_PROJECTILE.instantiate() as MagicProjectile
+	get_tree().current_scene.add_child(projectile)
+	projectile.setup(start_position, target_position, _get_projectile_color(skill))
+	await projectile.play()
+	turn_based_agent.play_idle_towards(target_position)
+
+func _get_projectile_color(skill: SkillResource) -> Color:
+	match skill.element:
+		SkillResource.Element.FIRE:
+			return Color(1.0, 0.12, 0.04, 1.0)
+		SkillResource.Element.ICE:
+			return Color(0.25, 0.75, 1.0, 1.0)
+		SkillResource.Element.LIGHTNING:
+			return Color(1.0, 0.9, 0.18, 1.0)
+		SkillResource.Element.LIGHT:
+			return Color(0.55, 1.0, 0.45, 1.0)
+		SkillResource.Element.SHADOW:
+			return Color(0.55, 0.22, 0.95, 1.0)
+		_:
+			return Color(1.0, 0.2, 0.2, 1.0)
 
 func _animation_example(target: TurnBasedAgent) -> void:
 	var start_position := global_position

@@ -6,6 +6,7 @@ signal run_requested()
 
 @onready var attack_button: Button = %AttackButton
 @onready var skills_button: Button = %SkillsButton
+@onready var magic_button: Button = %MagicButton
 @onready var combo_button: Button = %ComboButton
 @onready var item_button: Button = %ItemButton
 @onready var run_button: Button = %RunButton
@@ -22,6 +23,7 @@ const DEFAULT_COMBOS := [
 var _current_basic_attack: Resource = preload("res://battleSystem/data/skills/Attack.tres")
 var _current_character: TurnBasedAgent
 var _current_skills: Array[Resource] = []
+var _current_spells: Array[Resource] = []
 var _current_combos: Array[ComboResource] = []
 var _current_items: Array[ItemResource] = []
 
@@ -31,6 +33,7 @@ func _ready() -> void:
 
 	attack_button.pressed.connect(_on_attack_button_pressed)
 	skills_button.pressed.connect(_on_skill_button_pressed)
+	magic_button.pressed.connect(_on_magic_button_pressed)
 	combo_button.pressed.connect(_on_combo_button_pressed)
 	item_button.pressed.connect(_on_item_button_pressed)
 	run_button.pressed.connect(_on_run_button_pressed)
@@ -42,6 +45,11 @@ func _process(_delta: float) -> void:
 	if visible and main_commands.visible and _current_character != null:
 		_set_combo_options(_current_character)
 		_set_item_options()
+
+func _unhandled_input(event: InputEvent) -> void:
+	if visible and skill_container.visible and event.is_action_pressed("ui_cancel"):
+		get_viewport().set_input_as_handled()
+		_show_main_commands()
 
 func _set_late_signals() -> void:
 	await get_tree().current_scene.ready
@@ -79,33 +87,28 @@ func _on_command_pressed(command: Resource) -> void:
 		return
 	hide()
 	command_selected.emit(command)
-	main_commands.show()
-	skill_container.hide()
+	_show_main_commands()
 	attack_button.grab_focus()
 
 func _on_skill_button_pressed() -> void:
-	main_commands.hide()
+	_refresh_current_options()
 	_populate_command_list(_current_skills)
-	skill_container.show()
-	var children := skill_container.get_children()
-	if not children.is_empty():
-		children[0].grab_focus()
+	_show_command_list()
+
+func _on_magic_button_pressed() -> void:
+	_refresh_current_options()
+	_populate_command_list(_current_spells)
+	_show_command_list()
 
 func _on_combo_button_pressed() -> void:
-	main_commands.hide()
+	_refresh_current_options()
 	_populate_command_list(_current_combos)
-	skill_container.show()
-	var children := skill_container.get_children()
-	if not children.is_empty():
-		children[0].grab_focus()
+	_show_command_list()
 
 func _on_item_button_pressed() -> void:
-	main_commands.hide()
+	_refresh_current_options()
 	_populate_command_list(_current_items)
-	skill_container.show()
-	var children := skill_container.get_children()
-	if not children.is_empty():
-		children[0].grab_focus()
+	_show_command_list()
 
 func _on_run_button_pressed() -> void:
 	hide()
@@ -128,8 +131,16 @@ func _set_command_options(character: TurnBasedAgent) -> void:
 		skills_button.show()
 		skills_button.disabled = false
 
+	_set_spell_options()
 	_set_combo_options(character)
 	_set_item_options()
+
+func _set_spell_options() -> void:
+	_current_spells.clear()
+	for recipe in GameData.prepared_spells:
+		if recipe != null and recipe.result_skill != null:
+			_current_spells.append(recipe.result_skill)
+	magic_button.disabled = _current_spells.is_empty()
 
 func _set_combo_options(character: TurnBasedAgent) -> void:
 	_current_combos = ComboDiscovery.get_available_combos(
@@ -155,8 +166,31 @@ func _set_item_options() -> void:
 	item_button.visible = not _current_items.is_empty()
 	item_button.disabled = not has_usable_item
 
+func _refresh_current_options() -> void:
+	if _current_character != null:
+		_set_command_options(_current_character)
+
+func _show_command_list() -> void:
+	main_commands.hide()
+	skill_container.show()
+	var children := skill_container.get_children()
+	for child in children:
+		if child is Button and not (child as Button).disabled:
+			(child as Button).grab_focus()
+			return
+
+func _show_main_commands() -> void:
+	_refresh_current_options()
+	skill_container.hide()
+	main_commands.show()
+	for child in main_commands.get_children():
+		if child is Button and (child as Button).visible and not (child as Button).disabled:
+			(child as Button).grab_focus()
+			return
+
 func _populate_command_list(commands: Array) -> void:
 	for child in skill_container.get_children():
+		skill_container.remove_child(child)
 		child.queue_free()
 
 	for command in commands:
@@ -167,6 +201,11 @@ func _populate_command_list(commands: Array) -> void:
 		if not btn.disabled:
 			btn.pressed.connect(_on_command_pressed.bind(command))
 		skill_container.add_child(btn)
+
+	var back_button := COMMAND_BUTTON.instantiate()
+	back_button.text = "Voltar"
+	back_button.pressed.connect(_show_main_commands)
+	skill_container.add_child(back_button)
 
 func _get_basic_attack(character: TurnBasedAgent) -> Resource:
 	if character.basicAttack:
@@ -208,6 +247,8 @@ func _can_character_use_command(character: TurnBasedAgent, command: Resource) ->
 func _can_character_use_skill(character: TurnBasedAgent, skill: Resource) -> bool:
 	if not (skill is SkillResource):
 		return true
+	if character == null or character.character_resource == null:
+		return false
 	return skill.can_pay_cost(character.character_resource)
 
 func _get_skill_tooltip(character: TurnBasedAgent, skill: Resource) -> String:

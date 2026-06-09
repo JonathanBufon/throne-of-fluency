@@ -11,6 +11,7 @@ func _ready():
 	anim.stop()
 	anim.frame = 0
 	if GameData.cripta_porta_aberta:
+		call_deferred("_deactivate_open_hint_area")
 		_aplicar_porta_aberta(false)
 	# Garante que o ícone começa escondido ao carregar a cena
 	call_deferred("_esconder_icone_inicial")
@@ -43,7 +44,26 @@ func mostrar_input():
 
 func abrir_porta():
 	GameData.cripta_porta_aberta = true
+	_deactivate_open_hint_area()
 	_aplicar_porta_aberta(true)
+
+func _deactivate_open_hint_area():
+	var open_hint_area = _find_open_hint_area()
+	if open_hint_area and open_hint_area.has_method("deactivate"):
+		open_hint_area.deactivate()
+
+func _find_open_hint_area() -> Node:
+	var scene = get_tree().current_scene
+	if scene:
+		var open_hint_area = scene.get_node_or_null("LumenDialogArea3")
+		if open_hint_area:
+			return open_hint_area
+
+		open_hint_area = scene.find_child("LumenDialogArea3", true, false)
+		if open_hint_area:
+			return open_hint_area
+
+	return get_tree().root.find_child("LumenDialogArea3", true, false)
 
 func _aplicar_porta_aberta(tocar_animacao: bool = true):
 	aberta = true

@@ -1,14 +1,14 @@
 [gd_scene format=4 uid="uid://dy58lr87r72s7"]
 
-[ext_resource type="Texture2D" uid="uid://b0f50ptfaguj5" path="res://assets/sprites/world/shroomLands-scenario/Tiles/ShroomLands_Cliff_Tiles.png" id="1_jsao4"]
-[ext_resource type="Texture2D" uid="uid://v05715ri8c8s" path="res://assets/sprites/world/shroomLands-scenario/Tiles/ShroomLands_Grass_Green_Tiles.png" id="2_06pta"]
-[ext_resource type="Texture2D" uid="uid://dhbvs2ma3vsni" path="res://assets/sprites/world/shroomLands-scenario/Tiles/ShroomLands_Tall_Grass_Blue_Tiles.png" id="3_327i8"]
-[ext_resource type="Texture2D" uid="uid://b2rwp7058gr3y" path="res://assets/sprites/world/shroomLands-scenario/Props/Mushrooms_Blue.png" id="3_xpkrc"]
-[ext_resource type="Texture2D" uid="uid://c46vi3vndc6dl" path="res://assets/sprites/world/shroomLands-scenario/Tiles/ShroomLands_Tall_Grass_Purple_Tiles.png" id="4_av3f8"]
-[ext_resource type="Texture2D" uid="uid://2ww3u76gexr5" path="res://assets/sprites/world/shroomLands-scenario/Props/Mushrooms_Purple.png" id="5_jsao4"]
+[ext_resource type="Texture2D" uid="uid://ce8wiy650maim" path="res://assets/sprites/world/shroomLands-scenario/Tiles/ShroomLands_Cliff_Tiles.png" id="1_jsao4"]
+[ext_resource type="Texture2D" uid="uid://bwxq3umu07tue" path="res://assets/sprites/world/shroomLands-scenario/Tiles/ShroomLands_Grass_Green_Tiles.png" id="2_06pta"]
+[ext_resource type="Texture2D" uid="uid://jx2mmtrxiqe5" path="res://assets/sprites/world/shroomLands-scenario/Tiles/ShroomLands_Tall_Grass_Blue_Tiles.png" id="3_327i8"]
+[ext_resource type="Texture2D" uid="uid://c2u0h4sjrkr3t" path="res://assets/sprites/world/shroomLands-scenario/Props/Mushrooms_Blue.png" id="3_xpkrc"]
+[ext_resource type="Texture2D" uid="uid://21vlagxmrnyp" path="res://assets/sprites/world/shroomLands-scenario/Tiles/ShroomLands_Tall_Grass_Purple_Tiles.png" id="4_av3f8"]
+[ext_resource type="Texture2D" uid="uid://bfi6mf6gecypt" path="res://assets/sprites/world/shroomLands-scenario/Props/Mushrooms_Purple.png" id="5_jsao4"]
 [ext_resource type="PackedScene" uid="uid://cvmyqqm2xgget" path="res://actors/player/player.tscn" id="7_gunlw"]
-[ext_resource type="Texture2D" uid="uid://flbvhutynmm1" path="res://assets/sprites/world/dungeon-scenario/Dungeon_2/Dungeon_2.png" id="8_06pta"]
-[ext_resource type="Texture2D" uid="uid://ce88ale5w8by6" path="res://assets/sprites/world/dungeon-scenario/Dungeon_1/Dungeon_1_Stairs.png" id="8_q7j66"]
+[ext_resource type="Texture2D" uid="uid://bygjcklps35gh" path="res://assets/sprites/world/dungeon-scenario/Dungeon_2/Dungeon_2.png" id="8_06pta"]
+[ext_resource type="Texture2D" uid="uid://bq1o4yh86gu5" path="res://assets/sprites/world/dungeon-scenario/Dungeon_1/Dungeon_1_Stairs.png" id="8_q7j66"]
 [ext_resource type="Texture2D" uid="uid://hajag3xp2wog" path="res://assets/images/scenario/dungeon-scenario/Dungeon_1/Dungeon_1_Door_Open_Behind.png" id="9_18pqi"]
 [ext_resource type="PackedScene" uid="uid://bbupi2yx1vb1h" path="res://world/troca_fase.tscn" id="10_jkgqs"]
 [ext_resource type="Script" uid="uid://cxqd75s3t8f4f" path="res://world/cripta/scenario.gd" id="11_scnry"]
@@ -1137,6 +1137,12 @@ z_index = 3
 position = Vector2(1629, 1665)
 battle_model = ExtResource("17_enemy_model")
 encounter_id = "shroom_lands_entry_enemy_001"
+
+[node name="Enemy2" parent="." unique_id=463025726 instance=ExtResource("12_jkgqs")]
+z_index = 3
+position = Vector2(907, 896)
+battle_model = ExtResource("17_enemy_model")
+encounter_id = "shroom_lands_fire_test_enemy_002"
 
 [node name="spawn_2" type="Marker2D" parent="." unique_id=313921313]
 z_index = 3

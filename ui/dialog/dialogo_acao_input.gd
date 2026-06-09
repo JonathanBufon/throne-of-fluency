@@ -3,12 +3,15 @@ class_name Dialogo_Acao_Input extends Control
 ## Emitido quando o jogador confirma a entrada.
 ## [param text] é o texto digitado. [param correct] indica se estava certo.
 signal submitted(text: String, correct: bool)
+signal answered(text: String, correct: bool)
 
 # ──────────────────────────────────────────────
 #  Exportáveis — configure no Inspetor
 # ──────────────────────────────────────────────
 @export var hint_text: String = "What is the action to open the door?"
 @export var correct_answer: String = "open"
+@export var success_feedback: String = "✦  The Door Creaks and opens ✦"
+@export var failure_feedback: String = "✗  Wrong Action"
 @export var max_chars: int = 32
 @export var cursor_blink_speed: float = 0.55   # segundos por ciclo
 
@@ -87,6 +90,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 func ask() -> bool:
 	_typed = ""
 	_accepting = false
+	hint_label.text = hint_text
 	feedback_label.text = ""
 	feedback_label.modulate.a = 0.0
 	_refresh_display()
@@ -115,9 +119,11 @@ func _confirm() -> void:
 	var correct: bool = _typed.strip_edges().to_lower() == correct_answer.strip_edges().to_lower()
 
 	if correct:
-		_show_feedback("✦  The Door Creaks and opens ✦", true)
+		_show_feedback(success_feedback, true)
 	else:
-		_show_feedback("✗  Wrong Action", false)
+		_show_feedback(failure_feedback, false)
+
+	answered.emit(_typed, correct)
 
 	# Aguarda o feedback ser lido antes de fechar
 	await get_tree().create_timer(1.8).timeout
