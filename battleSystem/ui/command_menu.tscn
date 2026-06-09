@@ -42,6 +42,12 @@ layout_mode = 2
 disabled = true
 text = "Techs"
 
+[node name="MagicButton" parent="MarginContainer/MainCommands" instance=ExtResource("1_p0m5m")]
+unique_name_in_owner = true
+layout_mode = 2
+disabled = true
+text = "Magia"
+
 [node name="ComboButton" parent="MarginContainer/MainCommands" instance=ExtResource("1_p0m5m")]
 unique_name_in_owner = true
 layout_mode = 2
