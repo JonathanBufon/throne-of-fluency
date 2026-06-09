@@ -13,94 +13,6 @@ shader_parameter/lod = 0.0
 [sub_resource type="Theme" id="Theme_3cmrx"]
 default_font_size = 18
 
-[sub_resource type="Animation" id="Animation_3cmrx"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("bg_overlay:material:shader_parameter/lod")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("bg_overlay/menu_holder:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_cyu3q"]
-resource_name = "pause_game"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("bg_overlay:material:shader_parameter/lod")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [0.0, 1.0]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("bg_overlay/menu_holder:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-
-[sub_resource type="Animation" id="Animation_ensee"]
-resource_name = "resume_game"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("bg_overlay:material:shader_parameter/lod")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [1.0, 0.0]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("bg_overlay/menu_holder:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_7c8rc"]
-_data = {
-&"RESET": SubResource("Animation_3cmrx"),
-&"pause_game": SubResource("Animation_cyu3q"),
-&"resume_game": SubResource("Animation_ensee")
-}
-
 [node name="pause_menu" type="CanvasLayer" unique_id=763001074]
 process_mode = 3
 script = ExtResource("1_burh7")
@@ -114,7 +26,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="menu_holder" type="VBoxContainer" parent="bg_overlay" unique_id=1902202406]
-modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -174,9 +85,6 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "QUIT GAME"
 horizontal_alignment = 1
-
-[node name="animator" type="AnimationPlayer" parent="." unique_id=765525512]
-libraries/ = SubResource("AnimationLibrary_7c8rc")
 
 [connection signal="pressed" from="bg_overlay/menu_holder/resume_button" to="." method="_on_resume_button_pressed"]
 [connection signal="pressed" from="bg_overlay/menu_holder/quit_button" to="." method="_on_quit_button_pressed"]
