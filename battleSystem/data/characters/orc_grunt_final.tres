@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="CharacterResource" format=3]
+
+[ext_resource type="Script" uid="uid://b43yrin0qlny4" path="res://battleSystem/resources/character_resource.gd" id="1_char"]
+[ext_resource type="Resource" uid="uid://dm5g3oqr6d2uh" path="res://battleSystem/data/skills/Attack.tres" id="2_attack"]
+[ext_resource type="Resource" path="res://battleSystem/data/rewards/orc_grunt_final_reward.tres" id="3_reward"]
+
+[resource]
+script = ExtResource("1_char")
+name = "Orc Guardião"
+level = 3
+experience = 0
+maxHealth = 90
+currentHealth = 90
+maxMana = 0
+currentMana = 0
+speed = 45
+overDriveValue = 0
+basicAttack = ExtResource("2_attack")
+battleScale = Vector2(1, 1)
+battleOffset = Vector2(0, 0)
+isBoss = false
+battleReward = ExtResource("3_reward")
