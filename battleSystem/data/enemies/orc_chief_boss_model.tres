@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="EnemyModelResource" format=3]
+
+[ext_resource type="Script" uid="uid://dnpmpnco5rghw" path="res://battleSystem/resources/enemy_model_resource.gd" id="1_model"]
+[ext_resource type="Resource" path="res://battleSystem/data/characters/orc_chief_boss.tres" id="2_char"]
+
+[resource]
+script = ExtResource("1_model")
+baseCharacter = ExtResource("2_char")
+displayName = "Orc Chefe"
+battleAnimation = ""
+battleFrameIndex = 0
+battleFlipH = false
+battleScale = Vector2(6, 6)
