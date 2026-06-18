@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" path="res://actors/enemy/orc_chief.tscn" id="6_chief"]
 [ext_resource type="Resource" path="res://battleSystem/data/enemies/orc_grunt_final_model.tres" id="7_grunt_model"]
 [ext_resource type="Resource" path="res://battleSystem/data/enemies/orc_chief_boss_model.tres" id="8_chief_model"]
+[ext_resource type="PackedScene" path="res://world/lumen_dialog_area.tscn" id="9_lumen_dialog"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_top"]
 size = Vector2(1000, 20)
@@ -117,6 +118,10 @@ spawn_id = "spawn_2"
 
 [node name="CollisionShape2D" parent="Saida" index="0" unique_id=1478001296]
 position = Vector2(0, 82)
+
+[node name="LumenDialogEntrada" parent="." unique_id=2100000040 instance=ExtResource("9_lumen_dialog")]
+position = Vector2(500, 780)
+lines = Array[String](["Este é o lugar...", "Sinto os fragmentos da gema do diálogo aqui.", "Os Guardiões Orc não vão recuar facilmente.", "E o Chefe deles... está no altar.", "Confio em você."])
 
 [node name="spawn_entrada" type="Marker2D" parent="." unique_id=1915690848]
 position = Vector2(500, 780)
