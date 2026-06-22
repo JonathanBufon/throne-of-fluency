@@ -99,12 +99,6 @@ position = Vector2(640, 470)
 battle_model = ExtResource("7_grunt_model")
 encounter_id = "final_phase_grunt_003"
 
-[node name="OrcGuardiao4" parent="." unique_id=2100000013 instance=ExtResource("5_grunt")]
-z_index = 3
-position = Vector2(820, 520)
-battle_model = ExtResource("7_grunt_model")
-encounter_id = "final_phase_grunt_004"
-
 [node name="OrcChefe" parent="." unique_id=2100000020 instance=ExtResource("6_chief")]
 z_index = 3
 position = Vector2(500, 230)
