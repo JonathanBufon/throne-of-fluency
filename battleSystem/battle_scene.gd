@@ -88,6 +88,7 @@ func _spawn_enemies_from_transition() -> void:
 		_apply_animated_visual(enemy, sprite_frames, animations, frame_indices, frame_progresses, flip_hs, scales, i)
 		enemy.position = spawn.position
 		add_child(enemy)
+		agent.refresh_visual_node()
 
 func _apply_player_visuals() -> void:
 	if BattleTransition.player_sprite_frames == null or player_characters.is_empty():
