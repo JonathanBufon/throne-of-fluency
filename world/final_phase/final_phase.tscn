@@ -35,6 +35,13 @@ offset_right = 1000.0
 offset_bottom = 900.0
 color = Color(0.04, 0.03, 0.07, 1)
 
+[node name="Floor2" type="ColorRect" parent="." unique_id=100340690]
+offset_left = -419.0
+offset_top = -239.0
+offset_right = 1545.0
+offset_bottom = 1350.0
+color = Color(0, 0, 0, 1)
+
 [node name="Floor" type="ColorRect" parent="." unique_id=-1294967295]
 offset_left = 40.0
 offset_top = 40.0
@@ -121,7 +128,7 @@ texture = ExtResource("11_arch")
 
 [node name="ExitArch" type="Sprite2D" parent="Decor" unique_id=-1294967283]
 z_index = 1
-position = Vector2(502, 883)
+position = Vector2(502, 885.00006)
 rotation = 3.1415927
 scale = Vector2(4.03125, 3.75)
 texture = ExtResource("11_arch")
