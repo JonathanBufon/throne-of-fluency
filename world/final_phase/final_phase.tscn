@@ -13,7 +13,8 @@
 [ext_resource type="Texture2D" uid="uid://bcyw6qd1m40x1" path="res://assets/sprites/world/dungeon-scenario/Dungeon_2/Dungeon_2_Arch_Open.png" id="11_arch"]
 [ext_resource type="Texture2D" uid="uid://dwd8fwewajf3o" path="res://assets/sprites/world/dungeon-scenario/Objects/Dungeon_Objects.png" id="12_objects"]
 [ext_resource type="Texture2D" uid="uid://b0t7udqtrn831" path="res://assets/sprites/world/dungeon-scenario/Objects/Gold_Piles.png" id="13_gold"]
-[ext_resource type="PackedScene" path="res://world/final_phase/gem_collectible.tscn" id="14_gem"]
+[ext_resource type="PackedScene" uid="uid://d0a2r8ou82ky3" path="res://world/final_phase/gem_collectible.tscn" id="14_gem"]
+[ext_resource type="Texture2D" uid="uid://p44mhku3m6ob" path="res://assets/sprites/world/dungeon-scenario/Objects/Chest_anim.png" id="15_chest"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_top"]
 size = Vector2(1000, 40)
@@ -26,6 +27,9 @@ size = Vector2(40, 900)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_right"]
 size = Vector2(40, 900)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_altar"]
+size = Vector2(69, 48)
 
 [node name="FinalPhase" type="Node2D" unique_id=1219188274]
 script = ExtResource("1_script")
@@ -120,11 +124,13 @@ texture = ExtResource("10_pillars")
 region_enabled = true
 region_rect = Rect2(32, 0, 16, 48)
 
-[node name="BossArch" type="Sprite2D" parent="Decor" unique_id=-1294967284]
+[node name="Alltar" type="Sprite2D" parent="Decor" unique_id=-1294967284]
 z_index = 1
-position = Vector2(500, 230)
+position = Vector2(499, 209)
 scale = Vector2(4, 4)
-texture = ExtResource("11_arch")
+texture = ExtResource("15_chest")
+region_enabled = true
+region_rect = Rect2(0, 0, 32, 32)
 
 [node name="ExitArch" type="Sprite2D" parent="Decor" unique_id=-1294967283]
 z_index = 1
@@ -135,7 +141,7 @@ texture = ExtResource("11_arch")
 
 [node name="GoldLeft" type="Sprite2D" parent="Decor" unique_id=-1294967281]
 z_index = 1
-position = Vector2(360, 290)
+position = Vector2(78, 136)
 scale = Vector2(3, 3)
 texture = ExtResource("13_gold")
 region_enabled = true
@@ -143,8 +149,8 @@ region_rect = Rect2(0, 0, 32, 16)
 
 [node name="GoldRight" type="Sprite2D" parent="Decor" unique_id=-1294967280]
 z_index = 1
-position = Vector2(640, 290)
-scale = Vector2(3, 3)
+position = Vector2(243, 90.5)
+scale = Vector2(3, 2.8125)
 texture = ExtResource("13_gold")
 region_enabled = true
 region_rect = Rect2(0, 0, 32, 16)
@@ -174,6 +180,13 @@ position = Vector2(980, 450)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/WallRight" unique_id=353638027]
 shape = SubResource("RectangleShape2D_wall_right")
+
+[node name="AltarWall" type="StaticBody2D" parent="Walls" unique_id=353638028]
+position = Vector2(499, 209)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/AltarWall" unique_id=353638029]
+position = Vector2(5.5, 28)
+shape = SubResource("RectangleShape2D_altar")
 
 [node name="Altar" type="Node2D" parent="." unique_id=1070825175]
 position = Vector2(150, 120)
@@ -223,7 +236,7 @@ encounter_id = "final_phase_grunt_003"
 
 [node name="OrcChefe" parent="." unique_id=2100000020 instance=ExtResource("6_chief")]
 z_index = 3
-position = Vector2(500, 230)
+position = Vector2(500, 268)
 battle_model = ExtResource("8_chief_model")
 encounter_id = "final_phase_boss_001"
 
@@ -241,7 +254,8 @@ lines = Array[String](["Este é o lugar...", "Sinto os fragmentos da gema do di�
 persist_id = "lumen_dialog_final_entrada"
 
 [node name="GemaConversacao" parent="." unique_id=575383359 instance=ExtResource("14_gem")]
-position = Vector2(500, 195)
+z_index = 4
+position = Vector2(501, 219)
 required_encounters = Array[String](["final_phase_grunt_001", "final_phase_grunt_002", "final_phase_grunt_003", "final_phase_boss_001"])
 collect_dialog_lines = Array[String](["A Gema da Conversação...", "Os Orcs a guardavam aqui no altar.", "Com ela, as palavras voltarão a ter poder."])
 

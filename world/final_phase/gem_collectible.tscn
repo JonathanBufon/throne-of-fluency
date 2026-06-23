@@ -1,6 +1,6 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://d0a2r8ou82ky3"]
 
-[ext_resource type="Script" path="res://world/final_phase/gem_collectible.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://cpqneurf88w2e" path="res://world/final_phase/gem_collectible.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://cdadimxx0eu3w" path="res://assets/sprites/world/generated-sprites/Claude_Assets/sprite-gema-azul.png" id="2_gem"]
 
 [sub_resource type="AtlasTexture" id="AT_0"]
@@ -96,18 +96,16 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_trigger"]
-radius = 32.0
+radius = 59.211487
 
-[node name="GemCollectible" type="Area2D"]
+[node name="GemCollectible" type="Area2D" unique_id=135723167]
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("1_script")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=202909038]
 scale = Vector2(0.3, 0.3)
 sprite_frames = SubResource("SpriteFrames_gem")
-animation = &"default"
-autoplay = ""
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=451739696]
 shape = SubResource("CircleShape2D_trigger")

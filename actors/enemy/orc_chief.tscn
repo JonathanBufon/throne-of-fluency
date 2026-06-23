@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://orc_chief_scene"]
+[gd_scene format=3 uid="uid://1hw705254xfo"]
 
 [ext_resource type="Script" uid="uid://bqf7qx8eueooi" path="res://actors/enemy/enemy.gd" id="1_md0e3"]
 [ext_resource type="Texture2D" uid="uid://dblx0irb0uvtn" path="res://assets/sprites/characters/Orcs/Orc_Chief.png" id="2_pqhw6"]
@@ -435,13 +435,12 @@ radius = 14.0
 [node name="Enemy" type="CharacterBody2D" unique_id=1411583612]
 scale = Vector2(5, 5)
 script = ExtResource("1_md0e3")
-detection_range = 150.0
 chase_speed = 120.0
+detection_range = 150.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=96383352]
 sprite_frames = SubResource("SpriteFrames_ha2mi")
 animation = &"idle_down"
-frame_progress = 0.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1121305566]
 position = Vector2(0.25, -1)

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="CharacterResource" format=3]
+[gd_resource type="Resource" script_class="CharacterResource" format=3 uid="uid://c1dtj0yy0fwjx"]
 
 [ext_resource type="Script" uid="uid://b43yrin0qlny4" path="res://battleSystem/resources/character_resource.gd" id="1_char"]
 [ext_resource type="Resource" uid="uid://dm5g3oqr6d2uh" path="res://battleSystem/data/skills/Attack.tres" id="2_attack"]
@@ -10,17 +10,13 @@
 script = ExtResource("1_char")
 name = "Orc Chefe"
 level = 5
-experience = 0
 maxHealth = 200
 currentHealth = 200
 maxMana = 30
 currentMana = 30
 speed = 35
-overDriveValue = 0
 basicAttack = ExtResource("2_attack")
 techs = Array[Resource]([ExtResource("3_slash")])
-battleScale = Vector2(1, 1)
-battleOffset = Vector2(0, 0)
 isBoss = true
 enemyAI = ExtResource("4_ai")
 battleReward = ExtResource("5_reward")
