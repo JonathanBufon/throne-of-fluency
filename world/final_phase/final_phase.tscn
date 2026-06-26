@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://dwanm5msvdfpg" path="res://actors/lumen/lumen.tscn" id="3_lumen"]
 [ext_resource type="PackedScene" uid="uid://bbupi2yx1vb1h" path="res://world/troca_fase.tscn" id="4_troca"]
 [ext_resource type="PackedScene" path="res://actors/enemy/orc_grunt.tscn" id="5_grunt"]
-[ext_resource type="PackedScene" path="res://actors/enemy/orc_chief.tscn" id="6_chief"]
+[ext_resource type="PackedScene" uid="uid://1hw705254xfo" path="res://actors/enemy/orc_chief.tscn" id="6_chief"]
 [ext_resource type="Resource" path="res://battleSystem/data/enemies/orc_grunt_final_model.tres" id="7_grunt_model"]
 [ext_resource type="Resource" path="res://battleSystem/data/enemies/orc_chief_boss_model.tres" id="8_chief_model"]
 [ext_resource type="PackedScene" path="res://world/lumen_dialog_area.tscn" id="9_lumen_dialog"]
