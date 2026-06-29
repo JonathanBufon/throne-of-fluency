@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://bnqrqvtucs8tw"]
+
+[ext_resource type="Texture2D" uid="uid://dc08lm4qtd1oo" path="res://assets/sprites/world/green-scenario/Animals/Pig/Pig.png" id="1_bput3"]
+[ext_resource type="Script" path="res://actors/animal/wandering_animal.gd" id="2_wander"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_laj2a"]
+atlas = ExtResource("1_bput3")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f84oy"]
+atlas = ExtResource("1_bput3")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ofwgx"]
+atlas = ExtResource("1_bput3")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dfsd7"]
+atlas = ExtResource("1_bput3")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lj7q7"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_laj2a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f84oy")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 2.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ofwgx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dfsd7")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 2.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_t15qg"]
+size = Vector2(74, 52)
+
+[node name="Node2D" type="CharacterBody2D" unique_id=545540162]
+script = ExtResource("2_wander")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1754559983]
+position = Vector2(0.99999994, -6.9999995)
+scale = Vector2(5, 5)
+sprite_frames = SubResource("SpriteFrames_lj7q7")
+animation = &"walk"
+frame_progress = 0.4403104
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1147991473]
+position = Vector2(-2, -9)
+shape = SubResource("RectangleShape2D_t15qg")

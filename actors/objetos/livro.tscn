@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://bi7wyit7io4w"]
+
+[ext_resource type="Texture2D" uid="uid://bc707s5j8efuw" path="res://assets/ui/Book_UI.png" id="1_2dbmc"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e5y7v"]
+atlas = ExtResource("1_2dbmc")
+region = Rect2(6.777817, 4.5692863, 228.94609, 138.78833)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2dbmc"]
+atlas = ExtResource("1_2dbmc")
+region = Rect2(796.339, 77.618965, 31.022095, 20.734138)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p00kv"]
+atlas = ExtResource("1_2dbmc")
+region = Rect2(748.7846, 77.856415, 31.655151, 21.295288)
+
+[node name="livro" type="Node2D" unique_id=1156255815]
+
+[node name="livro_aberto" type="Sprite2D" parent="." unique_id=45846408]
+position = Vector2(19, 16)
+texture = SubResource("AtlasTexture_e5y7v")
+
+[node name="mini_aba_azul" type="Sprite2D" parent="." unique_id=1599230183]
+position = Vector2(133, -13)
+texture = SubResource("AtlasTexture_2dbmc")
+
+[node name="mini_aba_vermelho" type="Sprite2D" parent="." unique_id=810245319]
+position = Vector2(133, -36)
+texture = SubResource("AtlasTexture_p00kv")

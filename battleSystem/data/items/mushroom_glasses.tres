@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ItemResource" format=3]
+
+[ext_resource type="Script" uid="uid://bk5el3755vv3u" path="res://battleSystem/resources/item_resource.gd" id="1_item"]
+
+[resource]
+script = ExtResource("1_item")
+name = "Óculos do Cogumelo"
+description = "Óculos esquecidos pelo cogumelo que bloqueia o caminho ao norte."
+usableInBattle = false
+usableInWorld = false

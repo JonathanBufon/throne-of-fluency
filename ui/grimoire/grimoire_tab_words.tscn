@@ -22,9 +22,9 @@ theme_override_constants/separation = 8
 
 [node name="Title" type="Label" parent="VBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.95, 0.9, 0.6, 1)
+theme_override_colors/font_color = Color(0.24, 0.12, 0.065, 1)
 theme_override_font_sizes/font_size = 16
-text = "Palavras conhecidas"
+text = "Palavras do grimório"
 horizontal_alignment = 1
 
 [node name="Scroll" type="ScrollContainer" parent="VBox"]
@@ -41,9 +41,9 @@ theme_override_constants/separation = 4
 [node name="EmptyLabel" type="Label" parent="VBox"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_colors/font_color = Color(0.38, 0.25, 0.16, 1)
 theme_override_font_sizes/font_size = 14
-text = "Você ainda não conhece nenhuma palavra. Vença batalhas para aprender."
+text = "O grimório ainda não possui palavras registradas."
 horizontal_alignment = 1
 autowrap_mode = 3
 visible = false

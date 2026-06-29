@@ -25,6 +25,71 @@ func _ready() -> void:
 	controller.battle_won.connect(_on_battle_won)
 	controller.battle_lost.connect(_on_battle_lost)
 	command_menu.run_requested.connect(_on_run_requested)
+	if BattleTransition.tutorial_mode:
+		command_menu.run_button.hide()
+		command_menu.run_button.disabled = true
+		controller.set_process(false)
+		await _show_battle_tutorial()
+		controller.set_process(true)
+
+func _show_battle_tutorial() -> void:
+	var overlay := Control.new()
+	overlay.name = "BattleTutorialOverlay"
+	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+
+	var backdrop := ColorRect.new()
+	backdrop.color = Color(0, 0, 0, 0.78)
+	backdrop.set_anchors_preset(Control.PRESET_FULL_RECT)
+	overlay.add_child(backdrop)
+
+	var center := CenterContainer.new()
+	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	overlay.add_child(center)
+
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(620, 420)
+	center.add_child(panel)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 32)
+	margin.add_theme_constant_override("margin_top", 28)
+	margin.add_theme_constant_override("margin_right", 32)
+	margin.add_theme_constant_override("margin_bottom", 28)
+	panel.add_child(margin)
+
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 22)
+	margin.add_child(content)
+
+	var title := Label.new()
+	title.text = "Tutorial de Batalha"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 34)
+	content.add_child(title)
+
+	var instructions := Label.new()
+	instructions.text = (
+		"A barra de ação enche com o tempo.\n\n"
+		+ "Quando o turno do herói começar, escolha um comando como Atacar.\n"
+		+ "Depois, selecione o goblin como alvo para executar a ação.\n\n"
+		+ "Técnicas são habilidades especiais e podem consumir MP.\n"
+		+ "Itens de cura, como a Poção, recuperam HP durante a batalha."
+	)
+	instructions.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	instructions.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	instructions.add_theme_font_size_override("font_size", 22)
+	content.add_child(instructions)
+
+	var continue_button := Button.new()
+	continue_button.text = "Começar batalha"
+	continue_button.custom_minimum_size = Vector2(240, 54)
+	content.add_child(continue_button)
+
+	canvas_layer.add_child(overlay)
+	continue_button.grab_focus()
+	await continue_button.pressed
+	overlay.queue_free()
 
 func _spawn_player_party() -> void:
 	var resources := _get_player_party_resources()
@@ -206,6 +271,9 @@ func _get_player_slots_for_count(player_count: int) -> Array[Node2D]:
 func _on_battle_won() -> void:
 	var reward_summary := GameData.grant_battle_rewards(_get_enemy_reward_sources())
 	GameData.mark_encounter_defeated(BattleTransition.encounter_id)
+	if BattleTransition.tutorial_mode:
+		GameData.pending_world_event = "shroomlands_battle_tutorial_victory"
+	GameData.save_game()
 	BattleTransition.finish_battle(BattleTransition.Result.WON)
 	await _play_dying_animations_for_group("enemy")
 	await _show_result_message(_format_victory_message(reward_summary))
@@ -218,6 +286,8 @@ func _on_battle_lost() -> void:
 	await _return_to_game_over()
 
 func _on_run_requested() -> void:
+	if BattleTransition.tutorial_mode:
+		return
 	BattleTransition.finish_battle(BattleTransition.Result.FLED)
 	GameData.save_game()
 	await _play_player_escape_animation()

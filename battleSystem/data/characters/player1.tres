@@ -8,7 +8,11 @@
 [resource]
 script = ExtResource("1_umnqp")
 name = "Herói"
-speed = 60
+maxHealth = 110
+currentHealth = 110
+attack = 10
+defense = 6
+speed = 55
 basicAttack = ExtResource("2_attack")
 techs = Array[Resource]([ExtResource("3_heal"), ExtResource("4_slash")])
 metadata/_custom_type_script = "uid://b43yrin0qlny4"

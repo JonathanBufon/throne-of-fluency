@@ -92,7 +92,7 @@ func _show_intro_dialog() -> void:
 		},
 		{
 			"name": "Cavaleiro",
-			"text": "#$@#$#%@",
+			"text": ".....",
 			"speaker": "cavaleiro",
 		},
 		{
