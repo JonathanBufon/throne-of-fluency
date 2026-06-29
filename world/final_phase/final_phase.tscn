@@ -29,6 +29,69 @@ texture = ExtResource("16_floor_tex")
 [sub_resource type="TileSet" id="TileSet_chao"]
 sources/0 = SubResource("TileSetAtlasSource_chao")
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_m50hn"]
+texture = ExtResource("12_objects")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+7:1/0 = 0
+8:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+1:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, -0.9575672, -8, -0.9575672)
+2:2/0 = 0
+2:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, -0.9575672, -8, -0.9575672)
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+3:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-2.1762905, -8, 8, -8, 8, -3.220909, -1.828083, -3.220909)
+4:3/0 = 0
+4:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 2.6986008, -8, 2.8727036, -3.395012, -2.1762905, -3.395012, -8, -3.395012)
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+1:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, -1.4798775, -8, -1.6539803)
+2:5/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+5:5/0 = 0
+6:5/0 = 0
+7:5/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_xdcy2"]
+physics_layer_0/collision_layer = 1
+physics_layer_0/collision_mask = 6
+sources/0 = SubResource("TileSetAtlasSource_m50hn")
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_top"]
 size = Vector2(1000, 40)
 
@@ -48,8 +111,10 @@ size = Vector2(69, 48)
 script = ExtResource("1_script")
 
 [node name="Background" type="ColorRect" parent="." unique_id=452638030]
-offset_right = 1000.0
-offset_bottom = 900.0
+offset_left = -198.0
+offset_top = -188.0
+offset_right = 1204.0
+offset_bottom = 1243.0
 color = Color(0.04, 0.03, 0.07, 1)
 
 [node name="Chao" type="TileMapLayer" parent="." unique_id=200000001]
@@ -144,18 +209,24 @@ rotation = 3.1415927
 scale = Vector2(4.03125, 3.75)
 texture = ExtResource("11_arch")
 
-[node name="GoldLeft" type="Sprite2D" parent="Decor" unique_id=-1294967281]
+[node name="GoldRight" type="Sprite2D" parent="Decor" unique_id=-1294967280]
 z_index = 1
-position = Vector2(78, 136)
-scale = Vector2(3, 3)
+position = Vector2(179.99998, 74)
+scale = Vector2(3, 2.8125)
 texture = ExtResource("13_gold")
 region_enabled = true
 region_rect = Rect2(0, 0, 32, 16)
 
-[node name="GoldRight" type="Sprite2D" parent="Decor" unique_id=-1294967280]
+[node name="Objetos" type="TileMapLayer" parent="Decor" unique_id=1127282218]
 z_index = 1
-position = Vector2(243, 90.5)
-scale = Vector2(3, 2.8125)
+scale = Vector2(5, 5)
+tile_map_data = PackedByteArray("AAALAAAAAAAFAAMAAAALAAEAAAAFAAQAAAABAAIAAAAFAAMAAAABAAMAAAAFAAQAAAAEAAMAAAAAAAIAAAAHAAMAAAAAAAIAAAAEAAEAAAACAAEAAAAEAAIAAAACAAIAAAAHAAEAAAACAAEAAAAHAAIAAAACAAIAAAAKAAEAAAAAAAEAAAALAAIAAAADAAAAAAALAAMAAAADAAEAAAALAAoAAAAFAAUAAAA=")
+tile_set = SubResource("TileSet_xdcy2")
+
+[node name="GoldLeft" type="Sprite2D" parent="Decor/Objetos" unique_id=-1294967281]
+z_index = 1
+position = Vector2(25.8, 21.599998)
+scale = Vector2(0.59999996, 0.59999996)
 texture = ExtResource("13_gold")
 region_enabled = true
 region_rect = Rect2(0, 0, 32, 16)
