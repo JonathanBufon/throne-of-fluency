@@ -93,7 +93,7 @@ physics_layer_0/collision_mask = 6
 sources/0 = SubResource("TileSetAtlasSource_m50hn")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_top"]
-size = Vector2(1000, 40)
+size = Vector2(1000, 57)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_bottom"]
 size = Vector2(1000, 20)
@@ -237,6 +237,7 @@ region_rect = Rect2(0, 0, 32, 16)
 position = Vector2(500, 20)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/WallTop" unique_id=1420303837]
+position = Vector2(0, 8.5)
 shape = SubResource("RectangleShape2D_wall_top")
 
 [node name="WallBottom" type="StaticBody2D" parent="Walls" unique_id=506364536]
@@ -329,6 +330,12 @@ position = Vector2(15, 101)
 position = Vector2(500, 780)
 lines = Array[String](["Este é o lugar...", "Sinto os fragmentos da gema do diálogo aqui.", "Os Guardiões Orc não vão recuar facilmente.", "E o Chefe deles... está no altar.", "Confio em você."])
 persist_id = "lumen_dialog_final_entrada"
+
+[node name="LumenDialogGemaHint" parent="." unique_id=2100000041 instance=ExtResource("9_lumen_dialog")]
+position = Vector2(498, 672)
+lines = Array[String](["Aquela gema...", "Ela só se revela para aquele que derrotar os Guardiões Orc.", "Derrote todos eles e ela aparecerá no altar."])
+persist_id = "lumen_gem_hint_orcs"
+deactivate_if_all_defeated = Array[String](["final_phase_grunt_001", "final_phase_grunt_002", "final_phase_grunt_003", "final_phase_boss_001"])
 
 [node name="GemaConversacao" parent="." unique_id=575383359 instance=ExtResource("14_gem")]
 z_index = 4

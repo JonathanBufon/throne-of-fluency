@@ -6,6 +6,7 @@ const DIALOG_SCENE := preload("res://ui/dialog/dialogo_npc.tscn")
 @export var one_shot := true
 @export var pause_player := true
 @export var persist_id: String = ""
+@export var deactivate_if_all_defeated: Array[String] = []
 
 var _has_played := false
 var _is_playing := false
@@ -17,6 +18,15 @@ func _ready() -> void:
 	if not persist_id.is_empty() and GameData.is_encounter_defeated(persist_id):
 		deactivate()
 		return
+	if not deactivate_if_all_defeated.is_empty():
+		var all_defeated := true
+		for enc_id in deactivate_if_all_defeated:
+			if not GameData.is_encounter_defeated(enc_id):
+				all_defeated = false
+				break
+		if all_defeated:
+			deactivate()
+			return
 	if name == "LumenDialogArea3" and GameData.cripta_porta_aberta:
 		deactivate()
 
