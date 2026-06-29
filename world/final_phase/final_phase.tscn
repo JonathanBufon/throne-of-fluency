@@ -102,7 +102,7 @@ size = Vector2(1000, 20)
 size = Vector2(40, 900)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_right"]
-size = Vector2(40, 900)
+size = Vector2(6, 900)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_altar"]
 size = Vector2(69, 48)
@@ -138,9 +138,9 @@ offset_bottom = 900.0
 color = Color(0.22, 0.15, 0.42, 1)
 
 [node name="TrimRight" type="ColorRect" parent="." unique_id=-1294967292]
-offset_left = 958.0
+offset_left = 981.0
 offset_top = 40.0
-offset_right = 962.0
+offset_right = 981.0
 offset_bottom = 900.0
 color = Color(0.22, 0.15, 0.42, 1)
 
@@ -255,6 +255,7 @@ shape = SubResource("RectangleShape2D_wall_left")
 position = Vector2(980, 450)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/WallRight" unique_id=353638027]
+position = Vector2(17, 0)
 shape = SubResource("RectangleShape2D_wall_right")
 
 [node name="AltarWall" type="StaticBody2D" parent="Walls" unique_id=353638028]
@@ -318,8 +319,8 @@ encounter_id = "final_phase_boss_001"
 
 [node name="Saida" parent="." unique_id=2100000030 instance=ExtResource("4_troca")]
 position = Vector2(500, 860)
-proxima_fase = "res://world/shroom-lands.tscn"
-spawn_id = "spawn_2"
+proxima_fase = "res://pre_final.tscn"
+spawn_id = "Spawn_pre_final"
 
 [node name="CollisionShape2D" parent="Saida" index="0" unique_id=1478001296]
 position = Vector2(15, 101)

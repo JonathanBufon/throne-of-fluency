@@ -9,6 +9,8 @@
 [ext_resource type="PackedScene" uid="uid://cvmyqqm2xgget" path="res://actors/player/player.tscn" id="8_aedj8"]
 [ext_resource type="Script" uid="uid://drjdfok8nfni1" path="res://world/cripta/porta.gd" id="9_porta1"]
 [ext_resource type="PackedScene" uid="uid://ji64y4xps3oq" path="res://ui/dialog/dialogo_acao_input.tscn" id="10_dlginp"]
+[ext_resource type="Script" uid="uid://ke25ghptytjj" path="res://world/porta_final_fase.gd" id="11_porta_final"]
+[ext_resource type="Script" uid="uid://ccjr7w7lnrsi3" path="res://world/world_scene.gd" id="12_world_scene"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3yv0e"]
 texture = ExtResource("1_t3grb")
@@ -671,6 +673,7 @@ terrain_set_0/terrain_0/color = Color(0.5, 0.34375, 0.25, 1)
 sources/0 = SubResource("TileSetAtlasSource_3f77d")
 
 [node name="PreFinal" type="Node2D" unique_id=1129783536]
+script = ExtResource("12_world_scene")
 
 [node name="chao" type="TileMapLayer" parent="." unique_id=72412187]
 z_index = 1
@@ -701,7 +704,7 @@ tile_set = SubResource("TileSet_mpcis")
 position = Vector2(1985.0001, 3216.0002)
 scale = Vector2(5, 5)
 collision_mask = 6
-script = ExtResource("9_porta1")
+script = ExtResource("11_porta_final")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Porta" unique_id=599096067]
 position = Vector2(2.1999755, -6.105006e-05)
@@ -792,6 +795,9 @@ tile_set = SubResource("TileSet_3e7nf")
 
 [node name="Spawn_4" type="Marker2D" parent="." unique_id=149243754]
 position = Vector2(1997, 6246)
+
+[node name="Spawn_pre_final" type="Marker2D" parent="." unique_id=149243755]
+position = Vector2(1985, 3450)
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=111222333]
 
