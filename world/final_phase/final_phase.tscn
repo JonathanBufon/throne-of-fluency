@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://cxqd75s3t8f4f" path="res://world/cripta/scenario.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://cvmyqqm2xgget" path="res://actors/player/player.tscn" id="2_player"]
 [ext_resource type="PackedScene" uid="uid://dwanm5msvdfpg" path="res://actors/lumen/lumen.tscn" id="3_lumen"]
-[ext_resource type="PackedScene" uid="uid://bbupi2yx1vb1h" path="res://world/troca_fase.tscn" id="4_troca"]
 [ext_resource type="PackedScene" path="res://actors/enemy/orc_grunt.tscn" id="5_grunt"]
 [ext_resource type="PackedScene" uid="uid://1hw705254xfo" path="res://actors/enemy/orc_chief.tscn" id="6_chief"]
 [ext_resource type="Resource" path="res://battleSystem/data/enemies/orc_grunt_final_model.tres" id="7_grunt_model"]
@@ -16,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://d0a2r8ou82ky3" path="res://world/final_phase/gem_collectible.tscn" id="14_gem"]
 [ext_resource type="Texture2D" uid="uid://p44mhku3m6ob" path="res://assets/sprites/world/dungeon-scenario/Objects/Chest_anim.png" id="15_chest"]
 [ext_resource type="Texture2D" uid="uid://cltq1ed5asfa0" path="res://assets/sprites/world/dungeon-scenario/Dungeon_1/Dungeon_1_Pressure_Plate.png" id="16_floor_tex"]
+[ext_resource type="PackedScene" path="res://world/final_phase/saida_condicional.tscn" id="17_saida_scene"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_chao"]
 texture = ExtResource("16_floor_tex")
@@ -318,13 +318,11 @@ position = Vector2(503, 325.00003)
 battle_model = ExtResource("8_chief_model")
 encounter_id = "final_phase_boss_001"
 
-[node name="Saida" parent="." unique_id=2100000030 instance=ExtResource("4_troca")]
-position = Vector2(500, 860)
+[node name="Saida" parent="." unique_id=2100000030 instance=ExtResource("17_saida_scene")]
+position = Vector2(489, 937)
 proxima_fase = "res://pre_final.tscn"
 spawn_id = "Spawn_pre_final"
-
-[node name="CollisionShape2D" parent="Saida" index="0" unique_id=1478001296]
-position = Vector2(15, 101)
+proxima_fase_completa = "res://world/final_credits.tscn"
 
 [node name="LumenDialogEntrada" parent="." unique_id=2100000040 instance=ExtResource("9_lumen_dialog")]
 position = Vector2(500, 780)
@@ -347,4 +345,3 @@ collect_dialog_lines = Array[String](["A Gema da Conversação...", "Os Orcs a g
 position = Vector2(500, 780)
 
 [editable path="player/player"]
-[editable path="Saida"]

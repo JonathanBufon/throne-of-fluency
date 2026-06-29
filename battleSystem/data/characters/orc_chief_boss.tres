@@ -10,8 +10,8 @@
 script = ExtResource("1_char")
 name = "Orc Chefe"
 level = 5
-maxHealth = 150
-currentHealth = 150
+maxHealth = 1
+currentHealth = 1
 maxMana = 30
 currentMana = 30
 speed = 35

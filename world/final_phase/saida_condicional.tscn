@@ -1,0 +1,17 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://world/final_phase/saida_condicional.gd" id="1_script"]
+
+[sub_resource type="RectangleShape2D" id="RectShape_exit"]
+size = Vector2(325.25, 155)
+
+[node name="SaidaCondicional" type="Area2D"]
+collision_layer = 8
+collision_mask = 2
+script = ExtResource("1_script")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(38, 28.5)
+shape = SubResource("RectShape_exit")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
