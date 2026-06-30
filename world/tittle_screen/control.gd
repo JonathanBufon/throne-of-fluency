@@ -12,7 +12,7 @@ func _process(delta: float) -> void:
 
 
 func _on_stat_btn_pressed() -> void:
-	get_tree().change_scene_to_file("res://world/cripta/cripta.tscn")
+	get_tree().change_scene_to_file("res://intro/intro_cinematic.tscn")
 
 func _on_credits_btn_pressed() -> void:
 	pass # Replace with function body.
