@@ -421,6 +421,8 @@ func _play_directional_animation(prefix: String, direction: Vector2) -> void:
 		return
 
 	_animated_sprite.flip_h = flip_h
+	if prefix == "attack":
+		_animated_sprite.sprite_frames.set_animation_loop(animation_name, false)
 	_animated_sprite.play(animation_name)
 
 func _play_named_animation(animation_name: String) -> void:

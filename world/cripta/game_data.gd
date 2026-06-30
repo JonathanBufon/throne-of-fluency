@@ -21,6 +21,7 @@ var spawn_id: String:
 		_spawn_id = value
 
 var cripta_porta_aberta := false
+var porta_final_aberta := false
 var play_intro_crypt_sequence := false
 var defeated_encounters: Array[String] = []
 var party_resources: Array[CharacterResource] = []
@@ -29,6 +30,7 @@ var gold := 0
 var last_battle_reward: Dictionary = {}
 var known_words: Array[WordResource] = []
 var prepared_spells: Array[SpellRecipeResource] = []
+var collected_gems: Array[String] = []
 
 func _ready() -> void:
 	if not load_game():
@@ -174,6 +176,16 @@ func grant_battle_rewards(enemy_resources: Array[CharacterResource]) -> Dictiona
 	save_game()
 	return summary
 
+func collect_gem(gem_id: String) -> bool:
+	if gem_id.is_empty() or collected_gems.has(gem_id):
+		return false
+	collected_gems.append(gem_id)
+	save_game()
+	return true
+
+func has_gem(gem_id: String) -> bool:
+	return not gem_id.is_empty() and collected_gems.has(gem_id)
+
 func has_word(word: WordResource) -> bool:
 	return word != null and known_words.has(word)
 
@@ -224,6 +236,7 @@ func save_game() -> bool:
 		"inventory": _serialize_inventory(),
 		"known_words": _serialize_resource_paths(known_words),
 		"prepared_spells": _serialize_resource_paths(prepared_spells),
+		"collected_gems": collected_gems.duplicate(),
 	}
 
 	var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
@@ -268,6 +281,10 @@ func load_game() -> bool:
 	_deserialize_inventory(save_data.get("inventory", {}))
 	_deserialize_known_words(save_data.get("known_words", []))
 	_deserialize_prepared_spells(save_data.get("prepared_spells", []))
+
+	collected_gems.clear()
+	for gem_id in save_data.get("collected_gems", []):
+		collected_gems.append(String(gem_id))
 
 	return true
 
