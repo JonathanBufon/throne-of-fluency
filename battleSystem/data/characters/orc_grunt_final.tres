@@ -8,8 +8,8 @@
 script = ExtResource("1_char")
 name = "Orc Guardião"
 level = 3
-maxHealth = 1
-currentHealth = 1
+maxHealth = 90
+currentHealth = 90
 maxMana = 0
 currentMana = 0
 speed = 45
