@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://yc32ebpwxlpa"]
+
+[ext_resource type="Texture2D" uid="uid://y3y177klolvv" path="res://assets/sprites/world/green-scenario/Animals/Chicken/Chicken.png" id="1_t1ym3"]
+[ext_resource type="Script" path="res://actors/animal/wandering_animal.gd" id="2_wander"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yux11"]
+atlas = ExtResource("1_t1ym3")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jb1cb"]
+atlas = ExtResource("1_t1ym3")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f4spg"]
+atlas = ExtResource("1_t1ym3")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dwti4"]
+atlas = ExtResource("1_t1ym3")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_f8u1r"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yux11")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jb1cb")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 2.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f4spg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dwti4")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_t1ym3"]
+radius = 23.0
+height = 62.0
+
+[node name="Node2D" type="CharacterBody2D" unique_id=776233609]
+script = ExtResource("2_wander")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=969189068]
+scale = Vector2(5, 5)
+sprite_frames = SubResource("SpriteFrames_f8u1r")
+animation = &"walk"
+frame = 1
+frame_progress = 0.3524282
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1208107532]
+position = Vector2(1, -2)
+shape = SubResource("CapsuleShape2D_t1ym3")

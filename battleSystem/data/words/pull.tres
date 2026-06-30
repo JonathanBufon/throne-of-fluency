@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="WordResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://battleSystem/resources/word_resource.gd" id="1_word"]
+
+[resource]
+script = ExtResource("1_word")
+text_en = "PULL"
+text_pt = "puxar"
+part_of_speech = 1

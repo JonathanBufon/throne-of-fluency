@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="CharacterResource" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://battleSystem/resources/character_resource.gd" id="1_character"]
+[ext_resource type="Resource" path="res://battleSystem/data/skills/Attack.tres" id="2_attack"]
+[ext_resource type="Resource" path="res://battleSystem/data/rewards/orc_grunt_reward.tres" id="3_reward"]
+[ext_resource type="Texture2D" path="res://assets/sprites/world/dungeon-scenario/Objects/Crossbow_Bolt.png" id="4_bolt"]
+
+[resource]
+script = ExtResource("1_character")
+name = "Goblin Arqueiro"
+maxHealth = 58
+currentHealth = 58
+maxMana = 0
+currentMana = 0
+attack = 12
+defense = 2
+speed = 52
+basicAttack = ExtResource("2_attack")
+battleReward = ExtResource("3_reward")
+basicAttackProjectileTexture = ExtResource("4_bolt")
+basicAttackProjectileScale = Vector2(4, 4)

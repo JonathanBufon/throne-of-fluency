@@ -1,0 +1,61 @@
+[gd_scene format=3 uid="uid://cnsxrnu66ai3c"]
+
+[ext_resource type="Texture2D" uid="uid://bcmctu8bpxlrv" path="res://assets/sprites/world/green-scenario/Animals/Cow/Cow.png" id="1_a4xec"]
+[ext_resource type="Script" path="res://actors/animal/wandering_animal.gd" id="2_wander"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o73xp"]
+atlas = ExtResource("1_a4xec")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mxuwu"]
+atlas = ExtResource("1_a4xec")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_61qvj"]
+atlas = ExtResource("1_a4xec")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o5uj3"]
+atlas = ExtResource("1_a4xec")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lhrwx"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o73xp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mxuwu")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 2.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_61qvj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o5uj3")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 2.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jn8r7"]
+size = Vector2(82, 72)
+
+[node name="Node2D" type="CharacterBody2D" unique_id=518849244]
+script = ExtResource("2_wander")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1953425935]
+scale = Vector2(5, 5)
+sprite_frames = SubResource("SpriteFrames_lhrwx")
+animation = &"walk"
+frame_progress = 0.099438384
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=592179645]
+position = Vector2(1, -6)
+shape = SubResource("RectangleShape2D_jn8r7")
