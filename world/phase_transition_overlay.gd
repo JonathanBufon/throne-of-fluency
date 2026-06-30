@@ -11,6 +11,7 @@ func _ensure_fade_rect() -> void:
 	if _fade_rect:
 		return
 
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	layer = 128
 	_fade_rect = ColorRect.new()
 	_fade_rect.color = Color.BLACK

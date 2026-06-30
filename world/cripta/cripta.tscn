@@ -2,22 +2,23 @@
 
 [ext_resource type="PackedScene" uid="uid://ji64y4xps3oq" path="res://ui/dialog/dialogo_acao_input.tscn" id="1_a8fn1"]
 [ext_resource type="Script" uid="uid://cxqd75s3t8f4f" path="res://world/cripta/scenario.gd" id="2_abv6k"]
-[ext_resource type="Texture2D" uid="uid://dnpmo3xh0tchi" path="res://assets/sprites/world/dungeon-scenario/Objects/Dungeon_Objects.png" id="3_b8phd"]
-[ext_resource type="Texture2D" uid="uid://bq1o4yh86gu5" path="res://assets/sprites/world/dungeon-scenario/Dungeon_1/Dungeon_1_Stairs.png" id="4_vw5y5"]
-[ext_resource type="Texture2D" uid="uid://bygjcklps35gh" path="res://assets/sprites/world/dungeon-scenario/Dungeon_2/Dungeon_2.png" id="5_pbee5"]
-[ext_resource type="Texture2D" uid="uid://bp5y827jlqmc7" path="res://assets/sprites/world/dungeon-scenario/Dungeon_2/Dungeon_2_Arch_small.png" id="6_7nh4p"]
-[ext_resource type="Texture2D" uid="uid://cy2qioaf17tmv" path="res://assets/sprites/world/dungeon-scenario/Dungeon_1/Dungeon_1_Pressure_Plate.png" id="7_n5e2d"]
+[ext_resource type="Texture2D" uid="uid://dwd8fwewajf3o" path="res://assets/sprites/world/dungeon-scenario/Objects/Dungeon_Objects.png" id="3_b8phd"]
+[ext_resource type="Texture2D" uid="uid://ce88ale5w8by6" path="res://assets/sprites/world/dungeon-scenario/Dungeon_1/Dungeon_1_Stairs.png" id="4_vw5y5"]
+[ext_resource type="Texture2D" uid="uid://flbvhutynmm1" path="res://assets/sprites/world/dungeon-scenario/Dungeon_2/Dungeon_2.png" id="5_pbee5"]
+[ext_resource type="Texture2D" uid="uid://dfc8n2j1661dp" path="res://assets/sprites/world/dungeon-scenario/Dungeon_2/Dungeon_2_Arch_small.png" id="6_7nh4p"]
+[ext_resource type="Texture2D" uid="uid://cltq1ed5asfa0" path="res://assets/sprites/world/dungeon-scenario/Dungeon_1/Dungeon_1_Pressure_Plate.png" id="7_n5e2d"]
 [ext_resource type="PackedScene" uid="uid://bbupi2yx1vb1h" path="res://world/troca_fase.tscn" id="8_7tmc5"]
 [ext_resource type="Script" uid="uid://drjdfok8nfni1" path="res://world/cripta/porta.gd" id="9_n1h8o"]
 [ext_resource type="Texture2D" uid="uid://c78rm8c4urg48" path="res://assets/ui/UI_Frames.png" id="9_u0d6a"]
 [ext_resource type="Texture2D" uid="uid://cpwqj5rowbes6" path="res://assets/ui/UI_Button_Icons.png" id="10_4hesd"]
-[ext_resource type="Texture2D" uid="uid://c7jiig6qxxib8" path="res://assets/sprites/world/dungeon-scenario/Dungeon_1/Dungeon_1_Door_anim.png" id="10_cclv1"]
+[ext_resource type="Texture2D" uid="uid://cyun1yi6ar1iq" path="res://assets/sprites/world/dungeon-scenario/Dungeon_1/Dungeon_1_Door_anim.png" id="10_cclv1"]
 [ext_resource type="PackedScene" uid="uid://cvmyqqm2xgget" path="res://actors/player/player.tscn" id="11_6fsqc"]
 [ext_resource type="PackedScene" uid="uid://dwanm5msvdfpg" path="res://actors/lumen/lumen.tscn" id="12_ti6rb"]
 [ext_resource type="Script" uid="uid://cwj4dd4kkp4pv" path="res://intro/intro_crypt_sequence.gd" id="13_intro"]
-[ext_resource type="Texture2D" uid="uid://chhddlb7if0pg" path="res://assets/sprites/world/dungeon-scenario/Dungeon_2/Floor_Spikes_2.png" id="14_4hesd"]
-[ext_resource type="Texture2D" uid="uid://dg0tqr0yd26uy" path="res://assets/sprites/world/dungeon-scenario/Dungeon_2/Dungeon_2_Sewer_Anim.png" id="15_pdsw0"]
-[ext_resource type="Texture2D" uid="uid://kfbdapij61by" path="res://assets/sprites/world/dungeon-scenario/Dungeon_2/Dungeon_2_Sewer_Tileset.png" id="16_wua4d"]
+[ext_resource type="Texture2D" uid="uid://b60qyxmhstlq7" path="res://assets/sprites/world/dungeon-scenario/Dungeon_2/Floor_Spikes_2.png" id="14_4hesd"]
+[ext_resource type="Texture2D" uid="uid://cfbkb2t7j4032" path="res://assets/sprites/world/dungeon-scenario/Dungeon_2/Dungeon_2_Sewer_Anim.png" id="15_pdsw0"]
+[ext_resource type="Texture2D" uid="uid://clqj7ex4eh8bj" path="res://assets/sprites/world/dungeon-scenario/Dungeon_2/Dungeon_2_Sewer_Tileset.png" id="16_wua4d"]
+[ext_resource type="PackedScene" uid="uid://wq6art1l8a4c" path="res://world/cripta/bau_1.tscn" id="17_725t0"]
 [ext_resource type="PackedScene" uid="uid://wcd4skcnehoi" path="res://world/cripta/lever.tscn" id="17_s7o1u"]
 [ext_resource type="PackedScene" uid="uid://d01qofvvmn55l" path="res://world/cripta/parede.tscn" id="18_cokbk"]
 [ext_resource type="PackedScene" path="res://world/lumen_dialog_area.tscn" id="21_x5os5"]
@@ -88,7 +89,9 @@ texture = ExtResource("3_b8phd")
 3:0/0 = 0
 4:0/0 = 0
 5:0/0 = 0
+5:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-2.8727036, 5.1360455, 2.8727036, 5.484253, 3.917324, 8, -4.2655296, 8)
 6:0/0 = 0
+6:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-6.180666, 3.5691166, 6.180666, 3.3950138, 6.5288715, 8, -6.180666, 8)
 7:0/0 = 0
 8:0/0 = 0
 0:1/0 = 0
@@ -96,8 +99,11 @@ texture = ExtResource("3_b8phd")
 2:1/0 = 0
 3:1/0 = 0
 4:1/0 = 0
+4:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-3.5691166, -2.524496, 6.180666, -5.8324585, 4.925206, -1.6475921, 4.613737, -0.60936165, -0.9575672, 4.091427, -4.2655296, 3.3950138, -4.9619427, -0.43525696)
 5:1/0 = 0
+5:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4.9619427, -5.6583557, -4.091427, -8, 4.787838, -8, 6.3547688, -2.8727036, 6.3547688, 1.6539822, 5.484251, 4.613735, 0.60936165, 5.6583557, -2.8727036, 5.31015, -5.484253, 3.220911, -6.5288715, -1.828083)
 6:1/0 = 0
+6:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-6.5288715, -8, 6.0065613, -8, 6.3547688, 5.1360455, -6.5288715, 5.1360455)
 7:1/0 = 0
 8:1/0 = 0
 0:2/0 = 0
@@ -106,18 +112,22 @@ texture = ExtResource("3_b8phd")
 2:2/0 = 0
 2:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, -0.9575672, -8, -0.9575672)
 3:2/0 = 0
+3:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4.9619427, -1.828083, 1.828085, -5.6583557, 5.1360455, 1.4798775, -3.0468063, 5.484253, -6.0065613, 1.828085)
 4:2/0 = 0
+4:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -2.0021877, 0.26115417, -5.1360455, 3.917324, -3.220909, 8, -2.1762905, 8, 1.6539822, 2.8727036, 1.828085, 0.43525887, 3.3950138, -5.484253, 5.1360455, -8, 2.0021877)
 5:2/0 = 0
 6:2/0 = 0
 7:2/0 = 0
 0:3/0 = 0
 1:3/0 = 0
 2:3/0 = 0
+2:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-2.8727036, -3.395012, 3.7432194, 0.26115608, 0.60936165, 4.78784, -5.3101482, 2.0021877)
 3:3/0 = 0
 3:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-2.1762905, -8, 8, -8, 8, -3.220909, -1.828083, -3.220909)
 4:3/0 = 0
 4:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 2.6986008, -8, 2.8727036, -3.395012, -2.1762905, -3.395012, -8, -3.395012)
 5:3/0 = 0
+5:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-2.0021877, 4.9619427, 2.1762905, 4.9619427, 3.7432194, 8, -3.3950138, 8)
 6:3/0 = 0
 7:3/0 = 0
 0:4/0 = 0
@@ -126,7 +136,9 @@ texture = ExtResource("3_b8phd")
 3:4/0 = 0
 4:4/0 = 0
 5:4/0 = 0
+5:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-3.5691166, -8, 3.5691166, -8, 2.8727036, -5.1360455, 4.78784, -3.0468063, 5.6583557, 2.3503952, 3.7432194, 5.1360455, -3.5691166, 5.6583557, -5.1360455, -0.08705139, -2.524496, -4.2655296)
 6:4/0 = 0
+6:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-2.3503933, 5.484253, 1.828085, 5.1360455, 3.5691166, 8, -4.091427, 8)
 7:4/0 = 0
 0:5/0 = 0
 1:5/0 = 0
@@ -136,6 +148,7 @@ texture = ExtResource("3_b8phd")
 4:5/0 = 0
 5:5/0 = 0
 6:5/0 = 0
+6:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-3.3950138, -4.2655296, -3.5691166, -8, 4.4396324, -8, 3.220911, -5.3101482, 5.1360455, -1.3057747, 5.1360455, 1.828085, 4.091427, 5.1360455, -4.2655296, 4.9619427, -4.78784, -1.6539803)
 7:5/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_a17jt"]
@@ -2606,7 +2619,7 @@ tile_set = SubResource("TileSet_6vbny")
 [node name="Objetos" type="TileMapLayer" parent="Scenario" unique_id=1348884433]
 z_index = 1
 scale = Vector2(5, 5)
-tile_map_data = PackedByteArray("AAAOAAIAAAAEAAMAAAABAAAAAAACAAEAAAABAAEAAAACAAIAAAADAAAAAAACAAEAAAADAAEAAAACAAIAAAAFAAAAAAACAAEAAAAFAAEAAAACAAIAAAALAAEAAAAHAAAAAAALAAIAAAAHAAEAAAABAAoAAAAHAAAAAAABAAsAAAAHAAEAAAABAAMAAAAAAAUAAAADAAMAAAACAAUAAAALABoAAAAFAAAAAAALABsAAAAFAAEAAAAFABwAAAAEAAIAAAANABgAAAAEAAIAAAABABUAAAAHAAIAAAABABYAAAAHAAMAAAAZAAQAAAAGAAIAAAAZAAUAAAAGAAMAAAAXAAUAAAAEAAEAAAABAAIAAAAAAAQAAAACAAIAAAABAAQAAAACAAMAAAABAAUAAAADAAIAAAACAAQAAAAEABYAAAAEAAEAAAANABsAAAAEAAEAAAABABsAAAAGAAQAAAABABwAAAAGAAUAAAAUAAkAAAAHAAIAAAAUAAoAAAAHAAMAAAANAAIAAAADAAMAAAAIABwAAAADAAIAAAADABwAAAACAAMAAAAJABYAAAACAAIAAAAJABUAAAACAAEAAAAVABMAAAAFAAMAAAAVABQAAAAFAAQAAAAZAAoAAAAGAAAAAAAZAAsAAAAGAAEAAAAJAAUAAAAAAAIAAGAJAAcAAAAAAAIAAGAJAAkAAAAAAAIAAGAMAAUAAAAAAAIAAFAMAAcAAAAAAAIAAFAMAAkAAAAAAAIAAFAOABIAAAAAAAIAAAASABIAAAAAAAIAAAA=")
+tile_map_data = PackedByteArray("AAABAAAAAAACAAEAAAABAAEAAAACAAIAAAADAAAAAAACAAEAAAADAAEAAAACAAIAAAAFAAAAAAACAAEAAAAFAAEAAAACAAIAAAALAAEAAAAHAAAAAAALAAIAAAAHAAEAAAABAAoAAAAHAAAAAAABAAsAAAAHAAEAAAABAAMAAAAAAAUAAAADAAMAAAACAAUAAAALABoAAAAFAAAAAAALABsAAAAFAAEAAAAFABwAAAAEAAIAAAANABgAAAAEAAIAAAABABUAAAAHAAIAAAABABYAAAAHAAMAAAAZAAQAAAAGAAIAAAAZAAUAAAAGAAMAAAAXAAUAAAAEAAEAAAABAAIAAAAAAAQAAAACAAIAAAABAAQAAAACAAMAAAABAAUAAAADAAIAAAACAAQAAAAEABYAAAAEAAEAAAANABsAAAAEAAEAAAABABsAAAAGAAQAAAABABwAAAAGAAUAAAAUAAkAAAAHAAIAAAAUAAoAAAAHAAMAAAAIABwAAAADAAIAAAADABwAAAACAAMAAAAJABYAAAACAAIAAAAJABUAAAACAAEAAAAVABMAAAAFAAMAAAAVABQAAAAFAAQAAAAZAAoAAAAGAAAAAAAZAAsAAAAGAAEAAAAJAAUAAAAAAAIAAGAJAAcAAAAAAAIAAGAJAAkAAAAAAAIAAGAMAAUAAAAAAAIAAFAMAAcAAAAAAAIAAFAMAAkAAAAAAAIAAFAOABIAAAAAAAIAAAASABIAAAAAAAIAAAA=")
 tile_set = SubResource("TileSet_a17jt")
 
 [node name="Escada" type="TileMapLayer" parent="Scenario" unique_id=1688996686]
@@ -2693,6 +2706,7 @@ position = Vector2(1395, 461)
 scale = Vector2(0.99999994, 0.99999994)
 proxima_fase = "res://world/shroom-lands.tscn"
 spawn_id = "spawn_2"
+world_event_id = "shroomlands_battle_tutorial"
 
 [node name="CollisionShape2D" parent="Scenario/Fim_da_Fase" index="0" unique_id=1478001296]
 light_mask = 15
@@ -2757,6 +2771,10 @@ frame_progress = 0.92362505
 scale = Vector2(5.5, 10)
 tile_map_data = PackedByteArray("AAAYAAMAAAAMAAMAAAAZAAMAAAAEAAIAAAAaAAMAAAAEAAIAAAAbAAMAAAAEAAIAAAAcAAMAAAAEAAIAAAAYAAQAAAAMAAMAAAAYAAUAAAAMAAMAAAAYAAYAAAAMAAMAAAAZAAQAAAAEAAIAAAAaAAQAAAAEAAIAAAAbAAQAAAAEAAIAAAAcAAQAAAAEAAIAAAAdAAQAAAAEAAIAAAAdAAMAAAAEAAIAAAAdAAUAAAAEAAIAAAAcAAUAAAAEAAIAAAAbAAUAAAAEAAIAAAAaAAUAAAAEAAIAAAAZAAUAAAAEAAIAAAAZAAYAAAAEAAIAAAAaAAYAAAAEAAIAAAAbAAYAAAAEAAIAAAAcAAYAAAAEAAIAAAAdAAYAAAAEAAIAAAAYAAcAAAAEAAIAAAAZAAcAAAAEAAIAAAAaAAcAAAAEAAIAAAAbAAcAAAAEAAIAAAAcAAcAAAAEAAIAAAAdAAcAAAAEAAIAAAAdAAgAAAAEAAIAAAAcAAgAAAAEAAIAAAAbAAgAAAAEAAIAAAAaAAgAAAAEAAIAAAAZAAgAAAAEAAIAAAAYAAgAAAAEAAIAAAAYAAkAAAAEAAIAAAAZAAkAAAAEAAIAAAAaAAkAAAAEAAIAAAAbAAkAAAAEAAIAAAAcAAkAAAAEAAIAAAAdAAkAAAAEAAIAAAAYAAoAAAAEAAIAAAAZAAoAAAAEAAIAAAAaAAoAAAAEAAIAAAAbAAoAAAAEAAIAAAAcAAoAAAAEAAIAAAAdAAoAAAAEAAIAAAAdAAsAAAAEAAIAAAAcAAsAAAAEAAIAAAAbAAsAAAAEAAIAAAAaAAsAAAAEAAIAAAAZAAsAAAAEAAIAAAAYAAsAAAAEAAIAAAAYAAwAAAAEAAIAAAAYAA0AAAAEAAIAAAAZAA0AAAAEAAIAAAAaAA0AAAAEAAIAAAAbAA0AAAAEAAIAAAAcAA0AAAAEAAIAAAAdAA0AAAAEAAIAAAAdAAwAAAAEAAIAAAAcAAwAAAAEAAIAAAAbAAwAAAAEAAIAAAAaAAwAAAAEAAIAAAAZAAwAAAAEAAIAAAAYAA4AAAAEAAIAAAAZAA4AAAAEAAIAAAAaAA4AAAAEAAIAAAAbAA4AAAAEAAIAAAAcAA4AAAAEAAIAAAAdAA4AAAAEAAIAAAAdAA8AAAAEAAIAAAAcAA8AAAAEAAIAAAAbAA8AAAAEAAIAAAAaAA8AAAAEAAIAAAAZAA8AAAAEAAIAAAAYAA8AAAAEAAIAAAAYABAAAAAEAAIAAAAYABEAAAAEAAIAAAAZABEAAAAEAAIAAAAaABEAAAAEAAIAAAAaABAAAAAEAAIAAAAbABAAAAAEAAIAAAAcABAAAAAEAAIAAAAdABAAAAAEAAIAAAAdABEAAAAEAAIAAAAcABEAAAAEAAIAAAAbABEAAAAEAAIAAAAZABAAAAAEAAIAAAA=")
 tile_set = SubResource("TileSet_725t0")
+
+[node name="bau_1" parent="Scenario" unique_id=495372971 instance=ExtResource("17_725t0")]
+position = Vector2(1117.9999, 184.99998)
+scale = Vector2(5, 5)
 
 [node name="Spikes" type="Node2D" parent="." unique_id=2138631807]
 position = Vector2(220, 56)
@@ -2875,7 +2893,7 @@ shape = SubResource("RectangleShape2D_spike_block")
 
 [node name="player" parent="." unique_id=1143594569 instance=ExtResource("11_6fsqc")]
 z_index = 2
-position = Vector2(746, 272)
+position = Vector2(1112, 767)
 
 [node name="AnimatedSprite2D" parent="player" index="0" unique_id=96383351]
 position = Vector2(2, 3.5)

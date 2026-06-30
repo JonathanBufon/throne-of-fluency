@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://d04c68tykcx4t"]
+
+[ext_resource type="Texture2D" uid="uid://b30xkpxgaqw1f" path="res://assets/ui/placa.png" id="1_ywxd1"]
+[ext_resource type="Script" uid="uid://cwebayekj17bh" path="res://actors/objetos/placa.gd" id="2_script"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q78h2"]
+atlas = ExtResource("1_ywxd1")
+region = Rect2(787.6618, 195.7447, 155.3778, 176.26854)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_reading"]
+radius = 89.005615
+
+[node name="placa" type="Node2D" unique_id=177589165]
+script = ExtResource("2_script")
+
+[node name="placa" type="Sprite2D" parent="." unique_id=1909140081]
+texture = SubResource("AtlasTexture_q78h2")
+
+[node name="ReadingArea" type="Area2D" parent="." unique_id=2045530141]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ReadingArea" unique_id=724271667]
+position = Vector2(-2, -28)
+shape = SubResource("CircleShape2D_reading")
+
+[connection signal="body_entered" from="ReadingArea" to="." method="_on_reading_area_body_entered"]
+[connection signal="body_exited" from="ReadingArea" to="." method="_on_reading_area_body_exited"]

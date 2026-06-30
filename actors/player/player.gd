@@ -6,9 +6,19 @@ var last_direction: Vector2 = Vector2.RIGHT
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var icone_interacao: Node2D = $Icone_interacao
 
+var interaction_prompt_sources: Dictionary = {}
+
 func _ready() -> void:
 	add_to_group("player") # Necessário para que fim_da_fase e porta detectem o player
 	$Icone_interacao/Sprite2D.visible = false
+
+func show_interaction_prompt(source: Node) -> void:
+	interaction_prompt_sources[source.get_instance_id()] = true
+	$Icone_interacao/Sprite2D.visible = true
+
+func hide_interaction_prompt(source: Node) -> void:
+	interaction_prompt_sources.erase(source.get_instance_id())
+	$Icone_interacao/Sprite2D.visible = not interaction_prompt_sources.is_empty()
 
 func _physics_process(_delta: float) -> void:
 	process_movement()

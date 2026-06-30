@@ -6,6 +6,16 @@ const DISABLE_PERSISTENCE_IN_DEBUG := true
 
 const DEFAULT_PLAYER_1 = preload("res://battleSystem/data/characters/player1.tres")
 const DEFAULT_POTION = preload("res://battleSystem/data/items/potion.tres")
+const MUSHROOM_GLASSES = preload("res://battleSystem/data/items/mushroom_glasses.tres")
+const PULL_WORD = preload("res://battleSystem/data/words/pull.tres")
+const OPEN_WORD = preload("res://battleSystem/data/words/open.tres")
+const TALK_WORD = preload("res://battleSystem/data/words/talk.tres")
+
+const STORY_GRIMOIRE_WORDS: Array[WordResource] = [
+	PULL_WORD,
+	OPEN_WORD,
+	TALK_WORD,
+]
 
 const ALL_SPELL_RECIPES: Array[SpellRecipeResource] = [
 	preload("res://battleSystem/data/spells/fireball_recipe.tres"),
@@ -22,6 +32,9 @@ var spawn_id: String:
 
 var cripta_porta_aberta := false
 var play_intro_crypt_sequence := false
+var dialogue_gem_recovered := false
+var mushroom_guard_glasses_returned := false
+var pending_world_event := ""
 var defeated_encounters: Array[String] = []
 var party_resources: Array[CharacterResource] = []
 var battle_inventory: Dictionary = {}
@@ -29,6 +42,9 @@ var gold := 0
 var last_battle_reward: Dictionary = {}
 var known_words: Array[WordResource] = []
 var prepared_spells: Array[SpellRecipeResource] = []
+var opened_world_chests: Array[String] = []
+var completed_world_events: Array[String] = []
+var silent_npcs_spoken: Array[String] = []
 
 func _ready() -> void:
 	if not load_game():
@@ -126,6 +142,65 @@ func add_battle_item(item: ItemResource, quantity: int) -> void:
 		return
 	battle_inventory[item] = get_item_quantity(item) + quantity
 
+func grant_world_item(item: ItemResource, quantity: int = 1) -> void:
+	add_battle_item(item, quantity)
+	save_game()
+
+func mark_world_chest_opened(chest_id: String) -> void:
+	if chest_id.is_empty() or opened_world_chests.has(chest_id):
+		return
+	opened_world_chests.append(chest_id)
+	save_game()
+
+func is_world_chest_opened(chest_id: String) -> bool:
+	return not chest_id.is_empty() and opened_world_chests.has(chest_id)
+
+func mark_world_event_completed(event_id: String) -> void:
+	if event_id.is_empty() or completed_world_events.has(event_id):
+		return
+	completed_world_events.append(event_id)
+	save_game()
+
+func is_world_event_completed(event_id: String) -> bool:
+	return not event_id.is_empty() and completed_world_events.has(event_id)
+
+func recover_dialogue_gem() -> void:
+	if not dialogue_gem_recovered:
+		dialogue_gem_recovered = true
+	discover_word(TALK_WORD)
+	save_game()
+
+func has_recovered_dialogue_gem() -> bool:
+	return dialogue_gem_recovered
+
+func grant_mushroom_glasses() -> void:
+	if mushroom_guard_glasses_returned or get_item_quantity(MUSHROOM_GLASSES) > 0:
+		return
+	add_battle_item(MUSHROOM_GLASSES, 1)
+	save_game()
+
+func has_mushroom_glasses() -> bool:
+	return get_item_quantity(MUSHROOM_GLASSES) > 0
+
+func return_mushroom_glasses() -> bool:
+	if mushroom_guard_glasses_returned or not has_mushroom_glasses():
+		return false
+	battle_inventory[MUSHROOM_GLASSES] = get_item_quantity(MUSHROOM_GLASSES) - 1
+	mushroom_guard_glasses_returned = true
+	save_game()
+	return true
+
+func has_returned_mushroom_glasses() -> bool:
+	return mushroom_guard_glasses_returned
+
+func register_silent_npc_conversation(npc_id: String) -> int:
+	if dialogue_gem_recovered or npc_id.is_empty() or silent_npcs_spoken.has(npc_id):
+		return 0
+	silent_npcs_spoken.append(npc_id)
+	save_game()
+	var total := silent_npcs_spoken.size()
+	return total if total % 5 == 0 else 0
+
 func grant_battle_rewards(enemy_resources: Array[CharacterResource]) -> Dictionary:
 	var summary: Dictionary = {
 		"experience": 0,
@@ -183,6 +258,16 @@ func discover_word(word: WordResource) -> bool:
 	known_words.append(word)
 	return true
 
+func get_grimoire_words() -> Array[WordResource]:
+	var words: Array[WordResource] = []
+	for word in STORY_GRIMOIRE_WORDS:
+		if word != null:
+			words.append(word)
+	for word in known_words:
+		if word != null and not words.has(word):
+			words.append(word)
+	return words
+
 func get_known_recipes() -> Array[SpellRecipeResource]:
 	var ready: Array[SpellRecipeResource] = []
 	for recipe in ALL_SPELL_RECIPES:
@@ -219,11 +304,16 @@ func save_game() -> bool:
 		"version": SAVE_VERSION,
 		"gold": gold,
 		"cripta_porta_aberta": cripta_porta_aberta,
+		"dialogue_gem_recovered": dialogue_gem_recovered,
+		"mushroom_guard_glasses_returned": mushroom_guard_glasses_returned,
 		"defeated_encounters": defeated_encounters.duplicate(),
 		"party": _serialize_party(),
 		"inventory": _serialize_inventory(),
 		"known_words": _serialize_resource_paths(known_words),
 		"prepared_spells": _serialize_resource_paths(prepared_spells),
+		"opened_world_chests": opened_world_chests.duplicate(),
+		"completed_world_events": completed_world_events.duplicate(),
+		"silent_npcs_spoken": silent_npcs_spoken.duplicate(),
 	}
 
 	var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
@@ -259,14 +349,30 @@ func load_game() -> bool:
 	var save_data: Dictionary = data
 	gold = int(save_data.get("gold", 0))
 	cripta_porta_aberta = bool(save_data.get("cripta_porta_aberta", false))
+	dialogue_gem_recovered = bool(save_data.get("dialogue_gem_recovered", false))
+	mushroom_guard_glasses_returned = bool(save_data.get("mushroom_guard_glasses_returned", false))
 
 	defeated_encounters.clear()
 	for encounter_id in save_data.get("defeated_encounters", []):
 		defeated_encounters.append(String(encounter_id))
 
+	opened_world_chests.clear()
+	for chest_id in save_data.get("opened_world_chests", []):
+		opened_world_chests.append(String(chest_id))
+
+	completed_world_events.clear()
+	for event_id in save_data.get("completed_world_events", []):
+		completed_world_events.append(String(event_id))
+
+	silent_npcs_spoken.clear()
+	for npc_id in save_data.get("silent_npcs_spoken", []):
+		silent_npcs_spoken.append(String(npc_id))
+
 	_deserialize_party(save_data.get("party", []))
 	_deserialize_inventory(save_data.get("inventory", {}))
 	_deserialize_known_words(save_data.get("known_words", []))
+	if dialogue_gem_recovered:
+		discover_word(TALK_WORD)
 	_deserialize_prepared_spells(save_data.get("prepared_spells", []))
 
 	return true

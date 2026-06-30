@@ -1,0 +1,99 @@
+[gd_scene format=3 uid="uid://wq6art1l8a4c"]
+
+[ext_resource type="Script" uid="uid://gqxqgbwyre1u" path="res://world/cripta/bau.gd" id="1_bau"]
+[ext_resource type="Texture2D" uid="uid://p44mhku3m6ob" path="res://assets/sprites/world/dungeon-scenario/Objects/Chest_anim.png" id="2_chest"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_chest_0"]
+atlas = ExtResource("2_chest")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_chest_1"]
+atlas = ExtResource("2_chest")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_chest_2"]
+atlas = ExtResource("2_chest")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_chest_3"]
+atlas = ExtResource("2_chest")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_chest_4"]
+atlas = ExtResource("2_chest")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_chest_5"]
+atlas = ExtResource("2_chest")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_chest_6"]
+atlas = ExtResource("2_chest")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_chest_7"]
+atlas = ExtResource("2_chest")
+region = Rect2(224, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_chest"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_chest_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_chest_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_chest_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_chest_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_chest_4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_chest_5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_chest_6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_chest_7")
+}],
+"loop": false,
+"name": &"abrir",
+"speed": 8.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(18, 11)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mkl0f"]
+size = Vector2(20, 14)
+
+[node name="bau_1" type="Node2D" unique_id=218386260]
+script = ExtResource("1_bau")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=843914186]
+sprite_frames = SubResource("SpriteFrames_chest")
+animation = &"abrir"
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1488490778]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1004029519]
+position = Vector2(0, 3.5)
+shape = SubResource("RectangleShape2D_body")
+
+[node name="InteractionArea" type="Area2D" parent="." unique_id=616289135]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=347932857]
+position = Vector2(0, 4)
+shape = SubResource("RectangleShape2D_mkl0f")
+
+[connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]
+[connection signal="body_exited" from="InteractionArea" to="." method="_on_interaction_area_body_exited"]

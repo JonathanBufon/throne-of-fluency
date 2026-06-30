@@ -2,6 +2,7 @@ extends StaticBody2D
 
 const DAMAGE_NUMBER := preload("res://battleSystem/ui/damage_number.tscn")
 const MAGIC_PROJECTILE := preload("res://battleSystem/vfx/magic_projectile.tscn")
+const PHYSICAL_PROJECTILE := preload("res://battleSystem/vfx/physical_projectile.tscn")
 
 @onready var turn_based_agent: TurnBasedAgent = $TurnBasedAgent
 
@@ -33,7 +34,11 @@ func _apply_command_effect(target: TurnBasedAgent, command: Resource) -> void:
 	elif command is SkillResource and command.skillType == SkillResource.Skill_Type.HEAL:
 		target.character_resource.heal(command.power)
 	elif command is SkillResource:
-		target.character_resource.take_damage(command.power)
+		var damage := turn_based_agent.character_resource.calculate_damage_against(
+			target.character_resource,
+			command.power
+		)
+		target.character_resource.take_damage(damage)
 
 func _show_command_feedback(target: TurnBasedAgent, previous_health: int, previous_mana: int) -> void:
 	var health_delta := target.character_resource.currentHealth - previous_health
@@ -57,10 +62,37 @@ func _spawn_damage_number(target: TurnBasedAgent, amount: int, suffix := "") -> 
 	damage_number.show_value(text, amount > 0)
 
 func _play_command_animation(target: TurnBasedAgent, command: Resource) -> void:
+	if _uses_basic_attack_projectile(command):
+		await _play_basic_attack_projectile(target)
+		return
 	if command is SkillResource and _uses_projectile_animation(command):
 		await _play_magic_projectile(target, command)
 		return
 	await _animation_example(target)
+
+func _uses_basic_attack_projectile(command: Resource) -> bool:
+	var character := turn_based_agent.character_resource
+	return (
+		character.basicAttackProjectileTexture != null
+		and command == character.basicAttack
+	)
+
+func _play_basic_attack_projectile(target: TurnBasedAgent) -> void:
+	var character := turn_based_agent.character_resource
+	var start_position := turn_based_agent.get_global_position() + Vector2(0, -48)
+	var target_position := target.get_global_position() + Vector2(0, -48)
+	turn_based_agent.play_attack_towards(target_position)
+
+	var projectile := PHYSICAL_PROJECTILE.instantiate() as PhysicalProjectile
+	get_tree().current_scene.add_child(projectile)
+	projectile.setup(
+		start_position,
+		target_position,
+		character.basicAttackProjectileTexture,
+		character.basicAttackProjectileScale
+	)
+	await projectile.play()
+	turn_based_agent.play_idle_towards(target_position)
 
 func _uses_projectile_animation(skill: SkillResource) -> bool:
 	return skill.element != SkillResource.Element.NONE and skill.element != SkillResource.Element.PHYSICAL

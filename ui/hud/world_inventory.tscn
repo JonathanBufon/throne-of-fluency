@@ -1,126 +1,241 @@
 [gd_scene format=3 uid="uid://bd1rdwq0yo841"]
 
-[ext_resource type="Script" path="res://ui/hud/world_inventory.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://d0osjmjivaavt" path="res://ui/hud/world_inventory.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://bi7wyit7io4w" path="res://actors/objetos/livro.tscn" id="2_book"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
-bg_color = Color(0.05, 0.05, 0.08, 0.92)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.9, 0.85, 0.6, 0.85)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-content_margin_left = 16.0
-content_margin_top = 12.0
-content_margin_right = 16.0
-content_margin_bottom = 12.0
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_djn0q"]
 
-[node name="WorldInventory" type="CanvasLayer"]
-layer = 20
+[node name="WorldInventory" type="CanvasLayer" unique_id=715309920]
 process_mode = 3
+layer = 20
 script = ExtResource("1_script")
 
-[node name="Backdrop" type="ColorRect" parent="."]
+[node name="Backdrop" type="ColorRect" parent="." unique_id=2117776523]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.5)
-mouse_filter = 0
+color = Color(0, 0, 0, 0)
 
-[node name="Root" type="PanelContainer" parent="."]
+[node name="Root" type="Control" parent="." unique_id=425400737]
+layout_mode = 3
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -280.0
-offset_top = -230.0
-offset_right = 280.0
-offset_bottom = 230.0
+offset_left = -385.0
+offset_top = -215.0
+offset_right = 385.0
+offset_bottom = 215.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+mouse_filter = 1
 
-[node name="VBox" type="VBoxContainer" parent="Root"]
-layout_mode = 2
-theme_override_constants/separation = 8
+[node name="BookVisual" parent="Root" unique_id=1397196660 instance=ExtResource("2_book")]
+position = Vector2(366, 199)
+scale = Vector2(2.7, 2.7)
 
-[node name="Title" type="Label" parent="Root/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.95, 0.9, 0.6, 1)
-theme_override_font_sizes/font_size = 22
-text = "INVENTÁRIO"
-horizontal_alignment = 1
+[node name="PageContent" type="Control" parent="Root" unique_id=1348757841]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 125.0
+offset_top = 80.0
+offset_right = -65.0
+offset_bottom = -35.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
 
-[node name="Separator" type="HSeparator" parent="Root/VBox"]
-layout_mode = 2
-
-[node name="InventoryTabs" type="TabContainer" parent="Root/VBox"]
-layout_mode = 2
-size_flags_vertical = 3
+[node name="InventoryTabs" type="TabContainer" parent="Root/PageContent" unique_id=1389675206]
 process_mode = 3
-
-[node name="Itens" type="Control" parent="Root/VBox/InventoryTabs"]
-layout_mode = 2
-
-[node name="ItemsVBox" type="VBoxContainer" parent="Root/VBox/InventoryTabs/Itens"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_djn0q")
+current_tab = 0
+tabs_visible = false
+
+[node name="Itens" type="Control" parent="Root/PageContent/InventoryTabs" unique_id=1228397168]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="ItemsVBox" type="VBoxContainer" parent="Root/PageContent/InventoryTabs/Itens" unique_id=2111116487]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.47
+anchor_bottom = 1.0
+offset_right = -10.0
+grow_vertical = 2
 theme_override_constants/separation = 8
 
-[node name="Scroll" type="ScrollContainer" parent="Root/VBox/InventoryTabs/Itens/ItemsVBox"]
+[node name="Title" type="Label" parent="Root/PageContent/InventoryTabs/Itens/ItemsVBox" unique_id=1870488799]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.24, 0.12, 0.065, 1)
+theme_override_font_sizes/font_size = 20
+text = "INVENTÁRIO"
+horizontal_alignment = 1
+
+[node name="Separator" type="HSeparator" parent="Root/PageContent/InventoryTabs/Itens/ItemsVBox" unique_id=526299616]
+modulate = Color(0.35, 0.18, 0.08, 0.7)
+layout_mode = 2
+
+[node name="Scroll" type="ScrollContainer" parent="Root/PageContent/InventoryTabs/Itens/ItemsVBox" unique_id=353082452]
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="ItemList" type="VBoxContainer" parent="Root/VBox/InventoryTabs/Itens/ItemsVBox/Scroll"]
+[node name="ItemList" type="VBoxContainer" parent="Root/PageContent/InventoryTabs/Itens/ItemsVBox/Scroll" unique_id=751533417]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 4
 
-[node name="EmptyLabel" type="Label" parent="Root/VBox/InventoryTabs/Itens/ItemsVBox"]
+[node name="EmptyLabel" type="Label" parent="Root/PageContent/InventoryTabs/Itens/ItemsVBox" unique_id=446859274]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_colors/font_color = Color(0.35, 0.22, 0.13, 1)
 theme_override_font_sizes/font_size = 14
 text = "Inventário vazio."
 horizontal_alignment = 1
-visible = false
 
-[node name="FeedbackLabel" type="Label" parent="Root/VBox/InventoryTabs/Itens/ItemsVBox"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_colors/font_color = Color(0.6, 1, 0.6, 1)
-theme_override_font_sizes/font_size = 14
-text = ""
-horizontal_alignment = 1
-
-[node name="Grimório" type="Control" parent="Root/VBox/InventoryTabs"]
-layout_mode = 2
-
-[node name="GrimoireContent" type="Control" parent="Root/VBox/InventoryTabs/Grimório"]
-unique_name_in_owner = true
+[node name="ItemDetails" type="VBoxContainer" parent="Root/PageContent/InventoryTabs/Itens" unique_id=2023145083]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
+anchor_left = 0.53
 anchor_right = 1.0
 anchor_bottom = 1.0
-grow_horizontal = 2
+offset_left = 10.0
+grow_horizontal = 0
 grow_vertical = 2
-process_mode = 3
+theme_override_constants/separation = 10
 
-[node name="Hint" type="Label" parent="Root/VBox"]
+[node name="Title" type="Label" parent="Root/PageContent/InventoryTabs/Itens/ItemDetails" unique_id=1372252799]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_colors/font_color = Color(0.24, 0.12, 0.065, 1)
+theme_override_font_sizes/font_size = 20
+text = "DETALHES"
+horizontal_alignment = 1
+
+[node name="Separator" type="HSeparator" parent="Root/PageContent/InventoryTabs/Itens/ItemDetails" unique_id=1715548213]
+modulate = Color(0.35, 0.18, 0.08, 0.7)
+layout_mode = 2
+
+[node name="CharacterStatus" type="Label" parent="Root/PageContent/InventoryTabs/Itens/ItemDetails" unique_id=1742400693]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.28, 0.16, 0.09, 1)
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Spacer" type="Control" parent="Root/PageContent/InventoryTabs/Itens/ItemDetails" unique_id=1401424008]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="FeedbackLabel" type="Label" parent="Root/PageContent/InventoryTabs/Itens/ItemDetails" unique_id=1528868476]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.12, 0.38, 0.16, 1)
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 1
+
+[node name="Hint" type="Label" parent="Root/PageContent/InventoryTabs/Itens/ItemDetails" unique_id=785190639]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.34, 0.22, 0.14, 1)
 theme_override_font_sizes/font_size = 12
-text = "I para fechar   /   Enter para usar"
+text = "Enter para usar • I para fechar"
+horizontal_alignment = 1
+
+[node name="Grimório" type="Control" parent="Root/PageContent/InventoryTabs" unique_id=2088592240]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="GrimoireIntro" type="VBoxContainer" parent="Root/PageContent/InventoryTabs/Grimório" unique_id=638026565]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.47
+anchor_bottom = 1.0
+offset_right = -10.0
+grow_vertical = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="Root/PageContent/InventoryTabs/Grimório/GrimoireIntro" unique_id=853192468]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.24, 0.12, 0.065, 1)
+theme_override_font_sizes/font_size = 20
+text = "GRIMÓRIO"
+horizontal_alignment = 1
+
+[node name="Separator" type="HSeparator" parent="Root/PageContent/InventoryTabs/Grimório/GrimoireIntro" unique_id=35586361]
+modulate = Color(0.35, 0.18, 0.08, 0.7)
+layout_mode = 2
+
+[node name="Description" type="Label" parent="Root/PageContent/InventoryTabs/Grimório/GrimoireIntro" unique_id=1843812654]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.3, 0.18, 0.1, 1)
+theme_override_font_sizes/font_size = 15
+text = "Aqui ficam registradas as palavras aprendidas em sua jornada. Combine-as para descobrir e preparar novas magias."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Hint" type="Label" parent="Root/PageContent/InventoryTabs/Grimório/GrimoireIntro" unique_id=749671227]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.34, 0.22, 0.14, 1)
+theme_override_font_sizes/font_size = 12
+text = "G para fechar"
+horizontal_alignment = 1
+
+[node name="GrimoireContent" type="Control" parent="Root/PageContent/InventoryTabs/Grimório" unique_id=1644135290]
+unique_name_in_owner = true
+process_mode = 3
+layout_mode = 1
+anchor_left = 0.53
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="ItemsTab" type="Button" parent="Root" unique_id=1926213887]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 682.0
+offset_top = 72.0
+offset_right = 768.0
+offset_bottom = 132.0
+tooltip_text = "Inventário"
+mouse_default_cursor_shape = 2
+flat = true
+
+[node name="GrimoireTab" type="Button" parent="Root" unique_id=1782714438]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 682.0
+offset_top = 135.0
+offset_right = 768.0
+offset_bottom = 193.0
+tooltip_text = "Grimório"
+mouse_default_cursor_shape = 2
+flat = true
+
+[node name="CloseHint" type="Label" parent="Root" unique_id=1986992320]
+layout_mode = 0
+offset_left = 318.0
+offset_top = 395.0
+offset_right = 452.0
+offset_bottom = 417.0
+theme_override_colors/font_color = Color(0.92, 0.79, 0.58, 1)
+theme_override_font_sizes/font_size = 12
+text = "Esc para fechar"
 horizontal_alignment = 1

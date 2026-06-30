@@ -22,6 +22,7 @@ var player_flip_h: bool = false
 var return_scene: String = ""
 var return_position: Vector2 = Vector2.ZERO
 var encounter_id: String = ""
+var tutorial_mode := false
 var last_result: Result = Result.IDLE
 var _fade_layer: CanvasLayer
 var _fade_rect: ColorRect
@@ -38,6 +39,7 @@ func request_battle(
 	return_scene = origin_scene
 	return_position = player_position
 	encounter_id = id
+	tutorial_mode = false
 	last_result = Result.IDLE
 
 func set_player_party(players: Array[CharacterResource]) -> void:
@@ -84,6 +86,7 @@ func clear() -> void:
 	return_scene = ""
 	return_position = Vector2.ZERO
 	encounter_id = ""
+	tutorial_mode = false
 	last_result = Result.IDLE
 
 func _clear_visual_data() -> void:

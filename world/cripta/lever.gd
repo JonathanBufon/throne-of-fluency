@@ -1,6 +1,8 @@
 extends Node2D
 
 const DIALOG_SCENE := preload("res://ui/dialog/dialogo_npc.tscn")
+const PULL_WORD := preload("res://battleSystem/data/words/pull.tres")
+const OPEN_WORD := preload("res://battleSystem/data/words/open.tres")
 const LOWERED_SPIKE_FRAME := 4
 const RAISED_SPIKE_FRAME := 0
 const TUTORIAL_SPIKES := [
@@ -40,6 +42,7 @@ static var lumen_dialog_playing := false
 var player_near := false
 var pulled := false
 var waiting_input := false
+var _pending_sequence_error_hint := false
 
 @onready var lever_esquerda: Sprite2D = $lever_esquerda
 @onready var lever_direita: Sprite2D = $lever_direita
@@ -66,6 +69,9 @@ func try_pull() -> void:
 	waiting_input = true
 	var correct := await _ask_pull_action()
 	waiting_input = false
+	if _pending_sequence_error_hint:
+		_pending_sequence_error_hint = false
+		await _show_sequence_error_lumen_dialog()
 
 	if correct and not _is_sequence_lever():
 		_set_pulled(true)
@@ -149,6 +155,8 @@ func _set_spike_collision_enabled(spike: AnimatedSprite2D, enabled: bool) -> voi
 
 func _on_action_dialog_answered(_text: String, correct: bool) -> void:
 	if correct:
+		if GameData.discover_word(PULL_WORD):
+			GameData.save_game()
 		_set_pulled(true)
 		_handle_sequence_pull()
 		var player := get_tree().get_first_node_in_group("player")
@@ -174,6 +182,9 @@ func _handle_sequence_pull() -> void:
 
 	if name != LEVER_SEQUENCE[sequence_progress]:
 		_reset_sequence_puzzle()
+		if not sequence_hint_shown:
+			sequence_hint_shown = true
+			_pending_sequence_error_hint = true
 		return
 
 	sequence_progress += 1
@@ -257,13 +268,6 @@ func _on_area_lever_body_entered(body: Node) -> void:
 		player_near = true
 		if not pulled:
 			_set_player_interaction_icon(body, true)
-		if _should_show_sequence_hint():
-			sequence_hint_shown = true
-			_show_lumen_dialog([
-				"Espere... essas alavancas parecem estar conectadas.",
-				"Acho que existe uma sequencia correta para abrir o caminho.",
-				"Observe com cuidado. Se errarmos, talvez seja preciso recomecar."
-			], body as Node2D)
 
 
 func _on_area_lever_body_exited(body: Node) -> void:
@@ -278,8 +282,13 @@ func _set_player_interaction_icon(player: Node, icon_visible: bool) -> void:
 		icon.visible = icon_visible
 
 
-func _should_show_sequence_hint() -> bool:
-	return _is_sequence_lever() and not sequence_completed and not sequence_hint_shown and not lumen_dialog_playing
+func _show_sequence_error_lumen_dialog() -> void:
+	var player := get_tree().get_first_node_in_group("player") as Node2D
+	await _show_lumen_dialog([
+		"Alavanca Errada...",
+		"Vamos observar com cuidado e tentar descobrir a ordem correta.",
+		"Talvez forme alguma letra do alfabeto"
+	], player)
 
 
 func _show_sequence_complete_lumen_dialog() -> void:
@@ -291,6 +300,8 @@ func _show_sequence_complete_lumen_dialog() -> void:
 		"Devemos memorizar esta palavra,",
 		"De qualquer forma, o caminho esta livre agora."
 	], player)
+	if GameData.discover_word(OPEN_WORD):
+		GameData.save_game()
 
 
 func _show_lumen_dialog(lines: Array[String], player: Node2D = null) -> void:

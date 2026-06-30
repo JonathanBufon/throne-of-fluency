@@ -1,0 +1,65 @@
+[gd_scene format=3 uid="uid://bmgawqmqpkuq6"]
+
+[ext_resource type="Texture2D" uid="uid://cbvlcgf8bmahf" path="res://assets/sprites/world/shroomLands-scenario/Tiles/ShroomLands_Cliff_Waterfall.png" id="1_onpnt"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lcoke"]
+atlas = ExtResource("1_onpnt")
+region = Rect2(0, 0, 48, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hgc60"]
+atlas = ExtResource("1_onpnt")
+region = Rect2(48, 0, 48, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tnbw8"]
+atlas = ExtResource("1_onpnt")
+region = Rect2(96, 0, 48, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_glctv"]
+atlas = ExtResource("1_onpnt")
+region = Rect2(144, 0, 48, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_as0jl"]
+atlas = ExtResource("1_onpnt")
+region = Rect2(192, 0, 48, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6rmxt"]
+atlas = ExtResource("1_onpnt")
+region = Rect2(240, 0, 48, 80)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_22noh"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lcoke")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hgc60")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tnbw8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_glctv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_as0jl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6rmxt")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="cascata" type="Node2D" unique_id=672699306]
+scale = Vector2(5, 5)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1409828596]
+sprite_frames = SubResource("SpriteFrames_22noh")
+autoplay = "default"
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1512771351]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D" unique_id=1514948244]
+polygon = PackedVector2Array(-17, 39, -14, 34, -14.799999, 15.999999, -22.8, 15.799999, -23.599998, -13.799999, -14.4, -19.199999, -14, -33, -15, -39, 15, -39, 13, -34, 13, 24, 13, 33, 16, 39)

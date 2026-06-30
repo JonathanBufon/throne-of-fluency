@@ -22,6 +22,7 @@ enum State {
 @export var battle_party: Array[CharacterResource] = []
 @export var encounter_id: String = ""
 @export var battle_sprite_scale := Vector2(5, 5)
+@export var tutorial_battle := false
 
 var state: State = State.PATROL
 var player: Node2D
@@ -220,6 +221,7 @@ func _on_danger_box_body_entered(body: Node2D) -> void:
 		body.global_position,
 		get_effective_encounter_id()
 	)
+	BattleTransition.tutorial_mode = tutorial_battle
 	BattleTransition.set_player_party(GameData.get_battle_party_resources())
 	BattleTransition.set_enemy_visuals(
 		enemy_sprite_frames,

@@ -7,6 +7,7 @@ extends Control
 
 var _agent: TurnBasedAgent
 var _last_health := -1
+var _visible_top_cache: Dictionary = {}
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -63,8 +64,11 @@ func _get_visual_node() -> Node2D:
 	return null
 
 func _get_visual_top(visual_node: Node2D) -> float:
-	var texture_height := _get_visual_texture_height(visual_node)
-	var scaled_height := texture_height * absf(visual_node.scale.y)
+	var texture := _get_visual_texture(visual_node)
+	if texture == null:
+		return visual_node.position.y
+
+	var local_visible_top := _get_texture_visible_top(texture)
 	var centered := true
 
 	if visual_node is Sprite2D:
@@ -73,32 +77,52 @@ func _get_visual_top(visual_node: Node2D) -> float:
 		centered = (visual_node as AnimatedSprite2D).centered
 
 	if centered:
-		return visual_node.position.y - (scaled_height * 0.5)
+		local_visible_top -= texture.get_height() * 0.5
 
-	return visual_node.position.y
+	return visual_node.position.y + local_visible_top * absf(visual_node.scale.y)
 
-func _get_visual_texture_height(visual_node: Node2D) -> float:
+func _get_visual_texture(visual_node: Node2D) -> Texture2D:
 	var texture: Texture2D
 
 	if visual_node is AnimatedSprite2D:
 		var animated_sprite := visual_node as AnimatedSprite2D
 		if animated_sprite.sprite_frames == null:
-			return 32.0
+			return null
 
 		var animation := animated_sprite.animation
 		if not animated_sprite.sprite_frames.has_animation(animation):
-			return 32.0
+			return null
 
 		var frame_count := animated_sprite.sprite_frames.get_frame_count(animation)
 		if frame_count <= 0:
-			return 32.0
+			return null
 
 		var frame_index := clampi(animated_sprite.frame, 0, frame_count - 1)
 		texture = animated_sprite.sprite_frames.get_frame_texture(animation, frame_index)
 	elif visual_node is Sprite2D:
 		texture = (visual_node as Sprite2D).texture
 
-	if texture == null:
-		return 32.0
+	return texture
 
-	return texture.get_height()
+func _get_texture_visible_top(texture: Texture2D) -> float:
+	if _visible_top_cache.has(texture):
+		return float(_visible_top_cache[texture])
+
+	var image := texture.get_image()
+	if image == null or image.is_empty():
+		_visible_top_cache[texture] = 0.0
+		return 0.0
+
+	var visible_top := 0
+	var found_visible_pixel := false
+	for y in image.get_height():
+		for x in image.get_width():
+			if image.get_pixel(x, y).a > 0.05:
+				visible_top = y
+				found_visible_pixel = true
+				break
+		if found_visible_pixel:
+			break
+
+	_visible_top_cache[texture] = float(visible_top)
+	return float(visible_top)

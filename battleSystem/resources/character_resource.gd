@@ -9,6 +9,8 @@ class_name CharacterResource
 @export var currentHealth := 100
 @export var maxMana := 50
 @export var currentMana := 50
+@export var attack := 0
+@export var defense := 0
 @export var speed := 50
 @export var overDriveValue := 0
 @export var basicAttack: Resource
@@ -19,11 +21,17 @@ class_name CharacterResource
 @export var isBoss := false
 @export var enemyAI: Resource
 @export var battleReward: Resource
+@export var basicAttackProjectileTexture: Texture2D
+@export var basicAttackProjectileScale := Vector2(4, 4)
 
 func take_damage(damage: int) -> void:
 	currentHealth -= damage
 	if currentHealth < 0:
 		currentHealth = 0
+
+func calculate_damage_against(target: CharacterResource, base_power: int) -> int:
+	var target_defense := target.defense if target != null else 0
+	return maxi(base_power + attack - target_defense, 1)
 
 func heal(amount: int) -> void:
 	currentHealth += amount
