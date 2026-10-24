@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://d3j7h8qvk0eqq"]
 
-[ext_resource type="Texture2D" uid="uid://c7jiig6qxxib8" path="res://assets/sprites/world/dungeon-scenario/Dungeon_1/Dungeon_1_Door_anim.png" id="1_door"]
+[ext_resource type="Texture2D" uid="uid://cyun1yi6ar1iq" path="res://assets/sprites/world/dungeon-scenario/Dungeon_1/Dungeon_1_Door_anim.png" id="1_door"]
 [ext_resource type="Script" path="res://world/porta_final_fase.gd" id="2_script"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f1"]

@@ -8,9 +8,6 @@ export_presets.cfg
 .godot/
 *.translation
 
-# Imported resources
-*.import
-
 # Mono / C#
 .mono/
 data_*/
@@ -20,7 +17,6 @@ data_*/
 # Build outputs
 bin/
 obj/
-*gd.uid
 
 # Logs
 *.log

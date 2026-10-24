@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://do0rlbe0o6pgs"]
 
 [ext_resource type="Texture2D" uid="uid://bmosadiulpia0" path="res://assets/sprites/player/Player.png" id="1_ewhij"]
-[ext_resource type="FontFile" uid="uid://3e51p7doloxy" path="res://assets/fonts/CuteFantasy-5x9.ttf" id="2_hh11h"]
+[ext_resource type="FontFile" uid="uid://ccppngr33ka3v" path="res://assets/fonts/CuteFantasy-5x9.ttf" id="2_hh11h"]
 
 [sub_resource type="GDScript" id="GDScript_ewhij"]
 script/source = "extends Control

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c2g7iomacgrim"]
 
 [ext_resource type="Script" uid="uid://cgljy1fkexvuk" path="res://ui/grimoire/world_grimoire.gd" id="1_script"]
-[ext_resource type="PackedScene" uid="uid://b5g7iomactabs" path="res://ui/grimoire/grimoire_tabs.tscn" id="2_tabs"]
+[ext_resource type="PackedScene" uid="uid://b5g7iol9ctabs" path="res://ui/grimoire/grimoire_tabs.tscn" id="2_tabs"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
 content_margin_left = 16.0

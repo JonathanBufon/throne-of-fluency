@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="EnemyAIResource" format=3]
+[gd_resource type="Resource" script_class="EnemyAIResource" format=3 uid="uid://bpjwrbk0soglm"]
 
 [ext_resource type="Script" path="res://battleSystem/resources/enemy_ai_resource.gd" id="1_ai"]
 

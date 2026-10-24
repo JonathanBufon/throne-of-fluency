@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://d0a2r8ou82ky3"]
 
 [ext_resource type="Script" uid="uid://cpqneurf88w2e" path="res://world/final_phase/gem_collectible.gd" id="1_script"]
-[ext_resource type="Texture2D" uid="uid://cdadimxx0eu3w" path="res://assets/sprites/world/generated-sprites/Claude_Assets/sprite-gema-azul.png" id="2_gem"]
+[ext_resource type="Texture2D" uid="uid://ckmjdqrnlse00" path="res://assets/sprites/world/generated-sprites/Claude_Assets/sprite-gema-azul.png" id="2_gem"]
 
 [sub_resource type="AtlasTexture" id="AT_0"]
 atlas = ExtResource("2_gem")

@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" uid="uid://dxsc4wn5ypvjn" path="res://battleSystem/core/character.gd" id="1_character"]
-[ext_resource type="Texture2D" uid="uid://bd72l60i2gdk5" path="res://assets/sprites/characters/Knights/Swordman.png" id="2_swordman"]
+[ext_resource type="Texture2D" uid="uid://b1w5bj6vkt8qq" path="res://assets/sprites/characters/Knights/Swordman.png" id="2_swordman"]
 [ext_resource type="PackedScene" uid="uid://cefek1e0d8i2m" path="res://battleSystem/core/turn_based_agent.tscn" id="3_agent"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_player"]

@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://c83ortgf2jrk8" path="res://icon.svg" id="1_1ahfb"]
 [ext_resource type="PackedScene" uid="uid://djq2mu0mqkonh" path="res://battleSystem/core/turn_based_controller.tscn" id="1_jg7qw"]
 [ext_resource type="Script" uid="uid://dxsc4wn5ypvjn" path="res://battleSystem/core/character.gd" id="1_m08ds"]
-[ext_resource type="Texture2D" uid="uid://bd72l60i2gdk5" path="res://assets/sprites/characters/Knights/Swordman.png" id="2_ca7vg"]
+[ext_resource type="Texture2D" uid="uid://b1w5bj6vkt8qq" path="res://assets/sprites/characters/Knights/Swordman.png" id="2_ca7vg"]
 [ext_resource type="PackedScene" uid="uid://cefek1e0d8i2m" path="res://battleSystem/core/turn_based_agent.tscn" id="2_xj6nq"]
 [ext_resource type="PackedScene" uid="uid://b22m3i34hfut8" path="res://battleSystem/ui/command_menu.tscn" id="3_ca7vg"]
 [ext_resource type="Resource" uid="uid://dm5g3oqr6d2uh" path="res://battleSystem/data/skills/Attack.tres" id="5_4kefl"]
