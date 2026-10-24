@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="BattleRewardResource" format=3]
+
+[ext_resource type="Script" uid="uid://d3jxkco2cans1" path="res://battleSystem/resources/battle_reward_resource.gd" id="1_reward"]
+[ext_resource type="Script" uid="uid://c0eqemspa5eih" path="res://battleSystem/resources/word_resource.gd" id="2_wordscript"]
+[ext_resource type="Resource" uid="uid://b636m3iod5fq6" path="res://battleSystem/data/words/holy.tres" id="3_holy"]
+
+[resource]
+script = ExtResource("1_reward")
+experience = 20
+gold = 15
+word_drops = Array[ExtResource("2_wordscript")]([ExtResource("3_holy")])

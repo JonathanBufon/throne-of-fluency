@@ -1,0 +1,77 @@
+[gd_scene format=3 uid="uid://d3j7h8qvk0eqq"]
+
+[ext_resource type="Texture2D" uid="uid://c7jiig6qxxib8" path="res://assets/sprites/world/dungeon-scenario/Dungeon_1/Dungeon_1_Door_anim.png" id="1_door"]
+[ext_resource type="Script" path="res://world/porta_final_fase.gd" id="2_script"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f1"]
+atlas = ExtResource("1_door")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f2"]
+atlas = ExtResource("1_door")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f3"]
+atlas = ExtResource("1_door")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f4"]
+atlas = ExtResource("1_door")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f5"]
+atlas = ExtResource("1_door")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_door"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f5")
+}],
+"loop": false,
+"name": &"abrir",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectShape_interaction"]
+size = Vector2(31.6, 14.8)
+
+[sub_resource type="RectangleShape2D" id="RectShape_blocked"]
+size = Vector2(31.2, 3.2)
+
+[node name="Porta_Final" type="StaticBody2D" unique_id=200000001]
+scale = Vector2(5, 5)
+collision_mask = 6
+script = ExtResource("2_script")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=200000002]
+sprite_frames = SubResource("SpriteFrames_door")
+animation = &"abrir"
+
+[node name="Area_Porta" type="Area2D" parent="." unique_id=200000003]
+collision_layer = 8
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area_Porta" unique_id=200000004]
+position = Vector2(0, 17)
+shape = SubResource("RectShape_interaction")
+
+[node name="Colisao_Porta_Fechada" type="CollisionShape2D" parent="." unique_id=200000005]
+position = Vector2(0, 4.6)
+shape = SubResource("RectShape_blocked")
+
+[connection signal="body_entered" from="Area_Porta" to="." method="_on_area_porta_body_entered"]
+[connection signal="body_exited" from="Area_Porta" to="." method="_on_area_porta_body_exited"]

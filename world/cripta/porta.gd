@@ -34,7 +34,7 @@ func tentar_abrir():
 
 func mostrar_input():
 	esperando_input = true
-	var dialog = get_parent().get_parent().get_node_or_null("UI/Dialogo_Acao_Input")
+	var dialog = get_tree().current_scene.get_node_or_null("UI/Dialogo_Acao_Input")
 	var correto = false
 	if dialog and dialog.has_method("ask"):
 		correto = await dialog.ask()
